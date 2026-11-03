@@ -70,7 +70,7 @@ test('la paleta navega a una sección', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Construimos/ })).toBeInViewport({ timeout: 5000 })
 })
 
-test('el retrato y la ilustración de cada proyecto se dibujan en canvas', async ({ page }) => {
+test('el retrato se dibuja y cada proyecto tiene su imagen', async ({ page }) => {
   await page.locator('.retrato').scrollIntoViewIfNeeded()
   await expect(page.getByRole('img', { name: /Retrato de Scheneider Baltazar/ })).toBeVisible()
   await expect(page.locator('.obra__lienzo')).toHaveCount(6)

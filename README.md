@@ -2,7 +2,7 @@
 
 Mi portfolio como desarrollador Full Stack. Los proyectos no se enseñan con capturas: se ejecutan dentro de la página.
 
-[![CI](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml) ![React](https://img.shields.io/badge/React-19-149eca) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers%20%2B%20D1-f38020)
+[![CI](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml) ![React](https://img.shields.io/badge/React-19-149eca) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-f38020)
 
 ## Qué tiene de especial
 
@@ -12,9 +12,8 @@ Mi portfolio como desarrollador Full Stack. Los proyectos no se enseñan con cap
   - **BlackJack en COBOL**: el `blackjack.cob.cbl` original se ejecuta con un **intérprete de COBOL escrito en TypeScript** (`src/lib/cobol`), con el mismo intercambio por `BRIDGE.DAT` que la versión de escritorio.
   - **Detección de movimiento**: el algoritmo de la versión en C# portado a canvas, con la cámara del dispositivo.
   - **LifeLevelUp** y la web de Resident Evil se abren integradas.
-- **Gráficos hechos con código**: el planeta de la portada, el retrato y los logos de las tecnologías son rejillas de caracteres calculadas en canvas; cada proyecto tiene su propia escena generativa.
+- **Gráficos hechos con código**: el planeta de la portada, el retrato y los logos de las tecnologías son rejillas de caracteres calculadas en canvas.
 - **Datos en directo de GitHub** a través de un Worker de Cloudflare con caché: commits recientes, lenguajes y mapa de actividad.
-- **Contador de visitas propio y anónimo** (sin cookies ni IP) en Cloudflare D1, con un panel privado.
 - **Español e inglés**, paleta de comandos (`Ctrl + K`) y diseño adaptado a móvil.
 
 ## Calidad
@@ -42,10 +41,8 @@ src/
     logoAscii.ts       Logos de tecnologías en caracteres
     escenas.ts         Escenas generativas de los proyectos
     idioma.tsx         Español e inglés
-    analitica.ts       Contador de visitas anónimo
   data/                Proyectos y tecnologías
-worker/                Worker de Cloudflare: API de GitHub, visitas y panel
-migrations/            Esquema de la base de datos D1
+worker/                Worker de Cloudflare: API de GitHub con caché
 public/apps/           Jar del Tetris, página de Java, Python del gestor y COBOL del BlackJack
 e2e/                   Pruebas de Playwright
 ```
@@ -59,20 +56,15 @@ La sección de GitHub muestra los repositorios que tengan la etiqueta (topic) **
 ```bash
 npm install
 npm run dev         # solo la web, en http://localhost:5173
-npm run worker      # web + Worker + base de datos local, en http://localhost:8787
+npm run worker      # web + Worker, en http://localhost:8787
 npm run deploy      # compila y publica en Cloudflare
 ```
 
-Configuración en Cloudflare (una sola vez):
+Opcional: un token de GitHub de solo lectura evita quedarse sin consultas a la API.
 
 ```bash
-npx wrangler d1 create portfolio-visitas              # y copiar el id en wrangler.jsonc
-npx wrangler d1 migrations apply portfolio-visitas --remote
-npx wrangler secret put PANEL_CLAVE                   # clave del panel de visitas
-npx wrangler secret put GITHUB_TOKEN                  # opcional: token de GitHub de solo lectura
+npx wrangler secret put GITHUB_TOKEN
 ```
-
-El panel de visitas está en `/panel?clave=…`.
 
 ---
 

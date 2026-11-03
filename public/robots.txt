@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /panel
 Disallow: /api/
 
 Sitemap: https://portfolio.08-pruebas.workers.dev/sitemap.xml

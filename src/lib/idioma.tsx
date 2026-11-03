@@ -1,4 +1,3 @@
-import { registrar } from './analitica'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 export type Idioma = 'es' | 'en'
@@ -37,7 +36,6 @@ export function ProveedorIdioma({ children }: { children: ReactNode }) {
   }, [idioma])
 
   const cambiar = useCallback((nuevo: Idioma) => {
-    registrar('idioma', nuevo)
     setIdioma(nuevo)
     try {
       localStorage.setItem(CLAVE, nuevo)

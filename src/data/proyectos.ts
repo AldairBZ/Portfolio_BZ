@@ -21,6 +21,16 @@ export interface Proyecto {
   nota?: Texto
   /** Ilustración generativa que acompaña al proyecto */
   escena: NombreEscena
+  /** Captura real del proyecto; si existe, sustituye a la ilustración */
+  captura?: Captura
+}
+
+export interface Captura {
+  src: string
+  /** Texto de la pestaña de la ventana */
+  pestana: string
+  /** Página más alta que la ventana: se recorre despacio de arriba abajo */
+  recorrer?: boolean
 }
 
 const GITHUB = 'https://github.com/AldairBZ'
@@ -61,6 +71,7 @@ export const proyectos: Proyecto[] = [
       en: 'The API runs on Render’s free plan: the first request can take a few seconds.',
     },
     escena: 'planeta',
+    captura: { src: '/proyectos/lifelevelup.webp', pestana: 'lifelevelup.08-pruebas.workers.dev', recorrer: true },
   },
   {
     id: 'tetris',
@@ -89,6 +100,7 @@ export const proyectos: Proyecto[] = [
       en: 'There is no database in the browser, so the leaderboard is disabled.',
     },
     escena: 'bloques',
+    captura: { src: '/proyectos/tetris.webp', pestana: 'tetris.jar' },
   },
   {
     id: 'bongust',
@@ -174,6 +186,7 @@ export const proyectos: Proyecto[] = [
       en: 'Below the table you can see the BRIDGE.DAT record shared by the interface and the engine, and the COBOL paragraphs run on every move.',
     },
     escena: 'tarjeta',
+    captura: { src: '/proyectos/blackjack.webp', pestana: 'blackjack.cob.cbl' },
   },
   {
     id: 'residentevil',
@@ -191,5 +204,6 @@ export const proyectos: Proyecto[] = [
     demo: 'https://aldairbz.github.io/A2_ResidentEvil_Web/',
     ejecucion: { tipo: 'web', url: 'https://aldairbz.github.io/A2_ResidentEvil_Web/' },
     escena: 'maqueta',
+    captura: { src: '/proyectos/residentevil.webp', pestana: 'aldairbz.github.io/A2_ResidentEvil_Web', recorrer: true },
   },
 ]

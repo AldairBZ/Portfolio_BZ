@@ -115,9 +115,19 @@ export default function Proyectos({ onEjecutar }: Props) {
             <figure className="obra__ventana">
               <figcaption className="obra__pestana">
                 <span className="obra__puntos" aria-hidden="true" />
-                {proyecto.id}/{proyecto.escena}.ts
+                <span className="obra__ruta">{proyecto.captura?.pestana ?? `${proyecto.id}/${proyecto.escena}.ts`}</span>
               </figcaption>
-              <Ilustracion escena={proyecto.escena} className="obra__lienzo" />
+              {proyecto.captura ? (
+                <img
+                  src={proyecto.captura.src}
+                  alt={t(`Captura de ${tx(proyecto.nombre)}`, `Screenshot of ${tx(proyecto.nombre)}`)}
+                  className={`obra__lienzo obra__captura${proyecto.captura.recorrer ? ' obra__captura--recorrer' : ''}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <Ilustracion escena={proyecto.escena} className="obra__lienzo" />
+              )}
             </figure>
             <div className="obra__info">
               <p className="etiqueta">
