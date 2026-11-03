@@ -1,4 +1,3 @@
-import type { NombreEscena } from '../lib/escenas'
 import type { Texto } from '../lib/idioma'
 
 export type Ejecucion =
@@ -19,22 +18,24 @@ export interface Proyecto {
   demo?: string
   ejecucion: Ejecucion
   nota?: Texto
-  /** Ilustración generativa que acompaña al proyecto */
-  escena: NombreEscena
-  /** Captura real del proyecto; si existe, sustituye a la ilustración */
-  captura?: Captura
+  /** Lo que se ve en la ventana del proyecto, siempre a partir del proyecto real */
+  vista: Vista
 }
 
-export interface Captura {
-  src: string
-  /** Texto de la pestaña de la ventana */
-  pestana: string
-  /** Página más alta que la ventana: se recorre despacio de arriba abajo */
-  recorrer?: boolean
-}
+export type Vista =
+  | {
+      tipo: 'captura'
+      src: string
+      /** Texto de la pestaña de la ventana */
+      pestana: string
+      /** Página más alta que la ventana: se recorre despacio de arriba abajo */
+      recorrer?: boolean
+    }
+  /** Sesión real del programa de consola (data/bongust.ts) */
+  | { tipo: 'terminal'; pestana: string }
 
 const GITHUB = 'https://github.com/AldairBZ'
-const mismo = (texto: string): Texto => ({ es: texto, en: texto })
+const mismo = (texto: string): Texto => ({ es: texto, en: texto, ca: texto })
 
 export const proyectos: Proyecto[] = [
   {
@@ -70,8 +71,7 @@ export const proyectos: Proyecto[] = [
       es: 'La API usa el plan gratuito de Render: la primera petición puede tardar unos segundos.',
       en: 'The API runs on Render’s free plan: the first request can take a few seconds.',
     },
-    escena: 'planeta',
-    captura: { src: '/proyectos/lifelevelup.webp', pestana: 'lifelevelup.08-pruebas.workers.dev', recorrer: true },
+    vista: { tipo: 'captura', src: '/proyectos/lifelevelup.webp', pestana: 'lifelevelup.08-pruebas.workers.dev', recorrer: true },
   },
   {
     id: 'tetris',
@@ -99,8 +99,7 @@ export const proyectos: Proyecto[] = [
       es: 'En el navegador no hay base de datos, así que el ranking queda desactivado.',
       en: 'There is no database in the browser, so the leaderboard is disabled.',
     },
-    escena: 'bloques',
-    captura: { src: '/proyectos/tetris.webp', pestana: 'tetris.jar' },
+    vista: { tipo: 'captura', src: '/proyectos/tetris.webp', pestana: 'tetris.jar' },
   },
   {
     id: 'bongust',
@@ -127,7 +126,7 @@ export const proyectos: Proyecto[] = [
       es: 'El programa original está en español: escribe el número de la opción y pulsa Enter.',
       en: 'The original program is in Spanish: type the option number and press Enter.',
     },
-    escena: 'inventario',
+    vista: { tipo: 'terminal', pestana: 'python main.py' },
   },
   {
     id: 'movimiento',
@@ -157,7 +156,7 @@ export const proyectos: Proyecto[] = [
       es: 'Versión web del algoritmo original en C#. La imagen no sale de tu dispositivo.',
       en: 'Web version of the original C# algorithm. The image never leaves your device.',
     },
-    escena: 'pixeles',
+    vista: { tipo: 'captura', src: '/proyectos/movimiento.webp', pestana: 'DeteccionMovimiento' },
   },
   {
     id: 'blackjack',
@@ -185,8 +184,7 @@ export const proyectos: Proyecto[] = [
       es: 'Debajo de la mesa ves el registro BRIDGE.DAT que se intercambian la interfaz y el motor, y los párrafos COBOL que se ejecutan en cada jugada.',
       en: 'Below the table you can see the BRIDGE.DAT record shared by the interface and the engine, and the COBOL paragraphs run on every move.',
     },
-    escena: 'tarjeta',
-    captura: { src: '/proyectos/blackjack.webp', pestana: 'blackjack.cob.cbl' },
+    vista: { tipo: 'captura', src: '/proyectos/blackjack.webp', pestana: 'blackjack.cob.cbl' },
   },
   {
     id: 'residentevil',
@@ -203,7 +201,6 @@ export const proyectos: Proyecto[] = [
     repo: `${GITHUB}/A2_ResidentEvil_Web`,
     demo: 'https://aldairbz.github.io/A2_ResidentEvil_Web/',
     ejecucion: { tipo: 'web', url: 'https://aldairbz.github.io/A2_ResidentEvil_Web/' },
-    escena: 'maqueta',
-    captura: { src: '/proyectos/residentevil.webp', pestana: 'aldairbz.github.io/A2_ResidentEvil_Web', recorrer: true },
+    vista: { tipo: 'captura', src: '/proyectos/residentevil.webp', pestana: 'aldairbz.github.io/A2_ResidentEvil_Web', recorrer: true },
   },
 ]

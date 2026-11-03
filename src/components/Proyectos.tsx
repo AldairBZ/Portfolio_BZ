@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/scroll'
-import Ilustracion from './Ilustracion'
+import VistaProyecto from './VistaProyecto'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { useIdioma, type Texto } from '../lib/idioma'
 import { precargar } from '../lib/precarga'
@@ -49,14 +49,14 @@ export default function Proyectos({ onEjecutar }: Props) {
           invalidateOnRefresh: true,
         },
       })
-      // Cada ventana entra con un leve giro mientras la galería avanza
+      // Cada ventana se acerca recta, sin giros, mientras la galería avanza
       gsap.utils.toArray<HTMLElement>('.obra__ventana').forEach((ventana) => {
         gsap.fromTo(
           ventana,
-          { rotate: 4, scale: 0.92 },
+          { scale: 0.9, autoAlpha: 0.35 },
           {
-            rotate: 0,
             scale: 1,
+            autoAlpha: 1,
             ease: 'none',
             scrollTrigger: {
               trigger: ventana.closest('.obra'),
@@ -115,19 +115,13 @@ export default function Proyectos({ onEjecutar }: Props) {
             <figure className="obra__ventana">
               <figcaption className="obra__pestana">
                 <span className="obra__puntos" aria-hidden="true" />
-                <span className="obra__ruta">{proyecto.captura?.pestana ?? `${proyecto.id}/${proyecto.escena}.ts`}</span>
+                <span className="obra__ruta">{proyecto.vista.pestana}</span>
               </figcaption>
-              {proyecto.captura ? (
-                <img
-                  src={proyecto.captura.src}
-                  alt={t(`Captura de ${tx(proyecto.nombre)}`, `Screenshot of ${tx(proyecto.nombre)}`)}
-                  className={`obra__lienzo obra__captura${proyecto.captura.recorrer ? ' obra__captura--recorrer' : ''}`}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <Ilustracion escena={proyecto.escena} className="obra__lienzo" />
-              )}
+              <VistaProyecto
+                vista={proyecto.vista}
+                alt={t(`Captura de ${tx(proyecto.nombre)}`, `Screenshot of ${tx(proyecto.nombre)}`, `Captura de ${tx(proyecto.nombre)}`)}
+                className="obra__lienzo"
+              />
             </figure>
             <div className="obra__info">
               <p className="etiqueta">

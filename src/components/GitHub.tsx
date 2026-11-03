@@ -127,7 +127,11 @@ function MapaActividad({ actividad }: { actividad: Actividad }) {
     <figure className="actividad">
       <figcaption className="etiqueta">
         {actividad.total !== null
-          ? t(`${actividad.total} contribuciones en el último año`, `${actividad.total} contributions in the last year`)
+          ? t(
+              `${actividad.total} contribuciones en el último año`,
+              `${actividad.total} contributions in the last year`,
+              `${actividad.total} contribucions en l'últim any`,
+            )
           : t('Actividad del último año', 'Activity in the last year')}
       </figcaption>
       <div className="actividad__rejilla" ref={contenedor} role="img" aria-label={t('Mapa de contribuciones de GitHub', 'GitHub contributions map')}>

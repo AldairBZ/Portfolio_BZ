@@ -40,7 +40,7 @@ const cartas = (texto: string) => texto.split(',').map((c) => c.trim()).filter(B
 
 const FINALES = ['PLAYER_WIN', 'DEALER_WIN', 'PUSH']
 
-// Los mensajes los escribe el programa COBOL en español; en inglés se muestran traducidos
+// Los mensajes los escribe el programa COBOL en español; en los otros idiomas se muestran traducidos
 const MENSAJES_EN: Record<string, string> = {
   'PON TU APUESTA': 'PLACE YOUR BET',
   'APUESTA ACEPTADA': 'BET ACCEPTED',
@@ -152,7 +152,7 @@ export default function EjecutorCobol() {
     if (estado === 'DEALER_WIN') return { texto: `${t('PERDISTE', 'YOU LOSE')} -$${ultimaApuesta}`, tono: 'pierde' }
     if (estado === 'PUSH') return { texto: t('EMPATE', 'PUSH'), tono: 'empate' }
     const original = v['WS-MESSAGE'].trim()
-    return { texto: idioma === 'en' ? (MENSAJES_EN[original] ?? original) : original, tono: '' }
+    return { texto: idioma === 'en' ? (MENSAJES_EN[original] ?? original) : t(original, original), tono: '' }
   })()
 
   const restantes = Math.min(Number(v['WS-SHOE-REMAIN'] || 0), Number(v['WS-SHOE-TOTAL'] || 312))

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { DragonAscii } from '../lib/dragonAscii'
 import { useIdioma } from '../lib/idioma'
 import './Contacto.css'
 
@@ -13,6 +14,13 @@ const redes = [
 export default function Contacto() {
   const [copiado, setCopiado] = useState(false)
   const { t } = useIdioma()
+  const seccion = useRef<HTMLElement>(null)
+  const lienzo = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const dragon = new DragonAscii(lienzo.current!, seccion.current!)
+    return () => dragon.destruir()
+  }, [])
 
   const copiar = async () => {
     try {
@@ -25,7 +33,9 @@ export default function Contacto() {
   }
 
   return (
-    <footer id="contacto" className="contacto" aria-labelledby="contacto-titulo">
+    <footer id="contacto" className="contacto" aria-labelledby="contacto-titulo" ref={seccion}>
+      {/* Detrás del texto: un dragón de caracteres que sigue al cursor */}
+      <canvas ref={lienzo} className="contacto__dragon" aria-hidden="true" />
       <div className="contacto__contenido">
         <p className="etiqueta">{t('Contacto', 'Contact')}</p>
         <h2 id="contacto-titulo" className="contacto__titulo">
@@ -64,6 +74,7 @@ export default function Contacto() {
             'React · TypeScript · GSAP · Java in the browser with CheerpJ · Python with Pyodide · COBOL on my own interpreter · Cloudflare',
           )}
         </p>
+        <p>{t('Visitas contadas de forma anónima, sin cookies.', 'Visits counted anonymously, without cookies.')}</p>
       </div>
     </footer>
   )

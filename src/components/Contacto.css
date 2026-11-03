@@ -1,7 +1,24 @@
 .contacto {
+  position: relative;
+  overflow: hidden;
   padding: clamp(6rem, 14vw, 11rem) var(--margen) 2rem;
   background: var(--tinta-2);
   border-top: 1px solid var(--linea);
+}
+
+/* El dragón acompaña sin quitar protagonismo: detrás, tenue y sin capturar clics */
+.contacto__dragon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.contacto__contenido,
+.contacto__pie {
+  position: relative;
 }
 
 .contacto__contenido {

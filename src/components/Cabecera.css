@@ -28,15 +28,22 @@
 }
 
 .cabecera__monograma {
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
   border: 1px solid var(--papel);
   border-radius: 8px;
-  font-family: var(--display);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-family: var(--marca);
+  font-size: 0.92rem;
+  font-weight: 800;
+  font-stretch: 85%;
+  letter-spacing: -0.02em;
+}
+
+.cabecera__monograma span {
+  color: var(--bermellon);
 }
 
 .cabecera__nombre {
@@ -109,19 +116,32 @@
 
 .cabecera__idioma {
   display: inline-flex;
-  gap: 0.25rem;
-  padding: 0.45rem 0.7rem;
+  padding: 0.18rem;
   border: 1px solid var(--linea);
+  border-radius: 999px;
+}
+
+.cabecera__idioma button {
+  padding: 0.28rem 0.5rem;
+  border: 0;
   border-radius: 999px;
   background: none;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--papel-3);
   cursor: pointer;
+  transition:
+    background 0.25s,
+    color 0.25s;
 }
 
-.cabecera__idioma [aria-current='true'] {
+.cabecera__idioma button:hover {
   color: var(--papel);
+}
+
+.cabecera__idioma [aria-pressed='true'] {
+  background: var(--papel);
+  color: var(--tinta);
 }
 
 .cabecera__estado {

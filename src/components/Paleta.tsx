@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { bloquearScroll, irA } from '../lib/scroll'
 import { proyectos, type Proyecto } from '../data/proyectos'
-import { useIdioma } from '../lib/idioma'
+import { IDIOMAS, useIdioma } from '../lib/idioma'
 import './Paleta.css'
 
 interface Comando {
@@ -23,27 +23,26 @@ export default function Paleta({ onEjecutar }: Props) {
   const [activo, setActivo] = useState(0)
   const campo = useRef<HTMLInputElement>(null)
 
-  const { idioma, cambiar, t } = useIdioma()
+  const { idioma, cambiar, t, tx } = useIdioma()
 
   const comandos = useMemo<Comando[]>(() => {
     const ir = (destino: string) => () => irA(destino)
-    const es = idioma === 'es'
     return [
       ...proyectos.map((p) => ({
         id: `ejecutar-${p.id}`,
-        grupo: es ? 'Ejecutar' : 'Run',
-        texto: p.nombre[idioma],
+        grupo: t('Ejecutar', 'Run'),
+        texto: tx(p.nombre),
         pista: p.stack.slice(0, 2).join(' · '),
         accion: () => onEjecutar(p),
       })),
-      { id: 'ir-inicio', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Inicio' : 'Home', accion: ir('#inicio') },
-      { id: 'ir-proyectos', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Proyectos' : 'Projects', accion: ir('#proyectos') },
-      { id: 'ir-trayectoria', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Trayectoria' : 'Experience', accion: ir('#trayectoria') },
-      { id: 'ir-contacto', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Contacto' : 'Contact', accion: ir('#contacto') },
+      { id: 'ir-inicio', grupo: t('Ir a', 'Go to'), texto: t('Inicio', 'Home'), accion: ir('#inicio') },
+      { id: 'ir-proyectos', grupo: t('Ir a', 'Go to'), texto: t('Proyectos', 'Projects'), accion: ir('#proyectos') },
+      { id: 'ir-trayectoria', grupo: t('Ir a', 'Go to'), texto: t('Trayectoria', 'Experience'), accion: ir('#trayectoria') },
+      { id: 'ir-contacto', grupo: t('Ir a', 'Go to'), texto: t('Contacto', 'Contact'), accion: ir('#contacto') },
       {
         id: 'copiar-email',
-        grupo: es ? 'Contacto' : 'Contact',
-        texto: es ? 'Copiar mi email' : 'Copy my email',
+        grupo: t('Contacto', 'Contact'),
+        texto: t('Copiar mi email', 'Copy my email'),
         pista: 'aldairbz1719@gmail.com',
         accion: () => {
           navigator.clipboard?.writeText('aldairbz1719@gmail.com')
@@ -51,29 +50,29 @@ export default function Paleta({ onEjecutar }: Props) {
       },
       {
         id: 'linkedin',
-        grupo: es ? 'Contacto' : 'Contact',
-        texto: es ? 'Abrir LinkedIn' : 'Open LinkedIn',
+        grupo: t('Contacto', 'Contact'),
+        texto: t('Abrir LinkedIn', 'Open LinkedIn'),
         accion: () => {
           window.open('https://www.linkedin.com/in/scheneiderbz19/', '_blank', 'noopener')
         },
       },
       {
         id: 'github',
-        grupo: es ? 'Contacto' : 'Contact',
-        texto: es ? 'Abrir GitHub' : 'Open GitHub',
+        grupo: t('Contacto', 'Contact'),
+        texto: t('Abrir GitHub', 'Open GitHub'),
         accion: () => {
           window.open('https://github.com/AldairBZ', '_blank', 'noopener')
         },
       },
-      {
-        id: 'idioma',
-        grupo: es ? 'Preferencias' : 'Preferences',
-        texto: es ? 'Switch to English' : 'Cambiar a español',
-        pista: es ? 'EN' : 'ES',
-        accion: () => cambiar(es ? 'en' : 'es'),
-      },
+      ...IDIOMAS.filter((i) => i.codigo !== idioma).map((i) => ({
+        id: `idioma-${i.codigo}`,
+        grupo: t('Idioma', 'Language'),
+        texto: i.nombre,
+        pista: i.codigo.toUpperCase(),
+        accion: () => cambiar(i.codigo),
+      })),
     ]
-  }, [onEjecutar, idioma, cambiar])
+  }, [onEjecutar, idioma, cambiar, t, tx])
 
   const filtrados = useMemo(() => {
     const q = busqueda.trim().toLowerCase()

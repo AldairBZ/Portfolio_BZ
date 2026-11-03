@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { irA } from '../lib/scroll'
-import { useIdioma } from '../lib/idioma'
+import { IDIOMAS, useIdioma } from '../lib/idioma'
 import './Cabecera.css'
 
 const enlaces = [
@@ -29,7 +29,7 @@ export default function Cabecera() {
     <header className={`cabecera${compacta ? ' cabecera--compacta' : ''}`}>
       <a className="cabecera__marca" href="#inicio" onClick={(e) => navegar(e, '#inicio')}>
         <span className="cabecera__monograma" aria-hidden="true">
-          SB
+          B<span>Z</span>
         </span>
         <span className="cabecera__nombre">Scheneider Baltazar</span>
       </a>
@@ -58,16 +58,20 @@ export default function Cabecera() {
         <span className="cabecera__punto" aria-hidden="true" />
         {t('Disponible', 'Available')}
       </a>
-      <button
-        type="button"
-        className="cabecera__idioma"
-        onClick={() => cambiar(idioma === 'es' ? 'en' : 'es')}
-        aria-label={t('Switch to English', 'Cambiar a español')}
-      >
-        <span aria-current={idioma === 'es'}>ES</span>
-        <span aria-hidden="true">/</span>
-        <span aria-current={idioma === 'en'}>EN</span>
-      </button>
+      <div className="cabecera__idioma" role="group" aria-label={t('Idioma', 'Language')}>
+        {IDIOMAS.map((i) => (
+          <button
+            key={i.codigo}
+            type="button"
+            lang={i.codigo}
+            aria-pressed={idioma === i.codigo}
+            aria-label={i.nombre}
+            onClick={() => cambiar(i.codigo)}
+          >
+            {i.codigo.toUpperCase()}
+          </button>
+        ))}
+      </div>
       </div>
     </header>
   )

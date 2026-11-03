@@ -53,13 +53,33 @@ test('se juega una mano de BlackJack con el motor COBOL', async ({ page }) => {
 })
 
 test('cambia a inglés y lo recuerda al recargar', async ({ page }) => {
-  await page.getByRole('button', { name: 'Switch to English' }).click()
+  await page.getByRole('button', { name: 'English' }).click()
   await expect(page.getByText('Full Stack Developer · Tarragona, Spain')).toBeVisible()
   await expect(page).toHaveTitle(/Full Stack Developer/)
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
 
   await page.reload()
   await expect(page.getByText('Full Stack Developer · Tarragona, Spain')).toBeVisible()
+})
+
+test('se puede leer en catalán', async ({ page }) => {
+  await page.getByRole('button', { name: 'Català' }).click()
+  await expect(page.getByText('Desenvolupador Full Stack · Tarragona')).toBeVisible()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ca')
+  await expect(page).toHaveTitle(/Desenvolupador Full Stack/)
+})
+
+test.describe('con el navegador en catalán', () => {
+  test.use({ locale: 'ca-ES' })
+
+  test('detecta el idioma del navegador', async ({ browser }) => {
+    const contexto = await browser.newContext({ locale: 'ca-ES' })
+    const pagina = await contexto.newPage()
+    await pagina.goto('/')
+    await expect(pagina.locator('html')).toHaveAttribute('lang', 'ca')
+    await expect(pagina.getByRole('button', { name: 'Català' })).toHaveAttribute('aria-pressed', 'true')
+    await contexto.close()
+  })
 })
 
 test('la paleta navega a una sección', async ({ page }) => {
@@ -74,4 +94,20 @@ test('el retrato se dibuja y cada proyecto tiene su imagen', async ({ page }) =>
   await page.locator('.retrato').scrollIntoViewIfNeeded()
   await expect(page.getByRole('img', { name: /Retrato de Scheneider Baltazar/ })).toBeVisible()
   await expect(page.locator('.obra__lienzo')).toHaveCount(6)
+})
+
+test('la oreja del retrato abre el acceso al panel de visitas', async ({ page }) => {
+  const retrato = page.locator('.retrato__lienzo')
+  await retrato.scrollIntoViewIfNeeded()
+  const caja = (await retrato.boundingBox())!
+  await page.mouse.click(caja.x + caja.width * 0.665, caja.y + caja.height * 0.38)
+  const panel = page.getByRole('dialog', { name: 'Panel de visitas' })
+  await expect(panel.getByLabel('Contraseña')).toBeVisible()
+  // Sin servidor de funciones la contraseña no se puede comprobar, pero el formulario responde
+  await panel.getByLabel('Usuario').fill('nadie')
+  await panel.getByLabel('Contraseña').fill('nada')
+  await panel.getByRole('button', { name: 'Entrar' }).click()
+  await expect(panel.locator('.panel__error')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(panel).toBeHidden()
 })

@@ -1,14 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "portfolio",
-  "main": "worker/index.ts",
+  // Cloudflare Pages: la web estática de dist y las funciones de functions/api
+  "name": "scheneiderbz",
+  "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-10-15",
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "not_found_handling": "single-page-application",
-    // La API la atiende el Worker; el resto, los archivos estáticos
-    "run_worker_first": ["/api/*"]
-  },
-  "observability": { "enabled": true }
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio-visitas",
+      "database_id": "5c680cfa-ae82-40c1-a8ee-4481fe786330",
+      "migrations_dir": "migrations"
+    }
+  ]
 }

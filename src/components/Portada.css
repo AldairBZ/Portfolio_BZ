@@ -34,8 +34,12 @@
 
 .portada__titulo {
   margin: 0.6rem 0 0;
-  font-size: clamp(3rem, 9.5vw, 9rem);
-  line-height: 0.92;
+  font-family: var(--marca);
+  font-size: clamp(3.2rem, 10vw, 9.6rem);
+  font-weight: 700;
+  font-stretch: 88%;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
 }
 
 .portada__linea {

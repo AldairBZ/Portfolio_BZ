@@ -11,6 +11,6 @@ export default defineConfig({
   },
   test: {
     // Las pruebas en navegador (e2e) las ejecuta Playwright, no Vitest
-    include: ['src/**/*.test.ts', 'worker/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'servidor/**/*.test.ts'],
   },
 })

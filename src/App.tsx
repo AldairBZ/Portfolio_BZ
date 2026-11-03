@@ -10,6 +10,7 @@ import Contacto from './components/Contacto'
 import { iniciarScroll, ScrollTrigger } from './lib/scroll'
 import type { Proyecto } from './data/proyectos'
 import { useIdioma } from './lib/idioma'
+import { escucharClics, registrar } from './lib/analitica'
 
 // El ejecutor solo se descarga cuando alguien abre un proyecto
 const Ejecutor = lazy(() => import('./components/ejecutor/Ejecutor'))
@@ -18,9 +19,37 @@ export default function App() {
   const [abierto, setAbierto] = useState<Proyecto | null>(null)
   const { idioma, t } = useIdioma()
 
-  const ejecutar = useCallback((proyecto: Proyecto) => setAbierto(proyecto), [])
+  const ejecutar = useCallback((proyecto: Proyecto) => {
+    registrar('ejecutar', proyecto.id)
+    setAbierto(proyecto)
+  }, [])
   // Estable entre renders: si cambiara, la ventana abierta volvería a bloquear el scroll y a robar el foco
   const cerrar = useCallback(() => setAbierto(null), [])
+
+  // Visita, hasta qué sección llega (una vez por sección) y cada clic
+  useEffect(() => {
+    registrar('visita')
+    const vistas = new Set<string>()
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        for (const e of entradas) {
+          if (!e.isIntersecting || vistas.has(e.target.id)) continue
+          vistas.add(e.target.id)
+          registrar('seccion', e.target.id)
+        }
+      },
+      { threshold: 0.3 },
+    )
+    for (const id of ['proyectos', 'trayectoria', 'contacto']) {
+      const el = document.getElementById(id)
+      if (el) observador.observe(el)
+    }
+    const dejarDeEscuchar = escucharClics()
+    return () => {
+      observador.disconnect()
+      dejarDeEscuchar()
+    }
+  }, [])
 
   useEffect(() => {
     // Las animaciones de la portada empiezan siempre desde arriba

@@ -118,7 +118,11 @@ const json = (cuerpo: string, segundos: number) =>
     headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': `public, max-age=${segundos}` },
   })
 
-export async function responderGitHub(request: Request, ctx: ExecutionContext, tokenGitHub?: string) {
+export async function responderGitHub(
+  request: Request,
+  ctx: { waitUntil(promesa: Promise<unknown>): void },
+  tokenGitHub?: string,
+) {
   token = tokenGitHub ?? ''
   const cache = caches.default
   const reciente = new Request(new URL('/api/github', request.url).toString())

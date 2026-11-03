@@ -13,6 +13,8 @@
 
   --display: 'Martian Mono Variable', ui-monospace, monospace;
   --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  /* Solo para el nombre y el monograma */
+  --marca: 'Bricolage Grotesque Variable', 'IBM Plex Sans Variable', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --margen: clamp(1rem, 4vw, 3.5rem);
@@ -87,8 +89,7 @@ button {
   outline-offset: 3px;
 }
 
-/* Titulares: Martian Mono estrecha, el carácter de la página */
-.portada__titulo,
+/* Titulares: Martian Mono estrecha, el carácter de la página (el nombre usa --marca) */
 .proyectos__titulo,
 .obra__nombre,
 .github__titulo,

@@ -32,4 +32,4 @@ playwright-report/
 .dev.vars
 
 # Tipos generados por wrangler types (se crean al compilar)
-worker/worker-configuration.d.ts
+servidor/worker-configuration.d.ts

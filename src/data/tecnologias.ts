@@ -25,6 +25,7 @@ import {
   siVite,
 } from 'simple-icons'
 import type { FormaLogo } from '../lib/logoAscii'
+import { CATALAN } from '../lib/catalan'
 import type { Texto } from '../lib/idioma'
 
 export interface Tecnologia {
@@ -44,6 +45,7 @@ const PORTFOLIO = { es: 'este portfolio', en: 'this portfolio' }
 const usos = (...partes: (string | Texto)[]): Texto => ({
   es: partes.map((p) => (typeof p === 'string' ? p : p.es)).join(', '),
   en: partes.map((p) => (typeof p === 'string' ? p : p.en)).join(', '),
+  ca: partes.map((p) => (typeof p === 'string' ? p : (p.ca ?? CATALAN[p.es] ?? p.es))).join(', '),
 })
 
 export const tecnologias: GrupoTecnologias[] = [

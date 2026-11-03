@@ -102,39 +102,6 @@
   white-space: nowrap;
 }
 
-/* Captura real del proyecto */
-.obra__captura {
-  display: block;
-  object-fit: cover;
-  object-position: 50% 0%;
-}
-
-/* Las páginas largas se recorren despacio, como si alguien hiciera scroll */
-.obra__captura--recorrer {
-  animation: recorrer-captura 28s ease-in-out 1s infinite alternate;
-}
-
-.obra__ventana:hover .obra__captura--recorrer {
-  animation-play-state: paused;
-}
-
-@keyframes recorrer-captura {
-  0%,
-  8% {
-    object-position: 50% 0%;
-  }
-  92%,
-  100% {
-    object-position: 50% 100%;
-  }
-}
-
-/* Con movimiento reducido, el recorrido es mucho más lento */
-@media (prefers-reduced-motion: reduce) {
-  .obra__captura--recorrer {
-    animation-duration: 70s;
-  }
-}
 
 .obra__nombre {
   margin: 0.75rem 0 0;

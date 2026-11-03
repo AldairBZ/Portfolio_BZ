@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://portfolio.08-pruebas.workers.dev/sitemap.xml
+Sitemap: https://scheneiderbz.pages.dev/sitemap.xml
