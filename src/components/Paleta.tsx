@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { bloquearScroll, irA } from '../lib/scroll'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { useIdioma } from '../lib/idioma'
+import { registrar } from '../lib/analitica'
 import './Paleta.css'
 
 interface Comando {
@@ -45,19 +46,28 @@ export default function Paleta({ onEjecutar }: Props) {
         grupo: es ? 'Contacto' : 'Contact',
         texto: es ? 'Copiar mi email' : 'Copy my email',
         pista: 'aldairbz1719@gmail.com',
-        accion: () => navigator.clipboard?.writeText('aldairbz1719@gmail.com'),
+        accion: () => {
+          registrar('email', 'copiar')
+          navigator.clipboard?.writeText('aldairbz1719@gmail.com')
+        },
       },
       {
         id: 'linkedin',
         grupo: es ? 'Contacto' : 'Contact',
         texto: es ? 'Abrir LinkedIn' : 'Open LinkedIn',
-        accion: () => window.open('https://www.linkedin.com/in/scheneiderbz19/', '_blank', 'noopener'),
+        accion: () => {
+          registrar('linkedin')
+          window.open('https://www.linkedin.com/in/scheneiderbz19/', '_blank', 'noopener')
+        },
       },
       {
         id: 'github',
         grupo: es ? 'Contacto' : 'Contact',
         texto: es ? 'Abrir GitHub' : 'Open GitHub',
-        accion: () => window.open('https://github.com/AldairBZ', '_blank', 'noopener'),
+        accion: () => {
+          registrar('github')
+          window.open('https://github.com/AldairBZ', '_blank', 'noopener')
+        },
       },
       {
         id: 'idioma',

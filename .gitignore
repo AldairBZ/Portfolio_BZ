@@ -26,3 +26,10 @@ dist-ssr
 # Pruebas
 test-results/
 playwright-report/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Tipos generados por wrangler types (se crean al compilar)
+worker/worker-configuration.d.ts

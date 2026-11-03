@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useIdioma } from '../lib/idioma'
+import { registrar } from '../lib/analitica'
 import './Contacto.css'
 
 const EMAIL = 'aldairbz1719@gmail.com'
 const ANIO = new Date().getFullYear()
 
 const redes = [
-  { texto: 'LinkedIn', href: 'https://www.linkedin.com/in/scheneiderbz19/' },
-  { texto: 'GitHub', href: 'https://github.com/AldairBZ' },
+  { texto: 'LinkedIn', href: 'https://www.linkedin.com/in/scheneiderbz19/', evento: 'linkedin' as const },
+  { texto: 'GitHub', href: 'https://github.com/AldairBZ', evento: 'github' as const },
 ]
 
 export default function Contacto() {
@@ -15,6 +16,7 @@ export default function Contacto() {
   const { t } = useIdioma()
 
   const copiar = async () => {
+    registrar('email', 'copiar')
     try {
       await navigator.clipboard.writeText(EMAIL)
       setCopiado(true)
@@ -40,14 +42,14 @@ export default function Contacto() {
           )}
         </p>
         <div className="contacto__acciones">
-          <a className="boton boton--lleno contacto__correo" href={`mailto:${EMAIL}`}>
+          <a className="boton boton--lleno contacto__correo" href={`mailto:${EMAIL}`} onClick={() => registrar('email', 'abrir')}>
             {EMAIL}
           </a>
           <button type="button" className="boton" onClick={copiar} aria-live="polite">
             {copiado ? t('Copiado ✓', 'Copied ✓') : t('Copiar email', 'Copy email')}
           </button>
           {redes.map((red) => (
-            <a key={red.texto} className="boton" href={red.href} target="_blank" rel="noreferrer">
+            <a key={red.texto} className="boton" href={red.href} target="_blank" rel="noreferrer" onClick={() => registrar(red.evento)}>
               {red.texto} ↗
             </a>
           ))}
@@ -64,6 +66,7 @@ export default function Contacto() {
             'React · TypeScript · GSAP · Java in the browser with CheerpJ · Python with Pyodide · COBOL on my own interpreter · Cloudflare',
           )}
         </p>
+        <p>{t('Visitas contadas de forma anónima, sin cookies.', 'Visits counted anonymously, without cookies.')}</p>
       </div>
     </footer>
   )

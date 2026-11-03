@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useIdioma, type Idioma } from '../lib/idioma'
 import './GitHub.css'
 
 const USUARIO = 'AldairBZ'
-// Solo los repositorios de código; el resto de la cuenta no se muestra
+// Respaldo si el Worker no responde (por ejemplo, en desarrollo): solo estos repositorios
 const REPOS = [
   'LifeLevelUp',
   'TetrisGame',
@@ -29,6 +29,17 @@ interface Commit {
   url: string
 }
 
+interface Actividad {
+  dias: { fecha: string; nivel: number }[]
+  total: number | null
+}
+
+interface Datos {
+  repos: Repo[]
+  commits: Commit[]
+  actividad: Actividad
+}
+
 const coloresLenguaje: Record<string, string> = {
   JavaScript: '#e9c46a',
   TypeScript: '#5f8fc4',
@@ -43,7 +54,8 @@ const coloresLenguaje: Record<string, string> = {
 function haceCuanto(fecha: string, idioma: Idioma) {
   // Intl da 'hoy', 'ayer', 'hace 3 días'… en cada idioma
   const formato = new Intl.RelativeTimeFormat(idioma, { numeric: 'auto' })
-  const dias = Math.floor((Date.now() - new Date(fecha).getTime()) / 86400000)
+  // Un reloj del visitante algo atrasado no debe mostrar «mañana»
+  const dias = Math.max(0, Math.floor((Date.now() - new Date(fecha).getTime()) / 86400000))
   if (dias < 30) return formato.format(-dias, 'day')
   return formato.format(-Math.floor(dias / 30), 'month')
 }
@@ -67,40 +79,100 @@ async function pedir<T>(url: string): Promise<T> {
   return datos
 }
 
+async function cargarDirecto(): Promise<Datos> {
+  const todos = await pedir<Repo[]>(`https://api.github.com/users/${USUARIO}/repos?per_page=100&sort=pushed`)
+  const propios = todos.filter((r) => REPOS.includes(r.name))
+  // Los últimos commits de los cuatro repositorios con actividad más reciente
+  const listas = await Promise.all(
+    propios.slice(0, 4).map((r) =>
+      pedir<{ html_url: string; commit: { message: string; author: { date: string } } }[]>(
+        `https://api.github.com/repos/${USUARIO}/${r.name}/commits?per_page=3`,
+      )
+        .then((cs) =>
+          cs.map((c) => ({ repo: r.name, mensaje: c.commit.message.split('\n')[0], fecha: c.commit.author.date, url: c.html_url })),
+        )
+        .catch(() => [] as Commit[]),
+    ),
+  )
+  return {
+    repos: propios,
+    commits: listas
+      .flat()
+      .sort((x, y) => y.fecha.localeCompare(x.fecha))
+      .slice(0, 6),
+    actividad: { dias: [], total: null },
+  }
+}
+
+const NIVELES = ['·', ':', '=', '#', '@']
+
+/** Calendario de contribuciones dibujado con caracteres: una columna por semana */
+function MapaActividad({ actividad }: { actividad: Actividad }) {
+  const { t, idioma } = useIdioma()
+  const contenedor = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // En pantallas estrechas se muestra primero lo más reciente
+    const el = contenedor.current
+    if (el) el.scrollLeft = el.scrollWidth
+  }, [actividad])
+
+  if (!actividad.dias.length) return null
+  const semanas: { fecha: string; nivel: number }[][] = []
+  const primero = new Date(actividad.dias[0].fecha).getUTCDay()
+  const celdas = [...Array(primero).fill(null), ...actividad.dias]
+  for (let i = 0; i < celdas.length; i += 7) semanas.push(celdas.slice(i, i + 7))
+
+  return (
+    <figure className="actividad">
+      <figcaption className="etiqueta">
+        {actividad.total !== null
+          ? t(`${actividad.total} contribuciones en el último año`, `${actividad.total} contributions in the last year`)
+          : t('Actividad del último año', 'Activity in the last year')}
+      </figcaption>
+      <div className="actividad__rejilla" ref={contenedor} role="img" aria-label={t('Mapa de contribuciones de GitHub', 'GitHub contributions map')}>
+        {semanas.map((semana, i) => (
+          <div key={i} className="actividad__semana">
+            {semana.map((dia, j) =>
+              dia ? (
+                <span
+                  key={j}
+                  className={`actividad__dia actividad__dia--${dia.nivel}`}
+                  title={new Date(dia.fecha).toLocaleDateString(idioma, { day: 'numeric', month: 'short', year: 'numeric' })}
+                >
+                  {NIVELES[dia.nivel] ?? '·'}
+                </span>
+              ) : (
+                <span key={j} className="actividad__dia" />
+              ),
+            )}
+          </div>
+        ))}
+      </div>
+    </figure>
+  )
+}
+
 export default function GitHub() {
   const [repos, setRepos] = useState<Repo[] | null>(null)
   const [commits, setCommits] = useState<Commit[]>([])
   const [error, setError] = useState(false)
+  const [actividad, setActividad] = useState<Actividad | null>(null)
   const { idioma, t } = useIdioma()
 
   useEffect(() => {
-    pedir<Repo[]>(`https://api.github.com/users/${USUARIO}/repos?per_page=100&sort=pushed`)
-      .then(async (todos) => {
-        const propios = todos.filter((r) => REPOS.includes(r.name))
-        setRepos(propios)
-        // Los últimos commits de los cuatro repositorios con actividad más reciente
-        const listas = await Promise.all(
-          propios.slice(0, 4).map((r) =>
-            pedir<{ sha: string; html_url: string; commit: { message: string; author: { date: string } } }[]>(
-              `https://api.github.com/repos/${USUARIO}/${r.name}/commits?per_page=3`,
-            )
-              .then((cs) =>
-                cs.map((c) => ({
-                  repo: r.name,
-                  mensaje: c.commit.message.split('\n')[0],
-                  fecha: c.commit.author.date,
-                  url: c.html_url,
-                })),
-              )
-              .catch(() => [] as Commit[]),
-          ),
-        )
-        setCommits(
-          listas
-            .flat()
-            .sort((x, y) => y.fecha.localeCompare(x.fecha))
-            .slice(0, 6),
-        )
+    // El Worker de Cloudflare junta repos, commits y mapa de actividad con caché;
+    // si no está disponible, se pide directamente a la API pública de GitHub
+    pedir<Datos>('/api/github')
+      .then((datos) => {
+        if (!Array.isArray(datos.repos)) throw new Error('Respuesta no válida')
+        return datos
+      })
+      .catch(cargarDirecto)
+      .then((datos) => {
+        setRepos(datos.repos)
+        setCommits(datos.commits)
+        setActividad(datos.actividad)
       })
       .catch(() => setError(true))
   }, [])
@@ -132,6 +204,8 @@ export default function GitHub() {
             <a href={`https://github.com/${USUARIO}`}>github.com/{USUARIO}</a>.
           </p>
         )}
+
+        {actividad && <MapaActividad actividad={actividad} />}
 
         <div className="github__rejilla">
           <ol className="github__commits" aria-label={t('Commits recientes', 'Recent commits')}>
