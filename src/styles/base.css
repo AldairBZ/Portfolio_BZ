@@ -11,9 +11,9 @@
   --azul: #5f8fc4;
   --rosa: #e9b7a6;
 
-  --serif: 'Instrument Serif', 'Times New Roman', serif;
-  --sans: 'Geist Variable', system-ui, sans-serif;
-  --mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --display: 'Martian Mono Variable', ui-monospace, monospace;
+  --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --margen: clamp(1rem, 4vw, 3.5rem);
   --ancho: 1440px;
@@ -85,6 +85,33 @@ button {
 :focus-visible {
   outline: 2px solid var(--bermellon);
   outline-offset: 3px;
+}
+
+/* Titulares: Martian Mono estrecha, el carácter de la página */
+.portada__titulo,
+.proyectos__titulo,
+.obra__nombre,
+.github__titulo,
+.trayectoria__titulo,
+.contacto__titulo,
+.stack__nombre,
+.ejecutor__titulo,
+.portada__frase,
+.manifiesto__valor,
+.camara__datos strong {
+  font-family: var(--display);
+  font-stretch: 75%;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+}
+
+.portada__titulo em,
+.proyectos__titulo em,
+.github__titulo em,
+.trayectoria__titulo em,
+.contacto__titulo em,
+.portada__frase em {
+  font-style: normal;
 }
 
 .etiqueta {

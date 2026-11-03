@@ -11,11 +11,8 @@
 
 .contacto__titulo {
   margin: 1rem 0 0;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(3.2rem, 10vw, 10rem);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.6rem, 8vw, 8rem);
+  line-height: 0.95;
 }
 
 .contacto__titulo em {

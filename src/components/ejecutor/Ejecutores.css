@@ -195,8 +195,6 @@ body > .java__pantalla {
 }
 
 .camara__datos strong {
-  font-family: var(--serif);
-  font-weight: 400;
   font-size: 2rem;
   line-height: 1;
 }

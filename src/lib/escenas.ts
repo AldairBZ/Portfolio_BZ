@@ -19,7 +19,7 @@ const C = {
   rosa: '#e9b7a6',
 }
 
-const MONO = '"Geist Mono Variable", ui-monospace, monospace'
+const MONO = '"IBM Plex Mono", ui-monospace, monospace'
 
 /* Bloques que caen y se apilan; las filas completas desaparecen */
 export function escenaBloques(): Escena {

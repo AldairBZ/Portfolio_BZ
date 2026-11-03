@@ -1,8 +1,15 @@
 .proyectos {
   position: relative;
-  overflow: hidden;
   background: var(--tinta-2);
   border-block: 1px solid var(--linea);
+}
+
+/* En escritorio la galería se queda fija mientras avanza en horizontal */
+.proyectos__fijo {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
 }
 
 .proyectos__pista {
@@ -11,7 +18,8 @@
   gap: clamp(3rem, 6vw, 7rem);
   width: max-content;
   height: 100svh;
-  padding: 6rem var(--margen) 3rem;
+  /* El último proyecto termina centrado en pantalla */
+  padding: 6rem calc((100vw - min(62rem, 78vw)) / 2) 3rem var(--margen);
   will-change: transform;
 }
 
@@ -22,9 +30,7 @@
 
 .proyectos__titulo {
   margin: 1rem 0 0;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(3rem, 6.5vw, 6.5rem);
+  font-size: clamp(2.4rem, 5vw, 5.2rem);
   line-height: 0.95;
 }
 
@@ -91,9 +97,7 @@
 
 .obra__nombre {
   margin: 0.75rem 0 0;
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(2.4rem, 4.4vw, 4.4rem);
+  font-size: clamp(2rem, 3.4vw, 3.6rem);
   line-height: 1;
 }
 
@@ -129,6 +133,11 @@
 }
 
 @media (max-width: 899px) {
+  .proyectos__fijo {
+    position: static;
+    height: auto;
+  }
+
   .proyectos__pista {
     flex-direction: column;
     align-items: stretch;

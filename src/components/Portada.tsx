@@ -45,13 +45,21 @@ export default function Portada() {
       // Scroll: el planeta se centra, crece y la portada da paso al mensaje
       gsap
         .timeline({
-          scrollTrigger: { trigger: raiz.current, start: 'top top', end: '+=130%', scrub: 1, pin: true },
+          scrollTrigger: {
+            trigger: raiz.current,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
+          },
         })
-        .to('.portada__texto', { yPercent: -25, autoAlpha: 0, ease: 'none', duration: 0.45 }, 0)
+        .to('.portada__texto, .portada__pista', { yPercent: -25, autoAlpha: 0, ease: 'none', duration: 0.45 }, 0)
         .to(planeta.opciones, { centroX: 0.5, centroY: 0.5, ease: 'none', duration: 0.6 }, 0)
         .to(planeta.estado, { zoom: movil ? 2.2 : 2.9, velocidad: 3, ease: 'none', duration: 1 }, 0)
         .to(planeta.estado, { brillo: 0.32, ease: 'none', duration: 0.4 }, 0.55)
-        .fromTo('.portada__frase', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.3 }, 0.62)
+        .fromTo('.portada__frase', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.25 }, 0.55)
+        // Salida limpia antes de que llegue la siguiente sección
+        .to('.portada__frase', { autoAlpha: 0, y: -30, duration: 0.15 }, 0.9)
+        .to('.portada__lienzo', { opacity: 0.35, ease: 'none', duration: 0.15 }, 0.85)
     }, raiz)
 
     return () => {
@@ -63,6 +71,8 @@ export default function Portada() {
 
   return (
     <section id="inicio" className="portada" ref={raiz}>
+      {/* La escena se queda fija (sticky) mientras se recorre el alto de la sección */}
+      <div className="portada__escena">
       <canvas className="portada__lienzo" ref={lienzo} aria-hidden="true" />
 
       <div className="portada__texto">
@@ -112,6 +122,7 @@ export default function Portada() {
       <p className="etiqueta portada__pista portada__aparece" aria-hidden="true">
         Pulsa <kbd>Ctrl</kbd> + <kbd>K</kbd>
       </p>
+      </div>
     </section>
   )
 }

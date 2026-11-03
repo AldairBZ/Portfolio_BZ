@@ -112,7 +112,7 @@ export class PlanetaAscii {
 
     const celdaAlto = o.celda
     const celdaAncho = o.celda * 0.6
-    ctx.font = `${celdaAlto}px "Geist Mono Variable", ui-monospace, monospace`
+    ctx.font = `${celdaAlto}px "IBM Plex Mono", ui-monospace, monospace`
     ctx.textBaseline = 'top'
 
     const columnas = Math.ceil(ancho / celdaAncho)
@@ -186,7 +186,7 @@ export class PlanetaAscii {
     const { ctx, opciones: o } = this
     const simbolos = '{}<>;/=+*'
     const total = 90
-    ctx.font = `${celda * 0.9}px "Geist Mono Variable", ui-monospace, monospace`
+    ctx.font = `${celda * 0.9}px "IBM Plex Mono", ui-monospace, monospace`
     ctx.fillStyle = o.colorAnillo
     for (let i = 0; i < total; i++) {
       const a = (i / total) * Math.PI * 2 + this.giro * 1.6

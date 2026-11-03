@@ -56,6 +56,7 @@ export default function Trayectoria() {
   return (
     <section id="trayectoria" className="trayectoria" ref={raiz} aria-labelledby="trayectoria-titulo">
       <div className="trayectoria__contenido">
+        <div className="trayectoria__principal">
         <header>
           <p className="etiqueta">Trayectoria</p>
           <h2 id="trayectoria-titulo" className="trayectoria__titulo">
@@ -81,6 +82,8 @@ export default function Trayectoria() {
             </li>
           ))}
           </ol>
+        </div>
+
         </div>
 
         <div className="stack" aria-labelledby="stack-titulo">

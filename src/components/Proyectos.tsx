@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
-import { gsap } from '../lib/scroll'
+import { gsap, ScrollTrigger } from '../lib/scroll'
 import Ilustracion from './Ilustracion'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import './Proyectos.css'
@@ -26,16 +26,22 @@ export default function Proyectos({ onEjecutar }: Props) {
     // En escritorio la galería avanza en horizontal mientras se hace scroll
     mm.add('(min-width: 900px)', () => {
       const el = pista.current!
+      const seccion = raiz.current!
       const distancia = () => el.scrollWidth - window.innerWidth
+      // La sección mide lo que dura el recorrido horizontal; dentro, la galería es sticky
+      const ajustarAlto = () => {
+        seccion.style.height = `${window.innerHeight + distancia()}px`
+      }
+      ajustarAlto()
+      ScrollTrigger.addEventListener('refreshInit', ajustarAlto)
       const avance = gsap.to(el, {
         x: () => -distancia(),
         ease: 'none',
         scrollTrigger: {
-          trigger: raiz.current,
+          trigger: seccion,
           start: 'top top',
-          end: () => `+=${distancia()}`,
+          end: 'bottom bottom',
           scrub: 1,
-          pin: true,
           invalidateOnRefresh: true,
         },
       })
@@ -58,6 +64,10 @@ export default function Proyectos({ onEjecutar }: Props) {
           },
         )
       })
+      return () => {
+        ScrollTrigger.removeEventListener('refreshInit', ajustarAlto)
+        seccion.style.height = ''
+      }
     })
 
     mm.add('(max-width: 899px)', () => {
@@ -77,6 +87,7 @@ export default function Proyectos({ onEjecutar }: Props) {
 
   return (
     <section id="proyectos" className="proyectos" ref={raiz} aria-labelledby="proyectos-titulo">
+      <div className="proyectos__fijo">
       <div className="proyectos__pista" ref={pista}>
         <header className="proyectos__intro">
           <p className="etiqueta">Proyectos · {String(proyectos.length).padStart(2, '0')}</p>
@@ -127,6 +138,7 @@ export default function Proyectos({ onEjecutar }: Props) {
             </div>
           </article>
         ))}
+      </div>
       </div>
     </section>
   )

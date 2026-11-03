@@ -21,10 +21,31 @@ export default function App() {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
     window.scrollTo(0, 0)
     const parar = iniciarScroll()
-    // Recalcula posiciones cuando terminan de cargar fuentes e imágenes
-    document.fonts?.ready.then(() => ScrollTrigger.refresh())
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true })
-    return parar
+
+    // Las secciones fijadas (pin) añaden altura: se ordenan por su posición en la página
+    // y se recalculan cuando cambia la altura del documento (fuentes, datos de GitHub…)
+    let altoAnterior = 0
+    let espera = 0
+    const recalcular = () => {
+      ScrollTrigger.sort()
+      ScrollTrigger.refresh()
+      altoAnterior = document.body.scrollHeight
+    }
+    const primera = requestAnimationFrame(recalcular)
+    const observador = new ResizeObserver(() => {
+      if (Math.abs(document.body.scrollHeight - altoAnterior) < 2) return
+      clearTimeout(espera)
+      espera = window.setTimeout(recalcular, 150)
+    })
+    observador.observe(document.body)
+    document.fonts?.ready.then(recalcular)
+
+    return () => {
+      parar()
+      cancelAnimationFrame(primera)
+      clearTimeout(espera)
+      observador.disconnect()
+    }
   }, [])
 
   return (
