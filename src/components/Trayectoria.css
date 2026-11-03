@@ -94,34 +94,6 @@
   color: var(--rosa);
 }
 
-.stack {
-  margin-top: 6rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--linea);
-}
-
-.stack__grupos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-.stack__nombre {
-  margin: 0;
-  font-size: 1.3rem;
-}
-
-.stack__grupo ul {
-  margin: 0.8rem 0 0;
-  padding: 0;
-  list-style: none;
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  line-height: 2;
-  color: var(--papel-2);
-}
-
 @media (max-width: 860px) {
   .trayectoria__principal {
     grid-template-columns: 1fr;
@@ -129,9 +101,5 @@
 
   .trayectoria__principal > header {
     position: static;
-  }
-
-  .stack__grupos {
-    grid-template-columns: repeat(2, 1fr);
   }
 }

@@ -1,0 +1,120 @@
+.tecnologias {
+  margin-top: 6rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--linea);
+}
+
+.tecnologias__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 2rem;
+}
+
+.tecnologias__cabecera .etiqueta {
+  margin: 0;
+}
+
+.tecnologias__pista {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+}
+
+.tecnologias__grupo {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1rem 2rem;
+  align-items: start;
+  margin-top: 2.5rem;
+}
+
+.tecnologias__nombre {
+  margin: 0.6rem 0 0;
+  font-family: var(--display);
+  font-stretch: 75%;
+  font-weight: 500;
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+}
+
+.tecnologias__fichas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ficha__boton {
+  display: grid;
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.7rem;
+  border: 1px solid var(--linea);
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.3s,
+    background 0.3s;
+}
+
+.ficha--activa .ficha__boton {
+  border-color: var(--papel-3);
+  background: var(--tinta-2);
+}
+
+.ficha__logo {
+  width: 100%;
+  height: 6.2rem;
+}
+
+.ficha__nombre {
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--papel);
+}
+
+/* Dónde la he usado: aparece al resaltar la ficha */
+.ficha__uso {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--papel-3);
+  opacity: 0;
+  transition:
+    grid-template-rows 0.35s var(--ease),
+    opacity 0.35s;
+}
+
+.ficha__uso > span {
+  min-height: 0;
+}
+
+.ficha--activa .ficha__uso {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 860px) {
+  .tecnologias__grupo {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .tecnologias__fichas {
+    grid-template-columns: repeat(auto-fill, minmax(7.2rem, 1fr));
+  }
+
+  .ficha__logo {
+    height: 5rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/scroll'
 import { useIdioma, type Texto } from '../lib/idioma'
+import Tecnologias from './Tecnologias'
 import './Trayectoria.css'
 
 const mismo = (texto: string): Texto => ({ es: texto, en: texto })
@@ -30,16 +31,6 @@ const hitos = [
       es: 'AZ-900, AI-900, DP-900 y SC-900. Y Java SE 11 Programming II, de La Salle.',
       en: 'AZ-900, AI-900, DP-900 and SC-900. Plus Java SE 11 Programming II, from La Salle.',
     },
-  },
-]
-
-const stack = [
-  { grupo: mismo('Backend'), items: ['Java', 'Spring Boot', 'Hibernate', 'Node.js', 'Express', 'REST', 'JWT', 'OAuth 2.0'] },
-  { grupo: mismo('Frontend'), items: ['React', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Vite'] },
-  { grupo: { es: 'Datos', en: 'Data' }, items: ['MySQL', 'MongoDB', 'SQLite', 'JDBC'] },
-  {
-    grupo: { es: 'Calidad y entrega', en: 'Quality & delivery' },
-    items: ['JUnit', 'Supertest', 'Maven', 'Git', 'GitHub Actions', 'Cloudflare', 'Azure'],
   },
 ]
 
@@ -100,23 +91,7 @@ export default function Trayectoria() {
 
         </div>
 
-        <div className="stack" aria-labelledby="stack-titulo">
-          <h3 id="stack-titulo" className="etiqueta">
-            {t('Con qué trabajo', 'What I work with')}
-          </h3>
-          <div className="stack__grupos">
-            {stack.map((g) => (
-              <div key={g.grupo.es} className="stack__grupo">
-                <p className="stack__nombre">{tx(g.grupo)}</p>
-                <ul>
-                  {g.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Tecnologias />
       </div>
     </section>
   )
