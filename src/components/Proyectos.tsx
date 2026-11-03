@@ -4,6 +4,7 @@ import VistaProyecto from './VistaProyecto'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { useIdioma, type Texto } from '../lib/idioma'
 import { precargar } from '../lib/precarga'
+import Resplandor from './Resplandor'
 import './Proyectos.css'
 
 const textoBoton: Record<Proyecto['ejecucion']['tipo'], Texto> = {
@@ -45,7 +46,8 @@ export default function Proyectos({ onEjecutar }: Props) {
           trigger: seccion,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1,
+          // Sin retraso: con retraso, al subir rápido la página salía de la galería antes de que volviera al principio
+          scrub: true,
           invalidateOnRefresh: true,
         },
       })
@@ -98,6 +100,7 @@ export default function Proyectos({ onEjecutar }: Props) {
             {t('Proyectos', 'Projects')} · {String(proyectos.length).padStart(2, '0')}
           </p>
           <h2 id="proyectos-titulo" className="proyectos__titulo">
+            <Resplandor color="var(--bermellon)" />
             {t('No te los enseño.', 'I don’t show them.')}
             <br />
             <em>{t('Los ejecutas.', 'You run them.')}</em>

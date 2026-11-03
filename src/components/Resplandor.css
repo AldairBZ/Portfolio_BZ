@@ -1,0 +1,24 @@
+.resplandor {
+  position: absolute;
+  z-index: -1;
+  left: -6%;
+  top: 50%;
+  width: min(46rem, 90vw);
+  height: 70%;
+  min-height: 12rem;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-luz) 46%, transparent), transparent);
+  filter: blur(48px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Titulares que llevan resplandor: la luz queda detrás de sus letras */
+.proyectos__titulo,
+.github__titulo,
+.trayectoria__titulo,
+.contacto__titulo {
+  position: relative;
+  isolation: isolate;
+}

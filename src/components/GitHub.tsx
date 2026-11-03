@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useIdioma, type Idioma } from '../lib/idioma'
+import Resplandor from './Resplandor'
 import './GitHub.css'
 
 const USUARIO = 'AldairBZ'
@@ -196,6 +197,7 @@ export default function GitHub() {
             <span className="github__vivo" aria-hidden="true" /> {t('En directo', 'Live')} · api.github.com
           </p>
           <h2 id="github-titulo" className="github__titulo">
+            <Resplandor color="var(--azul)" />
             {t('Lo último que', 'What I’ve been')}
             <br />
             <em>{t('he subido.', 'pushing lately.')}</em>

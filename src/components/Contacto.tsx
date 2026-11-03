@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { DragonAscii } from '../lib/dragonAscii'
 import { useIdioma } from '../lib/idioma'
+import Resplandor from './Resplandor'
 import './Contacto.css'
 
 const EMAIL = 'aldairbz1719@gmail.com'
@@ -39,6 +40,7 @@ export default function Contacto() {
       <div className="contacto__contenido">
         <p className="etiqueta">{t('Contacto', 'Contact')}</p>
         <h2 id="contacto-titulo" className="contacto__titulo">
+          <Resplandor color="var(--rosa)" />
           {t('¿Construimos', 'Shall we build')}
           <br />
           <em>{t('algo juntos?', 'something together?')}</em>

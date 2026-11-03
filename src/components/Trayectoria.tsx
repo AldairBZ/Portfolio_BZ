@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/scroll'
 import { useIdioma, type Texto } from '../lib/idioma'
 import Tecnologias from './Tecnologias'
+import Resplandor from './Resplandor'
 import './Trayectoria.css'
 
 const mismo = (texto: string): Texto => ({ es: texto, en: texto })
@@ -65,6 +66,7 @@ export default function Trayectoria() {
         <header>
           <p className="etiqueta">{t('Trayectoria', 'Experience')}</p>
           <h2 id="trayectoria-titulo" className="trayectoria__titulo">
+            <Resplandor color="var(--celadon)" />
             {t('Aprender rápido,', 'Learn fast,')}
             <br />
             <em>{t('entregar código que funciona.', 'ship code that works.')}</em>

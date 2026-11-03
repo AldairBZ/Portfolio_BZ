@@ -28,7 +28,8 @@
 
 .contacto__titulo {
   margin: 1rem 0 0;
-  font-size: clamp(2.6rem, 8vw, 8rem);
+  /* Más contenido: en catalán e inglés la segunda línea es mucho más larga */
+  font-size: clamp(2.3rem, 5.6vw, 5.8rem);
   line-height: 0.95;
 }
 
