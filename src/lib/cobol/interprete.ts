@@ -184,8 +184,10 @@ export class ProgramaCobol {
 
   private leerCabecera() {
     this.saltarHasta('PROGRAM-ID')
-    this.p += 2
-    return this.tokens[this.p - 1].v
+    this.p++
+    // PROGRAM-ID. NOMBRE. : el punto tras PROGRAM-ID es opcional
+    if (this.esPunto()) this.p++
+    return this.tokens[this.p++].v
   }
 
   private leerArchivos() {
@@ -926,6 +928,13 @@ export class ProgramaCobol {
   private reiniciarMemoria() {
     if (!this.memoriaInicial) this.memoriaInicial = [...this.memoria]
     else this.memoria = [...this.memoriaInicial]
+  }
+
+  /** Contenido de un campo tal como está en memoria (para pruebas y depuración) */
+  leer(nombre: string) {
+    const campo = this.campos.get(nombre)
+    if (!campo) throw new Error(`Dato desconocido: ${nombre}`)
+    return this.texto({ k: 'ref', campo })
   }
 
   get estadisticas() {
