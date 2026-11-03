@@ -69,17 +69,23 @@ function Dias({ dias }: { dias: Ranking }) {
   )
 }
 
+const fecha = (iso: string) => new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })
+
 function Resumen({ datos }: { datos: ResumenPanel }) {
   const cifras: [number, string][] = [
-    [datos.totales.visitas, 'visitas'],
-    [datos.totales.destacadas, 'destacadas'],
-    [datos.totales.proyectos, 'proyectos ejecutados'],
-    [datos.totales.repos, 'repos abiertos'],
-    [datos.totales.clics, 'clics'],
+    [datos.totales.personas, 'personas distintas'],
+    [datos.totales.nuevasHoy, 'nuevas hoy'],
+    [datos.totales.linkedin, 'desde LinkedIn'],
+    [datos.totales.github, 'desde GitHub'],
+    [datos.totales.proyectos, 'han ejecutado un proyecto'],
     [datos.totales.contacto, 'email o LinkedIn'],
   ]
   return (
     <>
+      <p className="panel__nota">
+        Cada persona cuenta una sola vez, aunque vuelva o haga muchos clics. Los números de las tablas son personas
+        distintas.
+      </p>
       <div className="panel__cifras">
         {cifras.map(([n, texto]) => (
           <p key={texto}>
@@ -90,33 +96,36 @@ function Resumen({ datos }: { datos: ResumenPanel }) {
       </div>
       <div className="panel__rejilla">
         <Dias dias={datos.porDia} />
+        <Tabla titulo="De dónde llegan" filas={datos.origenes} unidad="pers." />
         <Tabla titulo="Proyectos ejecutados" filas={datos.proyectos} unidad="pers." />
         <Tabla titulo="Repositorios abiertos" filas={datos.repos} unidad="pers." />
-        <Tabla titulo="Todos los clics" filas={datos.clics} />
+        <Tabla titulo="Todos los clics" filas={datos.clics} unidad="pers." />
         <Tabla titulo="Hasta dónde bajan" filas={datos.secciones} unidad="pers." />
-        <Tabla titulo="De dónde llegan" filas={datos.referencias} />
-        <Tabla titulo="Desde dónde" filas={datos.lugares} />
-        <Tabla titulo="Dispositivo" filas={datos.dispositivos} />
-        <Tabla titulo="Idioma" filas={datos.idiomas} />
+        <Tabla titulo="Desde dónde" filas={datos.lugares} unidad="pers." />
+        <Tabla titulo="Dispositivo" filas={datos.dispositivos} unidad="pers." />
+        <Tabla titulo="Idioma" filas={datos.idiomas} unidad="pers." />
       </div>
       <section className="panel__bloque panel__bloque--ancho">
-        <h3>Últimas visitas</h3>
+        <h3>Últimas personas</h3>
         {datos.ultimas.length ? (
           <ul className="panel__visitas">
             {datos.ultimas.map((v) => (
-              <li key={v.fecha + v.referencia} className={v.portal || v.empresa ? 'panel__visita--destacada' : ''}>
+              <li key={v.primera + v.lugar} className={v.destacada ? 'panel__visita--destacada' : ''}>
                 <p>
-                  <strong>{new Date(v.fecha).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}</strong>
+                  <strong>{fecha(v.ultima)}</strong>
                   {' · '}
-                  {v.lugar || '—'} · {v.referencia} · {v.dispositivo} · {v.idioma}
+                  {v.lugar || '—'} · {v.dispositivo} · {v.idioma}
+                  {v.visitas > 1 && ` · ${v.visitas} visitas desde el ${fecha(v.primera)}`}
                 </p>
-                {(v.portal || v.empresa) && (
-                  <p className="panel__marcas">
-                    {v.portal && <span>viene de un portal de empleo</span>}
-                    {v.empresa && <span>red de empresa: {v.empresa}</span>}
-                  </p>
-                )}
-                {v.acciones.length > 0 && <p className="panel__acciones">{v.acciones.join('  →  ')}</p>}
+                <p className="panel__marcas">
+                  {v.origenes.map((o) => (
+                    <span key={o} className={o === 'Directo' ? 'panel__marca--neutra' : ''}>
+                      {o === 'Directo' ? 'entró directamente' : `llegó desde ${o}`}
+                    </span>
+                  ))}
+                  {v.empresa && <span>red de empresa: {v.empresa}</span>}
+                </p>
+                {v.acciones.length > 0 && <p className="panel__acciones">{v.acciones.join('  ·  ')}</p>}
               </li>
             ))}
           </ul>

@@ -15,7 +15,7 @@ const POR_DEFECTO = [
   'BlackJack-Proyecto-COBOL',
   'A2_ResidentEvil_Web',
   'BootCamp-TechTalent',
-  'portfolio',
+  'Portfolio_BZ',
 ]
 // Nunca se muestran: son personales
 const BLOQUEADOS = ['08-03Love', 'Fther', 'AldairBZ']

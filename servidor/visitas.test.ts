@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { iguales, resumir, type Fila } from './resumen'
+import { iguales, origen, resumir, type Fila } from './resumen'
 
 const hoy = new Date('2026-11-03T12:00:00Z')
-const fila = (sesion: string, evento: string, detalle = '', extra: Partial<Fila> = {}): Fila => ({
+const fila = (visitante: string, evento: string, detalle = '', extra: Partial<Fila> = {}): Fila => ({
   fecha: '2026-11-03T10:00:00Z',
-  sesion,
+  sesion: `${visitante}-1`,
+  visitante,
   evento,
   detalle,
   idioma: 'es',
@@ -16,51 +17,64 @@ const fila = (sesion: string, evento: string, detalle = '', extra: Partial<Fila>
   ...extra,
 })
 
-// Como en la base de datos: de más reciente a más antiguo
 const filas: Fila[] = [
-  fila('b', 'email', 'copiar'),
-  fila('b', 'repo', 'TetrisGame'),
-  fila('b', 'ejecutar', 'tetris'),
-  fila('b', 'visita', '', { referencia: 'linkedin.com', red: 'Indra Sistemas' }),
-  fila('a', 'ejecutar', 'tetris'),
-  fila('a', 'ejecutar', 'tetris'),
-  fila('a', 'clic', 'proyectos: Código'),
+  // Alguien de LinkedIn desde la red de una empresa, que vuelve al día siguiente desde GitHub
+  fila('b', 'visita', '', { referencia: 'ref:linkedin', red: 'Indra Sistemas', fecha: '2026-11-02T09:00:00Z' }),
+  fila('b', 'ejecutar', 'tetris', { fecha: '2026-11-02T09:01:00Z' }),
+  fila('b', 'visita', '', { referencia: 'github.com', sesion: 'b-2', fecha: '2026-11-03T09:00:00Z' }),
+  fila('b', 'repo', 'TetrisGame', { sesion: 'b-2', fecha: '2026-11-03T09:02:00Z' }),
+  fila('b', 'email', 'copiar', { sesion: 'b-2', fecha: '2026-11-03T09:03:00Z' }),
+  // Alguien que entra directo y pulsa veinte veces lo mismo
   fila('a', 'visita', '', { red: 'Telefonica de Espana', dispositivo: 'móvil' }),
+  ...Array.from({ length: 20 }, () => fila('a', 'ejecutar', 'tetris')),
+  ...Array.from({ length: 20 }, () => fila('a', 'clic', 'proyectos: Código')),
 ]
 
 describe('panel de visitas', () => {
   const resumen = resumir(filas, hoy)
 
-  it('cuenta visitas por persona y proyectos por personas distintas', () => {
-    expect(resumen.totales.visitas).toBe(2)
-    expect(resumen.totales.proyectos).toBe(3)
+  it('cuenta personas, no visitas ni clics repetidos', () => {
+    expect(resumen.totales.personas).toBe(2)
+    expect(resumen.totales.nuevasHoy).toBe(1)
     expect(resumen.proyectos).toEqual([['tetris', 2]])
-    expect(resumen.repos).toEqual([['TetrisGame', 1]])
+    expect(resumen.clics.find(([k]) => k === 'clic: proyectos: Código')).toEqual(['clic: proyectos: Código', 1])
   })
 
-  it('reúne todos los clics, incluidos repos y contacto', () => {
-    expect(resumen.totales.clics).toBe(3)
-    expect(resumen.clics.map(([k]) => k)).toContain('clic: proyectos: Código')
-  })
-
-  it('destaca a quien llega de LinkedIn desde la red de una empresa', () => {
-    const b = resumen.ultimas.find((v) => v.referencia === 'linkedin.com')!
-    expect(b.portal).toBe(true)
+  it('dice de dónde llega cada persona', () => {
+    expect(resumen.totales.linkedin).toBe(1)
+    expect(resumen.totales.github).toBe(1)
+    expect(resumen.origenes).toEqual(
+      expect.arrayContaining([
+        ['LinkedIn', 1],
+        ['GitHub', 1],
+        ['Directo', 1],
+      ]),
+    )
+    const b = resumen.ultimas.find((v) => v.origenes.includes('LinkedIn'))!
+    expect(b.origenes).toEqual(['LinkedIn', 'GitHub'])
+    expect(b.visitas).toBe(2)
     expect(b.empresa).toBe('Indra Sistemas')
     expect(b.acciones).toEqual(['ejecutar: tetris', 'repo: TetrisGame', 'email: copiar'])
     // Una operadora doméstica no dice nada de la empresa
-    expect(resumen.ultimas.find((v) => v.referencia === 'directo')!.empresa).toBe('')
-    expect(resumen.totales.destacadas).toBe(1)
+    expect(resumen.ultimas.find((v) => v.origenes.includes('Directo'))!.empresa).toBe('')
   })
 
-  it('da una fila por cada uno de los últimos 30 días', () => {
+  it('reconoce mis enlaces y las webs de origen', () => {
+    expect(origen('ref:linkedin')).toBe('LinkedIn')
+    expect(origen('lnkd.in')).toBe('LinkedIn')
+    expect(origen('github.com')).toBe('GitHub')
+    expect(origen('ref:cv')).toBe('cv')
+    expect(origen('')).toBe('Directo')
+  })
+
+  it('da una fila de personas nuevas por cada uno de los últimos 30 días', () => {
     expect(resumen.porDia).toHaveLength(30)
-    expect(resumen.porDia.at(-1)).toEqual(['2026-11-03', 2])
+    expect(resumen.porDia.at(-1)).toEqual(['2026-11-03', 1])
+    expect(resumen.porDia.at(-2)).toEqual(['2026-11-02', 1])
   })
 
   it('compara usuario y clave sin atajos', () => {
     expect(iguales('xxx', 'xxx')).toBe(true)
     expect(iguales('xx', 'xxx')).toBe(false)
-    expect(iguales('', '')).toBe(true)
   })
 })

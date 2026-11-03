@@ -13,7 +13,7 @@ const REPOS = [
   'BlackJack-Proyecto-COBOL',
   'A2_ResidentEvil_Web',
   'BootCamp-TechTalent',
-  'portfolio',
+  'Portfolio_BZ',
 ]
 
 interface Repo {

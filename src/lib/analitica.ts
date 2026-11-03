@@ -22,6 +22,18 @@ function idSesion() {
   return sesion
 }
 
+// Mis enlaces de LinkedIn y GitHub llevan ?ref=…: se lee una vez y se quita de la dirección
+const ref = new URLSearchParams(location.search).get('ref')
+if (ref) {
+  const limpia = new URL(location.href)
+  limpia.searchParams.delete('ref')
+  history.replaceState(history.state, '', limpia)
+}
+
+function origen() {
+  return ref ? `ref:${ref}` : document.referrer
+}
+
 export function registrar(evento: Evento, detalle = '') {
   // Se respeta la preferencia de no ser rastreado del navegador
   if (navigator.doNotTrack === '1' || import.meta.env.DEV) return
@@ -30,7 +42,7 @@ export function registrar(evento: Evento, detalle = '') {
     evento,
     detalle,
     idioma: document.documentElement.lang,
-    referencia: evento === 'visita' ? document.referrer : '',
+    referencia: evento === 'visita' ? origen() : '',
   })
   try {
     const enviado = navigator.sendBeacon?.('/api/evento', new Blob([cuerpo], { type: 'application/json' }))

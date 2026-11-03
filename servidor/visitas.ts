@@ -2,7 +2,9 @@
  * Contador de visitas propio y anónimo. Guarda qué se hace en la web (visita,
  * proyecto ejecutado, repositorio abierto, cada clic…) con los datos
  * aproximados que da Cloudflare: país, ciudad y la red desde la que se conecta.
- * No guarda IP ni usa cookies. El panel solo responde con el usuario y la clave
+ * No guarda IP ni usa cookies: para contar personas y no visitas, cada una se
+ * reconoce por una huella anónima (hash de IP y navegador con una sal secreta
+ * que solo vive en la base de datos), imposible de revertir a la IP. El panel solo responde con el usuario y la clave
  * guardados como secretos (PANEL_USUARIO y PANEL_CLAVE), nunca en el código.
  */
 
@@ -13,6 +15,22 @@ export interface Entorno {
   PANEL_USUARIO?: string
   PANEL_CLAVE?: string
   GITHUB_TOKEN?: string
+}
+
+let sal = ''
+
+/** Huella anónima de una persona: mismo navegador y conexión, misma huella */
+async function huella(db: D1Database, ip: string, agente: string) {
+  if (!sal) {
+    await db
+      .prepare("INSERT OR IGNORE INTO ajustes (clave, valor) VALUES ('sal', ?)")
+      .bind(crypto.randomUUID() + crypto.randomUUID())
+      .run()
+    sal = (await db.prepare("SELECT valor FROM ajustes WHERE clave = 'sal'").first<string>('valor')) ?? ''
+  }
+  const datos = new TextEncoder().encode(`${sal}|${ip}|${agente}`)
+  const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', datos))
+  return [...hash.slice(0, 8)].map((b) => b.toString(16).padStart(2, '0')).join('')
 }
 
 export async function registrarEvento(request: Request, env: Entorno) {
@@ -30,19 +48,26 @@ export async function registrarEvento(request: Request, env: Entorno) {
   if (/bot|crawler|spider|preview|headless|lighthouse/i.test(agente)) return new Response(null, { status: 204 })
   const cf = (request.cf ?? {}) as { country?: string; city?: string; asOrganization?: string }
   let referencia = ''
-  try {
-    referencia = datos.referencia ? new URL(datos.referencia).hostname.replace(/^www\./, '') : ''
-  } catch {
-    referencia = ''
+  if (datos.referencia?.startsWith('ref:')) {
+    // Mis enlaces llevan ?ref=linkedin o ?ref=github: más fiable que el referer
+    referencia = `ref:${datos.referencia.slice(4).replace(/[^\w-]/g, '').slice(0, 30)}`
+  } else {
+    try {
+      referencia = datos.referencia ? new URL(datos.referencia).hostname.replace(/^www\./, '') : ''
+    } catch {
+      referencia = ''
+    }
   }
+  const visitante = await huella(env.DB, request.headers.get('CF-Connecting-IP') ?? '', agente)
 
   await env.DB.prepare(
-    `INSERT INTO eventos (fecha, sesion, evento, detalle, idioma, referencia, pais, ciudad, red, dispositivo)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO eventos (fecha, sesion, visitante, evento, detalle, idioma, referencia, pais, ciudad, red, dispositivo)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   )
     .bind(
       new Date().toISOString(),
       datos.sesion.slice(0, 40),
+      visitante,
       datos.evento,
       (datos.detalle ?? '').slice(0, 80),
       (datos.idioma ?? '').slice(0, 5),

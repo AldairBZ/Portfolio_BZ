@@ -1,8 +1,8 @@
-﻿# Portfolio · Scheneider Baltazar
+﻿# Portfolio_BZ · Scheneider Baltazar
 
-Mi portfolio como desarrollador Full Stack: **[scheneiderbz.pages.dev](https://scheneiderbz.pages.dev)**. Los proyectos no se enseñan con capturas: se ejecutan dentro de la página.
+Mi portfolio como desarrollador Full Stack: **[scheneiderbz.pages.dev](https://scheneiderbz.pages.dev/?ref=github)**. Los proyectos no se enseñan con capturas: se ejecutan dentro de la página.
 
-[![CI](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/AldairBZ/portfolio/actions/workflows/ci.yml) ![React](https://img.shields.io/badge/React-19-149eca) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages%20%2B%20D1-f38020)
+[![CI](https://github.com/AldairBZ/Portfolio_BZ/actions/workflows/ci.yml/badge.svg)](https://github.com/AldairBZ/Portfolio_BZ/actions/workflows/ci.yml) ![React](https://img.shields.io/badge/React-19-149eca) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages%20%2B%20D1-f38020)
 
 ## Qué tiene de especial
 
@@ -14,7 +14,7 @@ Mi portfolio como desarrollador Full Stack: **[scheneiderbz.pages.dev](https://s
   - **LifeLevelUp** y la web de Resident Evil se abren integradas.
 - **Todo dibujado con caracteres**: el planeta de la portada, el retrato, los logos de las tecnologías y el dragón que sigue al cursor al final de la página. Las ventanas de los proyectos muestran capturas reales de cada uno convertidas a caracteres con sus colores, y una lente deja ver la original.
 - **Datos en directo de GitHub** a través de una función de Cloudflare con caché: commits recientes, lenguajes y mapa de actividad.
-- **Contador de visitas propio y anónimo** (sin cookies ni IP) en Cloudflare D1: visitas, proyectos ejecutados, repositorios abiertos y clics, en un panel privado escondido en la web.
+- **Contador de visitas propio y anónimo** (sin cookies ni IP) en Cloudflare D1: cuenta personas distintas, no clics repetidos, y dice si llegan desde LinkedIn, GitHub o directamente (los enlaces llevan `?ref=linkedin` o `?ref=github`). Todo en un panel privado escondido en la web.
 - **Español, catalán e inglés**, elegido según las preferencias del navegador; paleta de comandos (`Ctrl + K`) y diseño adaptado a móvil.
 
 ## Calidad

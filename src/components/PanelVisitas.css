@@ -278,6 +278,18 @@
   color: #7fd18b;
 }
 
+.panel__marcas .panel__marca--neutra {
+  background: rgba(239, 232, 218, 0.08);
+  color: var(--papel-3);
+}
+
+.panel__nota {
+  margin: 0 0 1rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+}
+
 .panel__acciones {
   margin-top: 0.4rem !important;
   color: var(--papel-3);
