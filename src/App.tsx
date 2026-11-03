@@ -9,12 +9,14 @@ import Paleta from './components/Paleta'
 import Contacto from './components/Contacto'
 import { iniciarScroll, ScrollTrigger } from './lib/scroll'
 import type { Proyecto } from './data/proyectos'
+import { useIdioma } from './lib/idioma'
 
 // El ejecutor solo se descarga cuando alguien abre un proyecto
 const Ejecutor = lazy(() => import('./components/ejecutor/Ejecutor'))
 
 export default function App() {
   const [abierto, setAbierto] = useState<Proyecto | null>(null)
+  const { idioma, t } = useIdioma()
 
   useEffect(() => {
     // Las animaciones de la portada empiezan siempre desde arriba
@@ -51,10 +53,11 @@ export default function App() {
   return (
     <>
       <a className="saltar" href="#proyectos">
-        Saltar a los proyectos
+        {t('Saltar a los proyectos', 'Skip to projects')}
       </a>
       <Cabecera />
-      <main>
+      {/* Al cambiar de idioma se vuelven a montar las secciones para rehacer sus animaciones */}
+      <main key={idioma}>
         <Portada />
         <Manifiesto />
         <Proyectos onEjecutar={setAbierto} />

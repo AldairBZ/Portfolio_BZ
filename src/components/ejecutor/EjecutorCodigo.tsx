@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Cargando } from './Ejecutor'
+import { useIdioma } from '../../lib/idioma'
 
 const FUENTE =
   'https://raw.githubusercontent.com/AldairBZ/BlackJack-Proyecto-COBOL/main/backend/blackjack.cob.cbl'
@@ -29,23 +30,24 @@ function resaltar(linea: string) {
 export default function EjecutorCodigo() {
   const [codigo, setCodigo] = useState<string[] | null>(null)
   const [error, setError] = useState(false)
+  const { t } = useIdioma()
 
   useEffect(() => {
     fetch(FUENTE)
       .then((r) => (r.ok ? r.text() : Promise.reject()))
-      .then((t) => setCodigo(t.replace(/\r/g, '').split('\n')))
+      .then((texto) => setCodigo(texto.replace(/\r/g, '').split('\n')))
       .catch(() => setError(true))
   }, [])
 
   return (
     <div className="codigo">
-      <div className="codigo__esquema" aria-label="Arquitectura del proyecto">
-        <span>Interfaz · Python + Tkinter</span>
+      <div className="codigo__esquema" aria-label={t('Arquitectura del proyecto', 'Project architecture')}>
+        <span>{t('Interfaz', 'Interface')} · Python + Tkinter</span>
         <span className="codigo__flecha">⇄ BRIDGE.DAT ⇄</span>
-        <span>Motor · COBOL</span>
+        <span>{t('Motor', 'Engine')} · COBOL</span>
       </div>
-      {!codigo && !error && <Cargando texto="Leyendo el código desde GitHub…" />}
-      {error && <Cargando texto="No se pudo leer el código. Puedes verlo en el repositorio." />}
+      {!codigo && !error && <Cargando texto={t('Leyendo el código desde GitHub…', 'Reading the code from GitHub…')} />}
+      {error && <Cargando texto={t('No se pudo leer el código. Puedes verlo en el repositorio.', 'The code could not be read. You can see it in the repository.')} />}
       {codigo && (
         <pre className="codigo__fuente" tabIndex={0}>
           <code>

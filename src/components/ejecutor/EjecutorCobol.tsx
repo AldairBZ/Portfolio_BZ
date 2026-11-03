@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProgramaCobol, type Traza } from '../../lib/cobol/interprete'
 import { Cargando } from './Ejecutor'
 import EjecutorCodigo from './EjecutorCodigo'
+import { useIdioma } from '../../lib/idioma'
 import './EjecutorCobol.css'
 
 const PUENTE = 'DATA/BRIDGE.DAT'
@@ -39,6 +40,20 @@ const cartas = (texto: string) => texto.split(',').map((c) => c.trim()).filter(B
 
 const FINALES = ['PLAYER_WIN', 'DEALER_WIN', 'PUSH']
 
+// Los mensajes los escribe el programa COBOL en español; en inglés se muestran traducidos
+const MENSAJES_EN: Record<string, string> = {
+  'PON TU APUESTA': 'PLACE YOUR BET',
+  'APUESTA ACEPTADA': 'BET ACCEPTED',
+  'APUESTA CERRADA': 'BETS ARE CLOSED',
+  'APUESTA PRIMERO': 'BET FIRST',
+  'SIN SALDO': 'NOT ENOUGH CHIPS',
+  'JUEGA TU MANO': 'PLAY YOUR HAND',
+  'TE PASASTE': 'BUST',
+  'CRUPIER BUST': 'DEALER BUST',
+  'BLACKJACK PUSH': 'BLACKJACK PUSH',
+  BLACKJACK: 'BLACKJACK',
+}
+
 interface Ejecucion {
   comando: string
   traza: Traza
@@ -53,7 +68,9 @@ export default function EjecutorCobol() {
   const [analisis, setAnalisis] = useState<{ ms: number; parrafos: number } | null>(null)
   const [error, setError] = useState('')
   const [vista, setVista] = useState<'mesa' | 'codigo'>('mesa')
-  const ultimaApuesta = useRef(0)
+  // Apuesta de la última mano, para mostrar cuánto se ganó o perdió
+  const [ultimaApuesta, setUltimaApuesta] = useState(0)
+  const { idioma, t } = useIdioma()
 
   const leer = () => (programa.current?.disco.get(PUENTE) ?? '').replace(/\n$/, '').padEnd(220, ' ')
 
@@ -68,7 +85,10 @@ export default function EjecutorCobol() {
       const traza = prog.ejecutarPrograma()
       setUltima({ comando, traza, ms: performance.now() - inicio })
       setAnterior(actual)
-      setRegistro(leer())
+      const nuevo = leer()
+      setRegistro(nuevo)
+      const apostado = Number(trocear(nuevo)['WS-BET'] || 0)
+      if (apostado > 0) setUltimaApuesta(apostado)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     }
@@ -97,7 +117,6 @@ export default function EjecutorCobol() {
   const terminada = FINALES.includes(estado)
   const fichas = Number(v['WS-CHIPS'] || 0)
   const apuesta = Number(v['WS-BET'] || 0)
-  if (apuesta > 0) ultimaApuesta.current = apuesta
 
   const apostar = (cantidad: number) => {
     if (terminada) ejecutar('RESET')
@@ -114,7 +133,7 @@ export default function EjecutorCobol() {
     const alTeclado = (e: KeyboardEvent) => {
       if (vista !== 'mesa' || e.target instanceof HTMLInputElement) return
       const tecla = e.key.toLowerCase()
-      if (tecla === 'p' && jugando) ejecutar('HIT')
+      if ((tecla === 'p' || tecla === 'h') && jugando) ejecutar('HIT')
       else if (tecla === 's' && jugando) ejecutar('STAND')
       else if (tecla === ' ' && !jugando && apuesta > 0) {
         e.preventDefault()
@@ -125,14 +144,15 @@ export default function EjecutorCobol() {
     return () => window.removeEventListener('keydown', alTeclado)
   }, [vista, jugando, apuesta, ejecutar])
 
-  if (error) return <Cargando texto={`Error en el intérprete: ${error}`} />
-  if (!registro) return <Cargando texto="Analizando el programa COBOL…" />
+  if (error) return <Cargando texto={`${t('Error en el intérprete', 'Interpreter error')}: ${error}`} />
+  if (!registro) return <Cargando texto={t('Analizando el programa COBOL…', 'Parsing the COBOL program…')} />
 
   const mensaje = (() => {
-    if (estado === 'PLAYER_WIN') return { texto: `GANASTE +$${ultimaApuesta.current}`, tono: 'gana' }
-    if (estado === 'DEALER_WIN') return { texto: `PERDISTE -$${ultimaApuesta.current}`, tono: 'pierde' }
-    if (estado === 'PUSH') return { texto: 'EMPATE', tono: 'empate' }
-    return { texto: v['WS-MESSAGE'].trim(), tono: '' }
+    if (estado === 'PLAYER_WIN') return { texto: `${t('GANASTE', 'YOU WIN')} +$${ultimaApuesta}`, tono: 'gana' }
+    if (estado === 'DEALER_WIN') return { texto: `${t('PERDISTE', 'YOU LOSE')} -$${ultimaApuesta}`, tono: 'pierde' }
+    if (estado === 'PUSH') return { texto: t('EMPATE', 'PUSH'), tono: 'empate' }
+    const original = v['WS-MESSAGE'].trim()
+    return { texto: idioma === 'en' ? (MENSAJES_EN[original] ?? original) : original, tono: '' }
   })()
 
   const restantes = Math.min(Number(v['WS-SHOE-REMAIN'] || 0), Number(v['WS-SHOE-TOTAL'] || 312))
@@ -144,14 +164,14 @@ export default function EjecutorCobol() {
     <div className="cobol">
       <div className="cobol__pestanas" role="tablist">
         <button type="button" role="tab" aria-selected={vista === 'mesa'} onClick={() => setVista('mesa')}>
-          Mesa
+          {t('Mesa', 'Table')}
         </button>
         <button type="button" role="tab" aria-selected={vista === 'codigo'} onClick={() => setVista('codigo')}>
           blackjack.cob.cbl
         </button>
         {analisis && (
           <span className="cobol__dato">
-            {analisis.parrafos} párrafos analizados en {analisis.ms.toFixed(1)} ms
+            {analisis.parrafos} {t('párrafos analizados en', 'paragraphs parsed in')} {analisis.ms.toFixed(1)} ms
           </span>
         )}
       </div>
@@ -163,31 +183,31 @@ export default function EjecutorCobol() {
       ) : (
         <div className="cobol__juego">
           <div className="cobol__mesa">
-            <Mano titulo="Crupier" codigos={cartasCrupier} ocultar={jugando} puntos={jugando ? '?' : Number(v['WS-D-SCORE'])} />
+            <Mano titulo={t('Crupier', 'Dealer')} codigos={cartasCrupier} ocultar={jugando} puntos={jugando ? '?' : Number(v['WS-D-SCORE'])} />
             <p className={`cobol__mensaje cobol__mensaje--${mensaje.tono}`} aria-live="polite">
               {mensaje.texto}
             </p>
-            <Mano titulo="Tú" codigos={cartasJugador} puntos={Number(v['WS-P-SCORE'])} />
+            <Mano titulo={t('Tú', 'You')} codigos={cartasJugador} puntos={Number(v['WS-P-SCORE'])} />
           </div>
 
           <div className="cobol__panel">
             <dl className="cobol__saldo">
               <div>
-                <dt>Saldo</dt>
+                <dt>{t('Saldo', 'Balance')}</dt>
                 <dd>${fichas}</dd>
               </div>
               <div>
-                <dt>Apuesta</dt>
+                <dt>{t('Apuesta', 'Bet')}</dt>
                 <dd>${apuesta}</dd>
               </div>
               <div>
-                <dt>Mazo</dt>
+                <dt>{t('Mazo', 'Shoe')}</dt>
                 <dd>{restantes}/312</dd>
               </div>
             </dl>
-            <div className="cobol__fichas" aria-label="Apostar">
+            <div className="cobol__fichas" aria-label={t('Apostar', 'Bet')}>
               {FICHAS.map((f) => (
-                <button key={f} type="button" disabled={jugando || f > fichas} onClick={() => apostar(f)} aria-label={`Apostar ${f}`}>
+                <button key={f} type="button" disabled={jugando || f > fichas} onClick={() => apostar(f)} aria-label={`${t('Apostar', 'Bet')} ${f}`}>
                   <img src={`/apps/blackjack/fichas/${f}.webp`} alt="" width="52" height="52" />
                   <span>${f}</span>
                 </button>
@@ -195,23 +215,23 @@ export default function EjecutorCobol() {
             </div>
             <div className="cobol__acciones">
               <button type="button" className="boton boton--lleno" disabled={jugando || (apuesta === 0 && !terminada)} onClick={repartir}>
-                Repartir
+                {t('Repartir', 'Deal')}
               </button>
               <button type="button" className="boton" disabled={!jugando} onClick={() => ejecutar('HIT')}>
-                Pedir <kbd className="solo-teclado">P</kbd>
+                {t('Pedir', 'Hit')} <kbd className="solo-teclado">{t('P', 'H')}</kbd>
               </button>
               <button type="button" className="boton" disabled={!jugando} onClick={() => ejecutar('STAND')}>
-                Plantarse <kbd className="solo-teclado">S</kbd>
+                {t('Plantarse', 'Stand')} <kbd className="solo-teclado">S</kbd>
               </button>
               <button type="button" className="cobol__reinicio" onClick={() => ejecutar('RESETALL')}>
-                Reiniciar saldo
+                {t('Reiniciar saldo', 'Reset balance')}
               </button>
             </div>
           </div>
 
           <div className="cobol__puente">
             <p className="etiqueta">
-              DATA/BRIDGE.DAT · {ultima?.comando.trim()} → {ultima?.traza.sentencias.toLocaleString('es')} instrucciones COBOL en{' '}
+              DATA/BRIDGE.DAT · {ultima?.comando.trim()} → {ultima?.traza.sentencias.toLocaleString(idioma)} {t('instrucciones COBOL en', 'COBOL statements in')}{' '}
               {ultima?.ms.toFixed(1)} ms
             </p>
             <div className="cobol__registro">
@@ -237,6 +257,7 @@ export default function EjecutorCobol() {
 }
 
 function Mano({ titulo, codigos, puntos, ocultar }: { titulo: string; codigos: string[]; puntos: number | string; ocultar?: boolean }) {
+  const { t } = useIdioma()
   return (
     <div className="mano">
       <p className="mano__titulo">
@@ -250,7 +271,7 @@ function Mano({ titulo, codigos, puntos, ocultar }: { titulo: string; codigos: s
             <img
               key={`${i}-${oculta ? 'x' : codigo}`}
               src={`/apps/blackjack/cartas/${oculta ? 'HIDDEN' : codigo}.webp`}
-              alt={oculta ? 'Carta boca abajo' : codigo}
+              alt={oculta ? t('Carta boca abajo', 'Face-down card') : codigo}
               width="113"
               height="157"
               style={{ animationDelay: `${i * 70}ms` }}

@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap, irA, movimientoReducido } from '../lib/scroll'
 import { PlanetaAscii } from '../lib/ascii'
+import { useIdioma } from '../lib/idioma'
 import './Portada.css'
 
 export default function Portada() {
   const raiz = useRef<HTMLElement>(null)
   const lienzo = useRef<HTMLCanvasElement>(null)
+  const { t } = useIdioma()
 
   useLayoutEffect(() => {
     const movil = window.matchMedia('(max-width: 760px)').matches
@@ -76,7 +78,7 @@ export default function Portada() {
       <canvas className="portada__lienzo" ref={lienzo} aria-hidden="true" />
 
       <div className="portada__texto">
-        <p className="etiqueta portada__aparece">Desarrollador Full Stack · Tarragona</p>
+        <p className="etiqueta portada__aparece">{t('Desarrollador Full Stack · Tarragona', 'Full Stack Developer · Tarragona, Spain')}</p>
         <h1 className="portada__titulo">
           <span className="portada__linea">
             <span>Scheneider</span>
@@ -89,8 +91,10 @@ export default function Portada() {
         </h1>
         <div className="portada__lateral">
           <p className="portada__intro portada__aparece">
-            Construyo aplicaciones web de principio a fin: APIs con Java, Spring Boot y Node.js, e interfaces con
-            React. Mis proyectos se ejecutan aquí mismo, en tu navegador.
+            {t(
+              'Construyo aplicaciones web de principio a fin: APIs con Java, Spring Boot y Node.js, e interfaces con React. Mis proyectos se ejecutan aquí mismo, en tu navegador.',
+              'I build web applications end to end: APIs with Java, Spring Boot and Node.js, and interfaces with React. My projects run right here, in your browser.',
+            )}
           </p>
           <div className="portada__acciones portada__aparece">
             <a
@@ -101,7 +105,7 @@ export default function Portada() {
                 irA('#proyectos')
               }}
             >
-              Ver proyectos
+              {t('Ver proyectos', 'See projects')}
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M8 2v12m0 0 5-5m-5 5-5-5" fill="none" stroke="currentColor" strokeWidth="1.5" />
               </svg>
@@ -114,13 +118,13 @@ export default function Portada() {
       </div>
 
       <p className="portada__frase">
-        Este planeta no es una imagen.
+        {t('Este planeta no es una imagen.', 'This planet is not an image.')}
         <br />
-        <em>Son caracteres recalculados 60 veces por segundo.</em>
+        <em>{t('Son caracteres recalculados 60 veces por segundo.', 'It is characters recalculated 60 times per second.')}</em>
       </p>
 
       <p className="etiqueta portada__pista portada__aparece" aria-hidden="true">
-        Pulsa <kbd>Ctrl</kbd> + <kbd>K</kbd>
+        {t('Pulsa', 'Press')} <kbd>Ctrl</kbd> + <kbd>K</kbd>
       </p>
       </div>
     </section>

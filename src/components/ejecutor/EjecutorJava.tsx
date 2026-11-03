@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Cargando } from './Ejecutor'
+import { useIdioma } from '../../lib/idioma'
 import { cargarScript } from '../../lib/cargarScript'
 
 declare global {
@@ -33,12 +34,12 @@ function arrancar(jar: string) {
 }
 
 const controles = [
-  { tecla: 'ArrowLeft', codigo: 37, texto: '←', nombre: 'Izquierda' },
-  { tecla: 'ArrowUp', codigo: 38, texto: '↻', nombre: 'Girar' },
-  { tecla: 'ArrowRight', codigo: 39, texto: '→', nombre: 'Derecha' },
-  { tecla: 'ArrowDown', codigo: 40, texto: '↓', nombre: 'Bajar' },
-  { tecla: ' ', codigo: 32, texto: '⤓', nombre: 'Caída rápida' },
-  { tecla: 'c', codigo: 67, texto: 'C', nombre: 'Guardar pieza' },
+  { tecla: 'ArrowLeft', codigo: 37, texto: '←', nombre: { es: 'Izquierda', en: 'Left' } },
+  { tecla: 'ArrowUp', codigo: 38, texto: '↻', nombre: { es: 'Girar', en: 'Rotate' } },
+  { tecla: 'ArrowRight', codigo: 39, texto: '→', nombre: { es: 'Derecha', en: 'Right' } },
+  { tecla: 'ArrowDown', codigo: 40, texto: '↓', nombre: { es: 'Bajar', en: 'Down' } },
+  { tecla: ' ', codigo: 32, texto: '⤓', nombre: { es: 'Caída rápida', en: 'Hard drop' } },
+  { tecla: 'c', codigo: 67, texto: 'C', nombre: { es: 'Guardar pieza', en: 'Hold piece' } },
 ]
 
 function pulsar(tecla: string, codigo: number) {
@@ -60,6 +61,7 @@ function pulsar(tecla: string, codigo: number) {
 export default function EjecutorJava({ jar }: { jar: string }) {
   const contenedor = useRef<HTMLDivElement>(null)
   const [estado, setEstado] = useState<'cargando' | 'listo' | 'error'>(pantalla ? 'listo' : 'cargando')
+  const { t, tx } = useIdioma()
 
   useEffect(() => {
     let activo = true
@@ -79,15 +81,15 @@ export default function EjecutorJava({ jar }: { jar: string }) {
 
   return (
     <div className="java">
-      {estado === 'cargando' && <Cargando texto="Arrancando una máquina virtual de Java en tu navegador…" />}
-      {estado === 'error' && <Cargando texto="No se pudo iniciar Java en este navegador. Prueba con Chrome, Edge o Firefox actualizados." />}
+      {estado === 'cargando' && <Cargando texto={t('Arrancando una máquina virtual de Java en tu navegador…', 'Starting a Java virtual machine in your browser…')} />}
+      {estado === 'error' && <Cargando texto={t('No se pudo iniciar Java en este navegador. Prueba con Chrome, Edge o Firefox actualizados.', 'Java could not start in this browser. Try an up-to-date Chrome, Edge or Firefox.')} />}
       <div className="java__marco" ref={contenedor} />
-      <div className="java__controles" aria-label="Controles del juego">
+      <div className="java__controles" aria-label={t('Controles del juego', 'Game controls')}>
         {controles.map((c) => (
           <button
-            key={c.nombre}
+            key={c.nombre.es}
             type="button"
-            aria-label={c.nombre}
+            aria-label={tx(c.nombre)}
             onPointerDown={(e) => {
               e.preventDefault()
               pulsar(c.tecla, c.codigo)
@@ -97,7 +99,7 @@ export default function EjecutorJava({ jar }: { jar: string }) {
           </button>
         ))}
       </div>
-      <p className="java__ayuda">Teclado: flechas para mover y girar, espacio para soltar, C para guardar pieza.</p>
+      <p className="java__ayuda">{t('Teclado: flechas para mover y girar, espacio para soltar, C para guardar pieza.', 'Keyboard: arrows to move and rotate, space to drop, C to hold a piece.')}</p>
     </div>
   )
 }

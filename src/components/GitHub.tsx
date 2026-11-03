@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useIdioma, type Idioma } from '../lib/idioma'
 import './GitHub.css'
 
 const USUARIO = 'AldairBZ'
@@ -39,13 +40,12 @@ const coloresLenguaje: Record<string, string> = {
   COBOL: '#b8ae9c',
 }
 
-function haceCuanto(fecha: string) {
+function haceCuanto(fecha: string, idioma: Idioma) {
+  // Intl da 'hoy', 'ayer', 'hace 3 días'… en cada idioma
+  const formato = new Intl.RelativeTimeFormat(idioma, { numeric: 'auto' })
   const dias = Math.floor((Date.now() - new Date(fecha).getTime()) / 86400000)
-  if (dias < 1) return 'hoy'
-  if (dias === 1) return 'ayer'
-  if (dias < 30) return `hace ${dias} días`
-  const meses = Math.floor(dias / 30)
-  return meses === 1 ? 'hace 1 mes' : `hace ${meses} meses`
+  if (dias < 30) return formato.format(-dias, 'day')
+  return formato.format(-Math.floor(dias / 30), 'month')
 }
 
 async function pedir<T>(url: string): Promise<T> {
@@ -71,6 +71,7 @@ export default function GitHub() {
   const [repos, setRepos] = useState<Repo[] | null>(null)
   const [commits, setCommits] = useState<Commit[]>([])
   const [error, setError] = useState(false)
+  const { idioma, t } = useIdioma()
 
   useEffect(() => {
     pedir<Repo[]>(`https://api.github.com/users/${USUARIO}/repos?per_page=100&sort=pushed`)
@@ -116,31 +117,31 @@ export default function GitHub() {
       <div className="github__contenido">
         <header className="github__cabecera">
           <p className="etiqueta">
-            <span className="github__vivo" aria-hidden="true" /> En directo · api.github.com
+            <span className="github__vivo" aria-hidden="true" /> {t('En directo', 'Live')} · api.github.com
           </p>
           <h2 id="github-titulo" className="github__titulo">
-            Lo último que
+            {t('Lo último que', 'What I’ve been')}
             <br />
-            <em>he subido.</em>
+            <em>{t('he subido.', 'pushing lately.')}</em>
           </h2>
         </header>
 
         {error && (
           <p className="github__error">
-            GitHub no responde ahora mismo. Puedes ver todo en{' '}
+            {t('GitHub no responde ahora mismo. Puedes ver todo en', 'GitHub is not responding right now. You can see everything at')}{' '}
             <a href={`https://github.com/${USUARIO}`}>github.com/{USUARIO}</a>.
           </p>
         )}
 
         <div className="github__rejilla">
-          <ol className="github__commits" aria-label="Commits recientes">
+          <ol className="github__commits" aria-label={t('Commits recientes', 'Recent commits')}>
             {(commits.length ? commits : Array.from({ length: 4 }, () => null)).map((c, i) =>
               c ? (
                 <li key={c.url}>
                   <a href={c.url} target="_blank" rel="noreferrer">
                     <span className="github__repo">{c.repo}</span>
                     <span className="github__mensaje">{c.mensaje}</span>
-                    <span className="github__fecha">{haceCuanto(c.fecha)}</span>
+                    <span className="github__fecha">{haceCuanto(c.fecha, idioma)}</span>
                   </a>
                 </li>
               ) : (
@@ -150,7 +151,7 @@ export default function GitHub() {
           </ol>
 
           <div className="github__lenguajes">
-            <p className="etiqueta">Lenguajes en mis repositorios</p>
+            <p className="etiqueta">{t('Lenguajes en mis repositorios', 'Languages in my repositories')}</p>
             <div className="github__barra" role="img" aria-label={lenguajes.map(([l]) => l).join(', ')}>
               {lenguajes.map(([lenguaje, peso]) => (
                 <span
@@ -173,7 +174,7 @@ export default function GitHub() {
                   <a href={r.html_url} target="_blank" rel="noreferrer">
                     {r.name}
                   </a>
-                  <span>{haceCuanto(r.pushed_at)}</span>
+                  <span>{haceCuanto(r.pushed_at, idioma)}</span>
                 </li>
               ))}
             </ul>

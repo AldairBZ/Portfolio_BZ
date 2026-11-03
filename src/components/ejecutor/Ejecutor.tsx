@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { bloquearScroll } from '../../lib/scroll'
 import type { Proyecto } from '../../data/proyectos'
+import { useIdioma, type Texto } from '../../lib/idioma'
 import './Ejecutor.css'
 import './Ejecutores.css'
 
@@ -11,13 +12,13 @@ const EjecutorCamara = lazy(() => import('./EjecutorCamara'))
 const EjecutorCodigo = lazy(() => import('./EjecutorCodigo'))
 const EjecutorCobol = lazy(() => import('./EjecutorCobol'))
 
-const etiquetas = {
-  web: 'Aplicación web',
-  java: 'Java en el navegador',
-  python: 'Python en el navegador',
-  camara: 'Visión por computador',
-  codigo: 'Código fuente',
-  cobol: 'COBOL en el navegador',
+const etiquetas: Record<Proyecto['ejecucion']['tipo'], Texto> = {
+  web: { es: 'Aplicación web', en: 'Web app' },
+  java: { es: 'Java en el navegador', en: 'Java in the browser' },
+  python: { es: 'Python en el navegador', en: 'Python in the browser' },
+  camara: { es: 'Visión por computador', en: 'Computer vision' },
+  codigo: { es: 'Código fuente', en: 'Source code' },
+  cobol: { es: 'COBOL en el navegador', en: 'COBOL in the browser' },
 }
 
 interface Props {
@@ -28,6 +29,7 @@ interface Props {
 export default function Ejecutor({ proyecto, onCerrar }: Props) {
   const dialogo = useRef<HTMLDivElement>(null)
   const { ejecucion } = proyecto
+  const { t, tx } = useIdioma()
 
   useEffect(() => {
     bloquearScroll(true)
@@ -57,21 +59,21 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
       >
         <header className="ejecutor__barra">
           <div>
-            <p className="etiqueta">{etiquetas[ejecucion.tipo]}</p>
+            <p className="etiqueta">{tx(etiquetas[ejecucion.tipo])}</p>
             <h2 id="ejecutor-titulo" className="ejecutor__titulo">
-              {proyecto.nombre}
+              {tx(proyecto.nombre)}
             </h2>
           </div>
           <div className="ejecutor__botones">
             {proyecto.demo && (
               <a className="boton ejecutor__extra" href={proyecto.demo} target="_blank" rel="noreferrer">
-                Pestaña nueva ↗
+                {t('Pestaña nueva', 'New tab')} ↗
               </a>
             )}
             <a className="boton ejecutor__extra" href={proyecto.repo} target="_blank" rel="noreferrer">
-              Código ↗
+              {t('Código', 'Code')} ↗
             </a>
-            <button type="button" className="boton ejecutor__cerrar" onClick={onCerrar} aria-label="Cerrar">
+            <button type="button" className="boton ejecutor__cerrar" onClick={onCerrar} aria-label={t('Cerrar', 'Close')}>
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="m3 3 10 10M13 3 3 13" stroke="currentColor" strokeWidth="1.5" />
               </svg>
@@ -81,8 +83,8 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
 
         <div className="ejecutor__cuerpo">
           <div className="ejecutor__escena">
-            <Suspense fallback={<Cargando texto="Preparando el entorno…" />}>
-              {ejecucion.tipo === 'web' && <EjecutorWeb url={ejecucion.url} titulo={proyecto.nombre} />}
+            <Suspense fallback={<Cargando texto={t('Preparando el entorno…', 'Preparing the environment…')} />}>
+              {ejecucion.tipo === 'web' && <EjecutorWeb url={ejecucion.url} titulo={tx(proyecto.nombre)} />}
               {ejecucion.tipo === 'java' && <EjecutorJava jar={ejecucion.jar} />}
               {ejecucion.tipo === 'python' && (
                 <EjecutorPython archivos={ejecucion.archivos} principal={ejecucion.principal} />
@@ -93,13 +95,13 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
             </Suspense>
           </div>
           <aside className="ejecutor__ficha">
-            <p className="ejecutor__resumen">{proyecto.resumen}</p>
+            <p className="ejecutor__resumen">{tx(proyecto.resumen)}</p>
             <ul className="ejecutor__detalle">
               {proyecto.detalle.map((d) => (
-                <li key={d}>{d}</li>
+                <li key={d.es}>{tx(d)}</li>
               ))}
             </ul>
-            {proyecto.nota && <p className="ejecutor__nota">{proyecto.nota}</p>}
+            {proyecto.nota && <p className="ejecutor__nota">{tx(proyecto.nota)}</p>}
           </aside>
         </div>
       </div>

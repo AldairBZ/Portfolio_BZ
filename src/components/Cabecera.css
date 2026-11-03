@@ -107,6 +107,23 @@
   border-color: var(--papel-2);
 }
 
+.cabecera__idioma {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  background: none;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+  cursor: pointer;
+}
+
+.cabecera__idioma [aria-current='true'] {
+  color: var(--papel);
+}
+
 .cabecera__estado {
   display: inline-flex;
   align-items: center;
@@ -143,5 +160,14 @@
   .cabecera__enlaces,
   .cabecera__nombre {
     display: none;
+  }
+}
+
+/* En pantallas muy estrechas el estado queda solo como punto */
+@media (max-width: 380px) {
+  .cabecera__estado {
+    font-size: 0;
+    gap: 0;
+    padding: 0.6rem;
   }
 }

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
 import { irA } from '../lib/scroll'
+import { useIdioma } from '../lib/idioma'
 import './Cabecera.css'
 
 const enlaces = [
-  { href: '#proyectos', texto: 'Proyectos' },
-  { href: '#trayectoria', texto: 'Trayectoria' },
-  { href: '#contacto', texto: 'Contacto' },
+  { href: '#proyectos', texto: { es: 'Proyectos', en: 'Projects' } },
+  { href: '#trayectoria', texto: { es: 'Trayectoria', en: 'Experience' } },
+  { href: '#contacto', texto: { es: 'Contacto', en: 'Contact' } },
 ]
 
 export default function Cabecera() {
   const [compacta, setCompacta] = useState(false)
+  const { idioma, cambiar, t, tx } = useIdioma()
 
   useEffect(() => {
     const alScroll = () => setCompacta(window.scrollY > 40)
@@ -31,12 +33,12 @@ export default function Cabecera() {
         </span>
         <span className="cabecera__nombre">Scheneider Baltazar</span>
       </a>
-      <nav aria-label="Principal">
+      <nav aria-label={t('Principal', 'Main')}>
         <ul className="cabecera__enlaces">
           {enlaces.map((enlace) => (
             <li key={enlace.href}>
               <a href={enlace.href} onClick={(e) => navegar(e, enlace.href)}>
-                {enlace.texto}
+                {tx(enlace.texto)}
               </a>
             </li>
           ))}
@@ -47,15 +49,25 @@ export default function Cabecera() {
         type="button"
         className="cabecera__comandos"
         onClick={() => window.dispatchEvent(new Event('abrir-paleta'))}
-        aria-label="Abrir paleta de comandos"
+        aria-label={t('Abrir paleta de comandos', 'Open command palette')}
       >
         <kbd className="solo-teclado">Ctrl K</kbd>
-        <kbd className="solo-tactil">Comandos</kbd>
+        <kbd className="solo-tactil">{t('Comandos', 'Commands')}</kbd>
       </button>
       <a className="cabecera__estado" href="#contacto" onClick={(e) => navegar(e, '#contacto')}>
         <span className="cabecera__punto" aria-hidden="true" />
-        Disponible
+        {t('Disponible', 'Available')}
       </a>
+      <button
+        type="button"
+        className="cabecera__idioma"
+        onClick={() => cambiar(idioma === 'es' ? 'en' : 'es')}
+        aria-label={t('Switch to English', 'Cambiar a español')}
+      >
+        <span aria-current={idioma === 'es'}>ES</span>
+        <span aria-hidden="true">/</span>
+        <span aria-current={idioma === 'en'}>EN</span>
+      </button>
       </div>
     </header>
   )

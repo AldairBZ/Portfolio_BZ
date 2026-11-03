@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useIdioma } from '../lib/idioma'
 import './Contacto.css'
 
 const EMAIL = 'aldairbz1719@gmail.com'
@@ -11,6 +12,7 @@ const redes = [
 
 export default function Contacto() {
   const [copiado, setCopiado] = useState(false)
+  const { t } = useIdioma()
 
   const copiar = async () => {
     try {
@@ -25,22 +27,24 @@ export default function Contacto() {
   return (
     <footer id="contacto" className="contacto" aria-labelledby="contacto-titulo">
       <div className="contacto__contenido">
-        <p className="etiqueta">Contacto</p>
+        <p className="etiqueta">{t('Contacto', 'Contact')}</p>
         <h2 id="contacto-titulo" className="contacto__titulo">
-          ¿Construimos
+          {t('¿Construimos', 'Shall we build')}
           <br />
-          <em>algo juntos?</em>
+          <em>{t('algo juntos?', 'something together?')}</em>
         </h2>
         <p className="contacto__texto">
-          Estoy buscando mi primer puesto como desarrollador. Remoto o híbrido desde Tarragona, con incorporación
-          inmediata.
+          {t(
+            'Estoy buscando mi primer puesto como desarrollador. Remoto o híbrido desde Tarragona, con incorporación inmediata.',
+            'I am looking for my first developer role. Remote or hybrid from Tarragona, available to start right away.',
+          )}
         </p>
         <div className="contacto__acciones">
           <a className="boton boton--lleno contacto__correo" href={`mailto:${EMAIL}`}>
             {EMAIL}
           </a>
           <button type="button" className="boton" onClick={copiar} aria-live="polite">
-            {copiado ? 'Copiado ✓' : 'Copiar email'}
+            {copiado ? t('Copiado ✓', 'Copied ✓') : t('Copiar email', 'Copy email')}
           </button>
           {redes.map((red) => (
             <a key={red.texto} className="boton" href={red.href} target="_blank" rel="noreferrer">
@@ -51,9 +55,14 @@ export default function Contacto() {
       </div>
 
       <div className="contacto__pie">
-        <p>© {ANIO} Scheneider Baltazar · Diseñado y programado por mí.</p>
         <p>
-          React · TypeScript · GSAP · Java en el navegador con CheerpJ · Python con Pyodide · Cloudflare
+          © {ANIO} Scheneider Baltazar · {t('Diseñado y programado por mí.', 'Designed and built by me.')}
+        </p>
+        <p>
+          {t(
+            'React · TypeScript · GSAP · Java en el navegador con CheerpJ · Python con Pyodide · COBOL con un intérprete propio · Cloudflare',
+            'React · TypeScript · GSAP · Java in the browser with CheerpJ · Python with Pyodide · COBOL on my own interpreter · Cloudflare',
+          )}
         </p>
       </div>
     </footer>

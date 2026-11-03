@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { bloquearScroll, irA } from '../lib/scroll'
 import { proyectos, type Proyecto } from '../data/proyectos'
+import { useIdioma } from '../lib/idioma'
 import './Paleta.css'
 
 interface Comando {
@@ -22,41 +23,51 @@ export default function Paleta({ onEjecutar }: Props) {
   const [activo, setActivo] = useState(0)
   const campo = useRef<HTMLInputElement>(null)
 
+  const { idioma, cambiar, t } = useIdioma()
+
   const comandos = useMemo<Comando[]>(() => {
     const ir = (destino: string) => () => irA(destino)
+    const es = idioma === 'es'
     return [
       ...proyectos.map((p) => ({
         id: `ejecutar-${p.id}`,
-        grupo: 'Ejecutar',
-        texto: p.nombre,
+        grupo: es ? 'Ejecutar' : 'Run',
+        texto: p.nombre[idioma],
         pista: p.stack.slice(0, 2).join(' · '),
         accion: () => onEjecutar(p),
       })),
-      { id: 'ir-inicio', grupo: 'Ir a', texto: 'Inicio', accion: ir('#inicio') },
-      { id: 'ir-proyectos', grupo: 'Ir a', texto: 'Proyectos', accion: ir('#proyectos') },
-      { id: 'ir-trayectoria', grupo: 'Ir a', texto: 'Trayectoria', accion: ir('#trayectoria') },
-      { id: 'ir-contacto', grupo: 'Ir a', texto: 'Contacto', accion: ir('#contacto') },
+      { id: 'ir-inicio', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Inicio' : 'Home', accion: ir('#inicio') },
+      { id: 'ir-proyectos', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Proyectos' : 'Projects', accion: ir('#proyectos') },
+      { id: 'ir-trayectoria', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Trayectoria' : 'Experience', accion: ir('#trayectoria') },
+      { id: 'ir-contacto', grupo: es ? 'Ir a' : 'Go to', texto: es ? 'Contacto' : 'Contact', accion: ir('#contacto') },
       {
         id: 'copiar-email',
-        grupo: 'Contacto',
-        texto: 'Copiar mi email',
+        grupo: es ? 'Contacto' : 'Contact',
+        texto: es ? 'Copiar mi email' : 'Copy my email',
         pista: 'aldairbz1719@gmail.com',
         accion: () => navigator.clipboard?.writeText('aldairbz1719@gmail.com'),
       },
       {
         id: 'linkedin',
-        grupo: 'Contacto',
-        texto: 'Abrir LinkedIn',
+        grupo: es ? 'Contacto' : 'Contact',
+        texto: es ? 'Abrir LinkedIn' : 'Open LinkedIn',
         accion: () => window.open('https://www.linkedin.com/in/scheneiderbz19/', '_blank', 'noopener'),
       },
       {
         id: 'github',
-        grupo: 'Contacto',
-        texto: 'Abrir GitHub',
+        grupo: es ? 'Contacto' : 'Contact',
+        texto: es ? 'Abrir GitHub' : 'Open GitHub',
         accion: () => window.open('https://github.com/AldairBZ', '_blank', 'noopener'),
       },
+      {
+        id: 'idioma',
+        grupo: es ? 'Preferencias' : 'Preferences',
+        texto: es ? 'Switch to English' : 'Cambiar a español',
+        pista: es ? 'EN' : 'ES',
+        accion: () => cambiar(es ? 'en' : 'es'),
+      },
     ]
-  }, [onEjecutar])
+  }, [onEjecutar, idioma, cambiar])
 
   const filtrados = useMemo(() => {
     const q = busqueda.trim().toLowerCase()
@@ -124,7 +135,7 @@ export default function Paleta({ onEjecutar }: Props) {
         className="paleta__caja"
         role="dialog"
         aria-modal="true"
-        aria-label="Paleta de comandos"
+        aria-label={t('Paleta de comandos', 'Command palette')}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={alTecladoLista}
       >
@@ -137,15 +148,15 @@ export default function Paleta({ onEjecutar }: Props) {
               setBusqueda(e.target.value)
               setActivo(0)
             }}
-            placeholder="Escribe un comando o un proyecto…"
-            aria-label="Buscar comando"
+            placeholder={t('Escribe un comando o un proyecto…', 'Type a command or a project…')}
+            aria-label={t('Buscar comando', 'Search command')}
             aria-controls="paleta-lista"
             aria-activedescendant={filtrados[activo] ? `cmd-${filtrados[activo].id}` : undefined}
           />
           <kbd>Esc</kbd>
         </div>
         <ul id="paleta-lista" className="paleta__lista" role="listbox">
-          {filtrados.length === 0 && <li className="paleta__vacio">Sin resultados</li>}
+          {filtrados.length === 0 && <li className="paleta__vacio">{t('Sin resultados', 'No results')}</li>}
           {filtrados.map((c, i) => {
             const cabecera = c.grupo !== grupoAnterior ? c.grupo : null
             grupoAnterior = c.grupo
@@ -169,7 +180,7 @@ export default function Paleta({ onEjecutar }: Props) {
           })}
         </ul>
         <p className="paleta__pie">
-          <kbd>↑</kbd> <kbd>↓</kbd> para moverte · <kbd>Enter</kbd> para elegir
+          <kbd>↑</kbd> <kbd>↓</kbd> {t('para moverte', 'to move')} · <kbd>Enter</kbd> {t('para elegir', 'to select')}
         </p>
       </div>
     </div>

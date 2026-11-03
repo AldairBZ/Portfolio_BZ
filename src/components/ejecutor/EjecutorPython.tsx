@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Cargando } from './Ejecutor'
+import { useIdioma } from '../../lib/idioma'
 import { cargarScript } from '../../lib/cargarScript'
 
 const PYODIDE = 'https://cdn.jsdelivr.net/pyodide/v0.27.2/full/'
@@ -84,6 +85,7 @@ type Linea = { texto: string; tipo: 'salida' | 'error' | 'entrada' }
 
 export default function EjecutorPython({ archivos, principal }: { archivos: string[]; principal: string }) {
   const [estado, setEstado] = useState<'cargando' | 'ejecutando' | 'terminado' | 'error'>('cargando')
+  const { t } = useIdioma()
   const [salida, setSalida] = useState<Linea[]>([])
   const [esperando, setEsperando] = useState(false)
   const [valor, setValor] = useState('')
@@ -179,12 +181,12 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
         <span className="etiqueta">python3 {principal}</span>
         {estado === 'terminado' && (
           <button type="button" className="terminal__reiniciar" onClick={ejecutar}>
-            Volver a ejecutar
+            {t('Volver a ejecutar', 'Run again')}
           </button>
         )}
       </div>
-      {estado === 'cargando' && <Cargando texto="Cargando Python 3 y SQLite en tu navegador…" />}
-      {estado === 'error' && <Cargando texto="No se pudo cargar Python. Revisa tu conexión y vuelve a intentarlo." />}
+      {estado === 'cargando' && <Cargando texto={t('Cargando Python 3 y SQLite en tu navegador…', 'Loading Python 3 and SQLite in your browser…')} />}
+      {estado === 'error' && <Cargando texto={t('No se pudo cargar Python. Revisa tu conexión y vuelve a intentarlo.', 'Python could not load. Check your connection and try again.')} />}
       <div className="terminal__pantalla" ref={pantalla} aria-live="polite">
         {salida.map((linea, i) => (
           <span key={i} className={`terminal__${linea.tipo}`}>
@@ -194,7 +196,7 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
         {esperando && (
           <form className="terminal__entrada" onSubmit={enviar}>
             <label className="sr-only" htmlFor="terminal-campo">
-              Respuesta para el programa
+              {t('Respuesta para el programa', 'Answer for the program')}
             </label>
             <input
               id="terminal-campo"
@@ -208,7 +210,7 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
             />
           </form>
         )}
-        {estado === 'terminado' && <span className="terminal__fin">{'\n'}— Programa terminado —</span>}
+        {estado === 'terminado' && <span className="terminal__fin">{'\n'}{t('— Programa terminado —', '— Program finished —')}</span>}
       </div>
     </div>
   )

@@ -2,15 +2,16 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../lib/scroll'
 import Ilustracion from './Ilustracion'
 import { proyectos, type Proyecto } from '../data/proyectos'
+import { useIdioma, type Texto } from '../lib/idioma'
 import './Proyectos.css'
 
-const textoBoton: Record<Proyecto['ejecucion']['tipo'], string> = {
-  web: 'Abrir aquí',
-  java: 'Ejecutar Java',
-  python: 'Ejecutar Python',
-  camara: 'Probar con cámara',
-  codigo: 'Ver el código',
-  cobol: 'Jugar en COBOL',
+const textoBoton: Record<Proyecto['ejecucion']['tipo'], Texto> = {
+  web: { es: 'Abrir aquí', en: 'Open here' },
+  java: { es: 'Ejecutar Java', en: 'Run Java' },
+  python: { es: 'Ejecutar Python', en: 'Run Python' },
+  camara: { es: 'Probar con cámara', en: 'Try with camera' },
+  codigo: { es: 'Ver el código', en: 'View code' },
+  cobol: { es: 'Jugar en COBOL', en: 'Play in COBOL' },
 }
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
 export default function Proyectos({ onEjecutar }: Props) {
   const raiz = useRef<HTMLElement>(null)
   const pista = useRef<HTMLDivElement>(null)
+  const { t, tx } = useIdioma()
 
   useLayoutEffect(() => {
     const mm = gsap.matchMedia(raiz)
@@ -91,15 +93,19 @@ export default function Proyectos({ onEjecutar }: Props) {
       <div className="proyectos__fijo">
       <div className="proyectos__pista" ref={pista}>
         <header className="proyectos__intro">
-          <p className="etiqueta">Proyectos · {String(proyectos.length).padStart(2, '0')}</p>
+          <p className="etiqueta">
+            {t('Proyectos', 'Projects')} · {String(proyectos.length).padStart(2, '0')}
+          </p>
           <h2 id="proyectos-titulo" className="proyectos__titulo">
-            No te los enseño.
+            {t('No te los enseño.', 'I don’t show them.')}
             <br />
-            <em>Los ejecutas.</em>
+            <em>{t('Los ejecutas.', 'You run them.')}</em>
           </h2>
           <p className="proyectos__texto">
-            Java, Python y JavaScript funcionando dentro de esta página, sin instalar nada. Pulsa en cualquier proyecto
-            para abrirlo aquí mismo.
+            {t(
+              'Java, Python, COBOL y JavaScript funcionando dentro de esta página, sin instalar nada. Pulsa en cualquier proyecto para abrirlo aquí mismo.',
+              'Java, Python, COBOL and JavaScript running inside this page, nothing to install. Click any project to open it right here.',
+            )}
           </p>
         </header>
 
@@ -117,10 +123,10 @@ export default function Proyectos({ onEjecutar }: Props) {
                 {String(i + 1).padStart(2, '0')} / {String(proyectos.length).padStart(2, '0')}
               </p>
               <h3 id={`obra-${proyecto.id}`} className="obra__nombre">
-                {proyecto.nombre}
+                {tx(proyecto.nombre)}
               </h3>
-              <p className="obra__resumen">{proyecto.resumen}</p>
-              <ul className="obra__stack" aria-label="Tecnologías">
+              <p className="obra__resumen">{tx(proyecto.resumen)}</p>
+              <ul className="obra__stack" aria-label={t('Tecnologías', 'Technologies')}>
                 {proyecto.stack.map((tec) => (
                   <li key={tec}>{tec}</li>
                 ))}
@@ -130,10 +136,10 @@ export default function Proyectos({ onEjecutar }: Props) {
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
                   </svg>
-                  {textoBoton[proyecto.ejecucion.tipo]}
+                  {tx(textoBoton[proyecto.ejecucion.tipo])}
                 </button>
                 <a className="boton" href={proyecto.repo} target="_blank" rel="noreferrer">
-                  Código
+                  {t('Código', 'Code')}
                 </a>
               </div>
             </div>

@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Cargando } from './Ejecutor'
+import { useIdioma } from '../../lib/idioma'
 
 export default function EjecutorWeb({ url, titulo }: { url: string; titulo: string }) {
   const [cargado, setCargado] = useState(false)
+  const { t } = useIdioma()
 
   return (
     <>
-      {!cargado && <Cargando texto="Cargando la aplicación…" />}
+      {!cargado && <Cargando texto={t('Cargando la aplicación…', 'Loading the app…')} />}
       <iframe
         src={url}
         title={titulo}
