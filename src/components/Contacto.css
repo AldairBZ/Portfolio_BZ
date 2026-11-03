@@ -1,0 +1,58 @@
+.contacto {
+  padding: clamp(6rem, 14vw, 11rem) var(--margen) 2rem;
+  background: var(--tinta-2);
+  border-top: 1px solid var(--linea);
+}
+
+.contacto__contenido {
+  max-width: var(--ancho);
+  margin: 0 auto;
+}
+
+.contacto__titulo {
+  margin: 1rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3.2rem, 10vw, 10rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.contacto__titulo em {
+  color: var(--rosa);
+}
+
+.contacto__texto {
+  max-width: 30rem;
+  margin: 2rem 0 0;
+  color: var(--papel-2);
+}
+
+.contacto__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.contacto__correo {
+  overflow-wrap: anywhere;
+}
+
+.contacto__pie {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  max-width: var(--ancho);
+  margin: clamp(5rem, 10vw, 8rem) auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--linea);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+}
+
+.contacto__pie p {
+  margin: 0;
+}

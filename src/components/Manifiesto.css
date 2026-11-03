@@ -1,0 +1,89 @@
+.manifiesto {
+  padding: clamp(6rem, 14vw, 12rem) var(--margen);
+}
+
+.manifiesto__rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.6fr);
+  gap: clamp(2rem, 6vw, 7rem);
+  align-items: start;
+  max-width: var(--ancho);
+  margin: 0 auto;
+}
+
+/* Los paneles de El Bosco tienen la parte superior en arco */
+.manifiesto__arco {
+  position: sticky;
+  top: 12vh;
+  margin: 0;
+  aspect-ratio: 3 / 5;
+  overflow: hidden;
+  border-radius: 999px 999px 6px 6px;
+  border: 1px solid var(--linea);
+}
+
+.manifiesto__arco img {
+  width: 100%;
+  height: 124%;
+  margin-top: -12%;
+  object-fit: cover;
+}
+
+.manifiesto__texto {
+  margin: 1.5rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 4.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.manifiesto__secundario {
+  max-width: 36rem;
+  margin: 2.5rem 0 0;
+  color: var(--papel-2);
+}
+
+.manifiesto__cifras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 4rem 0 0;
+  padding: 2rem 0 0;
+  list-style: none;
+  border-top: 1px solid var(--linea);
+}
+
+.manifiesto__cifra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.manifiesto__valor {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  line-height: 1;
+  color: var(--rosa);
+}
+
+.manifiesto__desc {
+  font-size: 0.9rem;
+  color: var(--papel-2);
+}
+
+@media (max-width: 860px) {
+  .manifiesto__rejilla {
+    grid-template-columns: 1fr;
+  }
+
+  .manifiesto__arco {
+    position: relative;
+    top: 0;
+    width: min(60%, 260px);
+    aspect-ratio: 3 / 4;
+  }
+
+  .manifiesto__cifras {
+    grid-template-columns: 1fr;
+  }
+}

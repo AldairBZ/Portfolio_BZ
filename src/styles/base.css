@@ -1,0 +1,170 @@
+:root {
+  --tinta: #0e0d0b;
+  --tinta-2: #17150f;
+  --tinta-3: #221f17;
+  --papel: #efe8da;
+  --papel-2: #b8ae9c;
+  --papel-3: #7d7566;
+  --linea: rgba(239, 232, 218, 0.14);
+  --bermellon: #d6502e;
+  --celadon: #a9c4b1;
+  --azul: #5f8fc4;
+  --rosa: #e9b7a6;
+
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --sans: 'Geist Variable', system-ui, sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --margen: clamp(1rem, 4vw, 3.5rem);
+  --ancho: 1440px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  background: var(--tinta);
+  color: var(--papel);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Grano de papel sobre toda la página */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--bermellon);
+  color: var(--tinta);
+}
+
+:focus-visible {
+  outline: 2px solid var(--bermellon);
+  outline-offset: 3px;
+}
+
+.etiqueta {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--papel-2);
+}
+
+.saltar {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  background: var(--papel);
+  color: var(--tinta);
+  border-radius: 999px;
+}
+
+.saltar:focus {
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Botón principal y secundario */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid var(--linea);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.4s var(--ease),
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease);
+}
+
+.boton:hover {
+  border-color: var(--papel);
+}
+
+.boton--lleno {
+  background: var(--papel);
+  color: var(--tinta);
+  border-color: var(--papel);
+}
+
+.boton--lleno:hover {
+  background: var(--bermellon);
+  border-color: var(--bermellon);
+  color: var(--tinta);
+}
+
+.boton svg {
+  width: 1em;
+  height: 1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,121 @@
+.cabecera {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem var(--margen);
+  transition:
+    padding 0.5s var(--ease),
+    background 0.5s var(--ease);
+}
+
+.cabecera--compacta {
+  padding-block: 0.75rem;
+  background: rgba(14, 13, 11, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--linea);
+}
+
+.cabecera__marca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.cabecera__monograma {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--papel);
+  border-radius: 1.2rem 1.2rem 0.3rem 0.3rem;
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.cabecera__nombre {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.cabecera__enlaces {
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cabecera__enlaces a {
+  position: relative;
+  font-size: 0.88rem;
+  text-decoration: none;
+  color: var(--papel-2);
+  transition: color 0.3s;
+}
+
+.cabecera__enlaces a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease);
+}
+
+.cabecera__enlaces a:hover {
+  color: var(--papel);
+}
+
+.cabecera__enlaces a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.cabecera__estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.cabecera__punto {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #7fd18b;
+  box-shadow: 0 0 0 0 rgba(127, 209, 139, 0.6);
+  animation: latido 2.4s infinite;
+}
+
+@keyframes latido {
+  70% {
+    box-shadow: 0 0 0 8px rgba(127, 209, 139, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(127, 209, 139, 0);
+  }
+}
+
+@media (max-width: 760px) {
+  .cabecera__enlaces,
+  .cabecera__nombre {
+    display: none;
+  }
+}

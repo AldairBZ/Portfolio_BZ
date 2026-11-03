@@ -1,0 +1,137 @@
+.trayectoria {
+  padding: clamp(6rem, 14vw, 11rem) var(--margen);
+}
+
+.trayectoria__contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 3rem clamp(2rem, 6vw, 7rem);
+  max-width: var(--ancho);
+  margin: 0 auto;
+}
+
+.trayectoria__contenido > header {
+  position: sticky;
+  top: 18vh;
+  align-self: start;
+}
+
+.trayectoria__titulo {
+  margin: 1rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.8rem, 5.5vw, 5.4rem);
+  line-height: 0.98;
+}
+
+.trayectoria__titulo em {
+  color: var(--celadon);
+}
+
+.trayectoria__hitos {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.trayectoria__lista {
+  display: grid;
+  gap: 3.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trayectoria__linea {
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(var(--bermellon), var(--linea));
+  transform-origin: top;
+}
+
+.hito {
+  position: relative;
+}
+
+.hito::before {
+  content: '';
+  position: absolute;
+  left: calc(-2rem - 4px);
+  top: 0.3rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tinta);
+  border: 1px solid var(--bermellon);
+}
+
+.hito__fecha {
+  margin: 0;
+}
+
+.hito__titulo {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.hito__texto {
+  margin: 0.6rem 0 0;
+  max-width: 34rem;
+  color: var(--papel-2);
+}
+
+.hito__enlace {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--rosa);
+}
+
+.stack {
+  grid-column: 1 / -1;
+  margin-top: 4rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--linea);
+}
+
+.stack__grupos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.stack__nombre {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.6rem;
+}
+
+.stack__grupo ul {
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 2;
+  color: var(--papel-2);
+}
+
+@media (max-width: 860px) {
+  .trayectoria__contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .trayectoria__contenido > header {
+    position: static;
+  }
+
+  .stack__grupos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

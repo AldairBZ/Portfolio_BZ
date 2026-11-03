@@ -1,0 +1,172 @@
+.portada {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Marco del cuadro: ocupa la mitad inferior y se funde con la página */
+.portada__cuadro {
+  position: absolute;
+  inset: 34% 0 0;
+  z-index: -1;
+  overflow: hidden;
+  clip-path: inset(0% 0% 0% 0%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
+}
+
+.portada__lienzo {
+  position: absolute;
+  inset: 0;
+  transform-origin: 52.2% 55%;
+  will-change: transform;
+}
+
+.portada__lienzo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 52% 50%;
+}
+
+.portada__plano {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.portada__trazo {
+  fill: none;
+  stroke: var(--papel);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.85;
+}
+
+.portada__cota {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: clamp(0.5rem, 0.9vw, 0.7rem);
+  color: var(--papel);
+  background: rgba(14, 13, 11, 0.75);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.portada__texto {
+  position: relative;
+  max-width: var(--ancho);
+  margin: 0 auto;
+  padding: clamp(6.5rem, 15vh, 9rem) var(--margen) 0;
+}
+
+.portada__titulo {
+  margin: 0.6rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3.6rem, 13vw, 12.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+}
+
+.portada__linea {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.portada__linea > span {
+  display: block;
+}
+
+.portada__linea em {
+  color: var(--rosa);
+  padding-left: 0.6em;
+}
+
+.portada__intro {
+  max-width: 34rem;
+  margin: 1.5rem 0 0;
+  color: var(--papel-2);
+  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+}
+
+.portada__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.portada__frase {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  translate: -50% 0;
+  width: min(90vw, 36rem);
+  margin: 0;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.portada__frase em {
+  color: var(--bermellon);
+}
+
+.portada__pista {
+  position: absolute;
+  right: var(--margen);
+  bottom: 1.5rem;
+  margin: 0;
+  writing-mode: vertical-rl;
+}
+
+@media (min-width: 1100px) {
+  .portada__texto {
+    display: grid;
+    grid-template-columns: 1fr 21rem;
+    column-gap: 3rem;
+  }
+
+  .portada__texto > .etiqueta {
+    grid-column: 1;
+  }
+
+  .portada__titulo {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  /* El texto va arriba a la derecha, sobre fondo oscuro, para que el cuadro no lo tape */
+  .portada__lateral {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    padding-top: 2.4rem;
+  }
+
+  .portada__intro {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .portada__cuadro {
+    inset: 46% 0 0;
+  }
+
+  .portada__pista {
+    display: none;
+  }
+}

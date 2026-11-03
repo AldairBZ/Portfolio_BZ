@@ -1,0 +1,136 @@
+.proyectos {
+  position: relative;
+  overflow: hidden;
+  background: var(--tinta-2);
+  border-block: 1px solid var(--linea);
+}
+
+.proyectos__pista {
+  display: flex;
+  align-items: center;
+  gap: clamp(3rem, 6vw, 7rem);
+  width: max-content;
+  height: 100svh;
+  padding: 6rem var(--margen) 3rem;
+  will-change: transform;
+}
+
+.proyectos__intro {
+  flex: 0 0 auto;
+  width: min(34rem, 80vw);
+}
+
+.proyectos__titulo {
+  margin: 1rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 6.5vw, 6.5rem);
+  line-height: 0.95;
+}
+
+.proyectos__titulo em {
+  color: var(--bermellon);
+}
+
+.proyectos__texto {
+  margin: 1.5rem 0 0;
+  max-width: 26rem;
+  color: var(--papel-2);
+}
+
+.obra {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  width: min(62rem, 78vw);
+}
+
+.obra__arco {
+  height: min(66svh, 38rem);
+  aspect-ratio: 3 / 4.4;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 999px 999px 6px 6px;
+  border: 1px solid var(--linea);
+  background: var(--tinta-3);
+}
+
+.obra__arco img {
+  width: 118%;
+  max-width: none;
+  height: 100%;
+  margin-left: -9%;
+  object-fit: cover;
+}
+
+.obra__nombre {
+  margin: 0.75rem 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 4.4vw, 4.4rem);
+  line-height: 1;
+}
+
+.obra__resumen {
+  max-width: 28rem;
+  margin: 1rem 0 0;
+  color: var(--papel-2);
+}
+
+.obra__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.obra__stack li {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-2);
+}
+
+.obra__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 899px) {
+  .proyectos__pista {
+    flex-direction: column;
+    align-items: stretch;
+    width: auto;
+    height: auto;
+    padding-block: 6rem;
+    gap: 5rem;
+  }
+
+  .proyectos__intro,
+  .obra {
+    width: auto;
+  }
+
+  .obra {
+    grid-template-columns: 1fr;
+  }
+
+  .obra__arco {
+    width: min(100%, 22rem);
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .obra__arco img {
+    width: 100%;
+    margin-left: 0;
+  }
+}
