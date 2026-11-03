@@ -10,6 +10,7 @@ const textoBoton: Record<Proyecto['ejecucion']['tipo'], string> = {
   python: 'Ejecutar Python',
   camara: 'Probar con cámara',
   codigo: 'Ver el código',
+  cobol: 'Jugar en COBOL',
 }
 
 interface Props {

@@ -1,4 +1,4 @@
-# Portfolio · Scheneider Baltazar
+﻿# Portfolio · Scheneider Baltazar
 
 Mi portfolio como desarrollador Full Stack. Los proyectos no se enseñan con capturas: se ejecutan dentro de la página.
 
@@ -10,7 +10,8 @@ Mi portfolio como desarrollador Full Stack. Los proyectos no se enseñan con cap
   - **TetrisGame**: el `.jar` original de Java 21 corre con [CheerpJ](https://cheerpj.com), con controles táctiles en el móvil.
   - **Gestor Bon Gust**: el `main.py` original corre con [Pyodide](https://pyodide.org) y SQLite en una terminal propia. Un transformador de AST convierte sus `input()` en esperas asíncronas sin tocar el archivo.
   - **Detección de movimiento**: el algoritmo de la versión en C# (AbsDiff, gris, umbral, recuento de píxeles) portado a canvas, con la cámara del dispositivo.
-  - **LifeLevelUp** y la web de Resident Evil se abren integradas; el código COBOL de BlackJack se lee en directo desde GitHub.
+  - **BlackJack en COBOL**: el `blackjack.cob.cbl` original se ejecuta con un intérprete de COBOL escrito en TypeScript (`src/lib/cobol`), con el mismo intercambio por `BRIDGE.DAT` que la versión de escritorio.
+  - **LifeLevelUp** y la web de Resident Evil se abren integradas.
 - **Ilustraciones hechas con código**: el planeta de la portada es una rejilla de caracteres que calcula luz, relieve y rotación en cada fotograma. Cada proyecto tiene su propia escena generativa en canvas, que solo se anima cuando está a la vista.
 - **Datos en directo** de la API de GitHub: últimos commits y lenguajes, con caché en `sessionStorage`.
 - **Paleta de comandos** con `Ctrl + K` para ir a cualquier sección o ejecutar un proyecto desde el teclado.

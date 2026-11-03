@@ -9,6 +9,7 @@ const EjecutorJava = lazy(() => import('./EjecutorJava'))
 const EjecutorPython = lazy(() => import('./EjecutorPython'))
 const EjecutorCamara = lazy(() => import('./EjecutorCamara'))
 const EjecutorCodigo = lazy(() => import('./EjecutorCodigo'))
+const EjecutorCobol = lazy(() => import('./EjecutorCobol'))
 
 const etiquetas = {
   web: 'Aplicación web',
@@ -16,6 +17,7 @@ const etiquetas = {
   python: 'Python en el navegador',
   camara: 'Visión por computador',
   codigo: 'Código fuente',
+  cobol: 'COBOL en el navegador',
 }
 
 interface Props {
@@ -87,6 +89,7 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
               )}
               {ejecucion.tipo === 'camara' && <EjecutorCamara />}
               {ejecucion.tipo === 'codigo' && <EjecutorCodigo />}
+              {ejecucion.tipo === 'cobol' && <EjecutorCobol />}
             </Suspense>
           </div>
           <aside className="ejecutor__ficha">

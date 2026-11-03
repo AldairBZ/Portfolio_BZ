@@ -1,0 +1,327 @@
+.cobol {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.cobol__pestanas {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--linea);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+
+.cobol__pestanas button {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  color: var(--papel-3);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cobol__pestanas button[aria-selected='true'] {
+  border-color: var(--linea);
+  color: var(--papel);
+}
+
+.cobol__dato {
+  margin-left: auto;
+  color: var(--papel-3);
+}
+
+.cobol__codigo {
+  position: relative;
+}
+
+.cobol__juego {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Mesa: el verde del original, más oscuro para encajar con la página */
+.cobol__mesa {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 0;
+  padding: 1.25rem;
+  background: radial-gradient(ellipse at center, #17432a 0%, #0c2617 75%);
+}
+
+.mano__titulo {
+  margin: 0 0 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(239, 232, 218, 0.7);
+  text-align: center;
+}
+
+.mano__titulo span {
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--papel);
+}
+
+.mano__cartas {
+  display: flex;
+  justify-content: center;
+  min-height: clamp(96px, 16vh, 157px);
+}
+
+.mano__cartas img {
+  width: auto;
+  height: clamp(96px, 16vh, 157px);
+  margin-left: -1.6rem;
+  border-radius: 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  animation: repartir 0.45s var(--ease) both;
+}
+
+.mano__cartas img:first-child {
+  margin-left: 0;
+}
+
+.mano__hueco {
+  width: clamp(68px, 11vh, 113px);
+  border: 1px dashed rgba(239, 232, 218, 0.2);
+  border-radius: 6px;
+}
+
+@keyframes repartir {
+  from {
+    opacity: 0;
+    transform: translate(40px, -60px) rotate(8deg);
+  }
+}
+
+.cobol__mensaje {
+  margin: 0;
+  text-align: center;
+  font-family: var(--display);
+  font-stretch: 75%;
+  font-weight: 600;
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  letter-spacing: -0.03em;
+  color: #f2c94c;
+}
+
+.cobol__mensaje--gana {
+  color: #7fd18b;
+}
+
+.cobol__mensaje--pierde {
+  color: #ef8a6e;
+}
+
+.cobol__mensaje--empate {
+  color: var(--papel-2);
+}
+
+.cobol__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.1rem;
+  border-left: 1px solid var(--linea);
+}
+
+.cobol__saldo {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.cobol__saldo div {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.cobol__saldo dt {
+  color: var(--papel-3);
+}
+
+.cobol__saldo dd {
+  margin: 0;
+}
+
+.cobol__fichas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.cobol__fichas button {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  padding: 0.3rem;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--papel-2);
+  cursor: pointer;
+  transition: transform 0.25s var(--ease), background 0.25s;
+}
+
+.cobol__fichas button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background: var(--tinta-3);
+}
+
+.cobol__fichas button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cobol__fichas img {
+  width: 44px;
+  height: 44px;
+}
+
+.cobol__acciones {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.cobol__acciones .boton {
+  justify-content: center;
+}
+
+.cobol__acciones .boton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cobol__acciones kbd {
+  font-size: 0.65rem;
+}
+
+.cobol__reinicio {
+  margin-top: 0.25rem;
+  border: 0;
+  background: none;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Registro BRIDGE.DAT en vivo: el contrato entre la interfaz y el motor */
+.cobol__puente {
+  grid-column: 1 / -1;
+  padding: 0.8rem 1rem 1rem;
+  border-top: 1px solid var(--linea);
+  background: #0b0a08;
+}
+
+.cobol__puente .etiqueta {
+  margin: 0 0 0.6rem;
+  text-transform: none;
+}
+
+.cobol__registro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.cobol__campo {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--linea);
+  border-radius: 6px;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.cobol__campo small {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  color: var(--papel-3);
+}
+
+.cobol__campo code {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-2);
+  white-space: pre;
+}
+
+.cobol__campo--cambio {
+  border-color: var(--bermellon);
+  background: rgba(214, 80, 46, 0.1);
+}
+
+.cobol__campo--cambio code {
+  color: var(--papel);
+}
+
+.cobol__traza {
+  margin: 0.6rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.6;
+  color: var(--celadon);
+}
+
+@media (max-width: 760px) {
+  .cobol__juego {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .cobol__mesa {
+    min-height: 23rem;
+    padding: 1rem 0.5rem;
+  }
+
+  /* Con muchas cartas, se solapan más para caber en el ancho del móvil */
+  .mano__cartas img {
+    height: 92px;
+    margin-left: -2.2rem;
+  }
+
+  .mano__hueco {
+    width: 66px;
+  }
+
+  .cobol__panel {
+    border-left: 0;
+    border-top: 1px solid var(--linea);
+  }
+
+  .cobol__fichas {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .cobol__acciones {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cobol__reinicio {
+    grid-column: 1 / -1;
+  }
+
+  .cobol__dato {
+    display: none;
+  }
+}

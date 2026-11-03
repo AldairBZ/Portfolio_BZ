@@ -5,6 +5,7 @@ export type Ejecucion =
   | { tipo: 'java'; jar: string; clase: string }
   | { tipo: 'python'; archivos: string[]; principal: string }
   | { tipo: 'camara' }
+  | { tipo: 'cobol' }
   | { tipo: 'codigo' }
 
 export interface Proyecto {
@@ -94,10 +95,12 @@ export const proyectos: Proyecto[] = [
       'Motor de reglas, mazo y apuestas escrito en COBOL.',
       'Interfaz gráfica en Python con Tkinter.',
       'Comunicación entre procesos mediante archivos de intercambio.',
+      'Aquí se ejecuta el mismo blackjack.cob.cbl con un intérprete de COBOL que he escrito en TypeScript.',
     ],
     stack: ['COBOL', 'Python', 'Tkinter'],
     repo: `${GITHUB}/BlackJack-Proyecto-COBOL`,
-    ejecucion: { tipo: 'codigo' },
+    ejecucion: { tipo: 'cobol' },
+    nota: 'Debajo de la mesa ves el registro BRIDGE.DAT que se intercambian la interfaz y el motor, y los párrafos COBOL que se ejecutan en cada jugada.',
     escena: 'tarjeta',
   },
   {
