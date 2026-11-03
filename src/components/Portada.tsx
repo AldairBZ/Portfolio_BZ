@@ -2,12 +2,13 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap, irA, movimientoReducido } from '../lib/scroll'
 import { PlanetaAscii } from '../lib/ascii'
 import { useIdioma } from '../lib/idioma'
+import { rutaCv } from '../lib/cv'
 import './Portada.css'
 
 export default function Portada() {
   const raiz = useRef<HTMLElement>(null)
   const lienzo = useRef<HTMLCanvasElement>(null)
-  const { t } = useIdioma()
+  const { t, idioma } = useIdioma()
 
   useLayoutEffect(() => {
     const movil = window.matchMedia('(max-width: 760px)').matches
@@ -132,6 +133,9 @@ export default function Portada() {
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M8 2v12m0 0 5-5m-5 5-5-5" fill="none" stroke="currentColor" strokeWidth="1.5" />
               </svg>
+            </a>
+            <a className="boton" href={rutaCv(idioma)} download>
+              {t('Descargar CV', 'Download CV')}
             </a>
             <a className="boton" href="https://github.com/AldairBZ" target="_blank" rel="noreferrer">
               GitHub

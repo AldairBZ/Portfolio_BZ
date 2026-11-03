@@ -74,6 +74,14 @@
   margin-top: 1.75rem;
 }
 
+/* En escritorio los tres botones caben en una fila aunque el texto sea más estrecho */
+@media (min-width: 761px) {
+  .portada__acciones {
+    flex-wrap: nowrap;
+    width: max-content;
+  }
+}
+
 .portada__frase {
   /* Centrado sin transform: GSAP anima la y de este elemento */
   position: absolute;

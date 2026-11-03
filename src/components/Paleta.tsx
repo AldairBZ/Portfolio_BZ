@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { bloquearScroll, irA } from '../lib/scroll'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { IDIOMAS, useIdioma } from '../lib/idioma'
+import { rutaCv } from '../lib/cv'
 import './Paleta.css'
 
 interface Comando {
@@ -46,6 +47,18 @@ export default function Paleta({ onEjecutar }: Props) {
         pista: 'aldairbz1719@gmail.com',
         accion: () => {
           navigator.clipboard?.writeText('aldairbz1719@gmail.com')
+        },
+      },
+      {
+        id: 'cv',
+        grupo: t('Contacto', 'Contact'),
+        texto: t('Descargar mi CV', 'Download my CV'),
+        pista: 'PDF',
+        accion: () => {
+          const enlace = document.createElement('a')
+          enlace.href = rutaCv(idioma)
+          enlace.download = ''
+          enlace.click()
         },
       },
       {

@@ -109,6 +109,8 @@ export const CATALAN: Record<string, string> = {
     'Busco la meva primera feina com a desenvolupador. En remot o híbrid des de Tarragona, amb incorporació immediata.',
   'Copiado ✓': 'Copiat ✓',
   'Copiar email': 'Copiar correu',
+  'Descargar CV': 'Descarregar CV',
+  'Descargar mi CV': 'Descarregar el meu CV',
   'Diseñado y programado por mí.': 'Dissenyat i programat per mi.',
   'Visitas contadas de forma anónima, sin cookies.': 'Visites comptades de manera anònima, sense galetes.',
   'React · TypeScript · GSAP · Java en el navegador con CheerpJ · Python con Pyodide · COBOL con un intérprete propio · Cloudflare':
