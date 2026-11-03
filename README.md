@@ -4,6 +4,9 @@ Mi portfolio como desarrollador Full Stack: **[scheneiderbz.pages.dev](https://s
 
 [![CI](https://github.com/AldairBZ/Portfolio_BZ/actions/workflows/ci.yml/badge.svg)](https://github.com/AldairBZ/Portfolio_BZ/actions/workflows/ci.yml) ![React](https://img.shields.io/badge/React-19-149eca) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6) ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages%20%2B%20D1-f38020)
 
+
+<p align="center"><a href="https://scheneiderbz.pages.dev/?ref=github"><img src="docs/portada.gif" alt="Portada del portfolio: un planeta dibujado con caracteres que gira" width="100%" /></a></p>
+
 ## Qué tiene de especial
 
 - **Proyectos ejecutables en el navegador**
