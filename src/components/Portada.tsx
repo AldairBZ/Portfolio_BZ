@@ -20,6 +20,16 @@ export default function Portada() {
       centroY: movil ? 0.74 : medio ? 0.7 : 0.56,
     })
     if (movimientoReducido()) planeta.estado.velocidad = 0.4
+    // Valores de reposo: el scroll parte siempre de ellos, aunque la portada se monte
+    // a media página (al cambiar de idioma) y la entrada no haya terminado
+    const reposo = {
+      centroX: planeta.opciones.centroX,
+      centroY: planeta.opciones.centroY,
+      zoom: 1,
+      velocidad: planeta.estado.velocidad,
+      brillo: planeta.estado.brillo,
+    }
+    const arriba = window.scrollY < 40
 
     // El ratón mueve la luz y la inclinación del planeta
     const alMover = (e: PointerEvent) => {
@@ -37,11 +47,14 @@ export default function Portada() {
       if (movimientoReducido()) {
         gsap.fromTo('.portada__titulo, .portada__aparece', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, stagger: 0.15 })
       } else {
-        gsap
+        const entrada = gsap
           .timeline({ defaults: { ease: 'expo.out', duration: 1.6 } })
           .fromTo('.portada__linea > span', { yPercent: 110 }, { yPercent: 0, stagger: 0.12 }, 0.15)
           .fromTo('.portada__aparece', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, stagger: 0.08, duration: 1 }, 0.6)
-          .fromTo(planeta.estado, { zoom: 0.2, velocidad: 14 }, { zoom: 1, velocidad: 1, duration: 2.8 }, 0)
+        // El planeta solo aparece desde lejos si se ve: a media página lo controla el scroll
+        if (arriba) {
+          entrada.fromTo(planeta.estado, { zoom: 0.2, velocidad: 14 }, { zoom: 1, velocidad: reposo.velocidad, duration: 2.8 }, 0)
+        }
       }
 
       // Scroll: el planeta se centra, crece y la portada da paso al mensaje
@@ -55,9 +68,19 @@ export default function Portada() {
           },
         })
         .to('.portada__texto, .portada__pista', { yPercent: -25, autoAlpha: 0, ease: 'none', duration: 0.45 }, 0)
-        .to(planeta.opciones, { centroX: 0.5, centroY: 0.5, ease: 'none', duration: 0.6 }, 0)
-        .to(planeta.estado, { zoom: movil ? 2.2 : 2.9, velocidad: 3, ease: 'none', duration: 1 }, 0)
-        .to(planeta.estado, { brillo: 0.32, ease: 'none', duration: 0.4 }, 0.55)
+        .fromTo(
+          planeta.opciones,
+          { centroX: reposo.centroX, centroY: reposo.centroY },
+          { centroX: 0.5, centroY: 0.5, ease: 'none', duration: 0.6, immediateRender: false },
+          0,
+        )
+        .fromTo(
+          planeta.estado,
+          { zoom: reposo.zoom, velocidad: reposo.velocidad },
+          { zoom: movil ? 2.2 : 2.9, velocidad: 3, ease: 'none', duration: 1, immediateRender: false },
+          0,
+        )
+        .fromTo(planeta.estado, { brillo: reposo.brillo }, { brillo: 0.32, ease: 'none', duration: 0.4, immediateRender: false }, 0.55)
         .fromTo('.portada__frase', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.25 }, 0.55)
         // Salida limpia antes de que llegue la siguiente sección
         .to('.portada__frase', { autoAlpha: 0, y: -30, duration: 0.15 }, 0.9)

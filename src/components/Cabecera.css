@@ -135,7 +135,7 @@
     color 0.25s;
 }
 
-.cabecera__idioma button:hover {
+.cabecera__idioma button:not([aria-pressed='true']):hover {
   color: var(--papel);
 }
 
