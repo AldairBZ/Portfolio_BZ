@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { DragonAscii } from '../lib/dragonAscii'
 import { useIdioma } from '../lib/idioma'
-import { rutaCv } from '../lib/cv'
+import BotonCv from './BotonCv'
 import Resplandor from './Resplandor'
 import './Contacto.css'
 
@@ -15,7 +15,7 @@ const redes = [
 
 export default function Contacto() {
   const [copiado, setCopiado] = useState(false)
-  const { t, idioma } = useIdioma()
+  const { t } = useIdioma()
   const seccion = useRef<HTMLElement>(null)
   const lienzo = useRef<HTMLCanvasElement>(null)
 
@@ -59,9 +59,7 @@ export default function Contacto() {
           <button type="button" className="boton" onClick={copiar} aria-live="polite">
             {copiado ? t('Copiado ✓', 'Copied ✓') : t('Copiar email', 'Copy email')}
           </button>
-          <a className="boton" href={rutaCv(idioma)} download>
-            {t('Descargar CV', 'Download CV')} ↓
-          </a>
+          <BotonCv flecha="↓" />
           {redes.map((red) => (
             <a key={red.texto} className="boton" href={red.href} target="_blank" rel="noreferrer">
               {red.texto} ↗

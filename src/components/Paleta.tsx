@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { bloquearScroll, irA } from '../lib/scroll'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { IDIOMAS, useIdioma } from '../lib/idioma'
-import { rutaCv } from '../lib/cv'
+import { CVS, descargarCv } from '../lib/cv'
 import './Paleta.css'
 
 interface Comando {
@@ -49,18 +49,13 @@ export default function Paleta({ onEjecutar }: Props) {
           navigator.clipboard?.writeText('aldairbz1719@gmail.com')
         },
       },
-      {
-        id: 'cv',
-        grupo: t('Contacto', 'Contact'),
-        texto: t('Descargar mi CV', 'Download my CV'),
+      ...CVS.map((cv) => ({
+        id: `cv-${cv.idioma}`,
+        grupo: t('Descargar CV', 'Download CV'),
+        texto: cv.nombre,
         pista: 'PDF',
-        accion: () => {
-          const enlace = document.createElement('a')
-          enlace.href = rutaCv(idioma)
-          enlace.download = ''
-          enlace.click()
-        },
-      },
+        accion: () => descargarCv(cv.ruta),
+      })),
       {
         id: 'linkedin',
         grupo: t('Contacto', 'Contact'),

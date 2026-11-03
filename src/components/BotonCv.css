@@ -1,0 +1,56 @@
+.boton-cv {
+  position: relative;
+  pointer-events: auto;
+}
+
+.boton-cv__menu {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: calc(100% + 0.5rem);
+  display: grid;
+  min-width: 13rem;
+  padding: 0.4rem;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: var(--tinta-2);
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.8);
+  animation: subir 0.3s var(--ease);
+}
+
+.boton-cv__menu--arriba {
+  top: auto;
+  bottom: calc(100% + 0.5rem);
+}
+
+.boton-cv__menu p {
+  margin: 0.35rem 0.6rem 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--papel-3);
+}
+
+.boton-cv__menu a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 9px;
+  color: var(--papel);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.boton-cv__menu a:hover,
+.boton-cv__menu a:focus-visible {
+  background: rgba(239, 232, 218, 0.08);
+}
+
+.boton-cv__menu small {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  color: var(--bermellon);
+}

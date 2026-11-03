@@ -110,7 +110,8 @@ export const CATALAN: Record<string, string> = {
   'Copiado ✓': 'Copiat ✓',
   'Copiar email': 'Copiar correu',
   'Descargar CV': 'Descarregar CV',
-  'Descargar mi CV': 'Descarregar el meu CV',
+  'Idioma del CV': 'Idioma del CV',
+  '¿En qué idioma?': 'En quin idioma?',
   'Diseñado y programado por mí.': 'Dissenyat i programat per mi.',
   'Visitas contadas de forma anónima, sin cookies.': 'Visites comptades de manera anònima, sense galetes.',
   'React · TypeScript · GSAP · Java en el navegador con CheerpJ · Python con Pyodide · COBOL con un intérprete propio · Cloudflare':

@@ -111,3 +111,13 @@ test('la oreja del retrato abre el acceso al panel de visitas', async ({ page })
   await page.keyboard.press('Escape')
   await expect(panel).toBeHidden()
 })
+
+test('el CV se descarga en el idioma elegido', async ({ page }) => {
+  await page.locator('.portada').getByRole('button', { name: 'Descargar CV' }).click()
+  const menu = page.getByRole('menu', { name: 'Idioma del CV' })
+  await expect(menu.getByRole('menuitem')).toHaveText([/Castellano/, /Català/, /English/])
+  const descarga = page.waitForEvent('download')
+  await menu.getByRole('menuitem', { name: /Català/ }).click()
+  expect((await descarga).suggestedFilename()).toBe('Scheneider_Baltazar_CV_CA.pdf')
+  await expect(menu).toBeHidden()
+})
