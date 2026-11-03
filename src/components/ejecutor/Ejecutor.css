@@ -24,19 +24,6 @@
   animation: subir 0.6s var(--ease);
 }
 
-@keyframes aparecer {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes subir {
-  from {
-    transform: translateY(30px) scale(0.98);
-    opacity: 0;
-  }
-}
-
 .ejecutor__barra {
   display: flex;
   align-items: center;

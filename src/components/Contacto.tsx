@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Contacto.css'
 
 const EMAIL = 'aldairbz1719@gmail.com'
+const ANIO = new Date().getFullYear()
 
 const redes = [
   { texto: 'LinkedIn', href: 'https://www.linkedin.com/in/scheneiderbz19/' },
@@ -50,7 +51,7 @@ export default function Contacto() {
       </div>
 
       <div className="contacto__pie">
-        <p>© {new Date().getFullYear()} Scheneider Baltazar · Diseñado y programado por mí.</p>
+        <p>© {ANIO} Scheneider Baltazar · Diseñado y programado por mí.</p>
         <p>
           React · TypeScript · GSAP · Java en el navegador con CheerpJ · Python con Pyodide · Cloudflare
         </p>

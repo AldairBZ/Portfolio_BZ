@@ -1,0 +1,91 @@
+.vivo {
+  overflow: hidden;
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  background: #0b0a08;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+}
+
+.vivo__barra {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--linea);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--papel-3);
+}
+
+.vivo__puntos {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--papel-3);
+  box-shadow:
+    13px 0 0 var(--papel-3),
+    26px 0 0 var(--papel-3);
+  margin-right: 26px;
+  opacity: 0.6;
+}
+
+.vivo__test {
+  margin-left: auto;
+  color: #7fd18b;
+}
+
+.vivo__codigo {
+  min-height: 34rem;
+  margin: 0;
+  padding: 1rem 0;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: clamp(0.66rem, 0.95vw, 0.8rem);
+  line-height: 1.7;
+  color: var(--papel-2);
+}
+
+.vivo__linea {
+  display: block;
+  padding-right: 1rem;
+}
+
+.vivo__numero {
+  display: inline-block;
+  width: 3rem;
+  padding-right: 1rem;
+  text-align: right;
+  color: var(--papel-3);
+  opacity: 0.6;
+  user-select: none;
+}
+
+.vivo__clave {
+  color: var(--bermellon);
+}
+
+.vivo__cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--papel);
+  animation: parpadeo 1s steps(1) infinite;
+}
+
+@keyframes parpadeo {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .vivo__codigo {
+    min-height: 0;
+  }
+
+  .vivo__test {
+    display: none;
+  }
+}

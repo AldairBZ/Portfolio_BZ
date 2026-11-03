@@ -1,3 +1,5 @@
+import type { NombreEscena } from '../lib/escenas'
+
 export type Ejecucion =
   | { tipo: 'web'; url: string }
   | { tipo: 'java'; jar: string; clase: string }
@@ -15,8 +17,8 @@ export interface Proyecto {
   demo?: string
   ejecucion: Ejecucion
   nota?: string
-  /** Fragmento del cuadro que acompaña al proyecto */
-  fragmento: string
+  /** Ilustración generativa que acompaña al proyecto */
+  escena: NombreEscena
 }
 
 const GITHUB = 'https://github.com/AldairBZ'
@@ -37,7 +39,7 @@ export const proyectos: Proyecto[] = [
     demo: 'https://lifelevelup.08-pruebas.workers.dev',
     ejecucion: { tipo: 'web', url: 'https://lifelevelup.08-pruebas.workers.dev' },
     nota: 'La API usa el plan gratuito de Render: la primera petición puede tardar unos segundos.',
-    fragmento: 'jirafa-700',
+    escena: 'planeta',
   },
   {
     id: 'tetris',
@@ -53,7 +55,7 @@ export const proyectos: Proyecto[] = [
     repo: `${GITHUB}/TetrisGame`,
     ejecucion: { tipo: 'java', jar: '/apps/tetris.jar', clase: 'com.tetrisgame.Main' },
     nota: 'En el navegador no hay base de datos, así que el ranking queda desactivado.',
-    fragmento: 'torre-900',
+    escena: 'bloques',
   },
   {
     id: 'bongust',
@@ -67,7 +69,7 @@ export const proyectos: Proyecto[] = [
     stack: ['Python', 'SQLite'],
     repo: `${GITHUB}/GestorBonGustProject`,
     ejecucion: { tipo: 'python', archivos: ['main.py', 'database.py', 'models.py'], principal: 'main.py' },
-    fragmento: 'fresa-424',
+    escena: 'inventario',
   },
   {
     id: 'movimiento',
@@ -82,7 +84,7 @@ export const proyectos: Proyecto[] = [
     repo: `${GITHUB}/DeteccionMovimiento`,
     ejecucion: { tipo: 'camara' },
     nota: 'Versión web del algoritmo original en C#. La imagen no sale de tu dispositivo.',
-    fragmento: 'buho-530',
+    escena: 'pixeles',
   },
   {
     id: 'blackjack',
@@ -96,7 +98,7 @@ export const proyectos: Proyecto[] = [
     stack: ['COBOL', 'Python', 'Tkinter'],
     repo: `${GITHUB}/BlackJack-Proyecto-COBOL`,
     ejecucion: { tipo: 'codigo' },
-    fragmento: 'columna-800',
+    escena: 'tarjeta',
   },
   {
     id: 'residentevil',
@@ -107,6 +109,6 @@ export const proyectos: Proyecto[] = [
     repo: `${GITHUB}/A2_ResidentEvil_Web`,
     demo: 'https://aldairbz.github.io/A2_ResidentEvil_Web/',
     ejecucion: { tipo: 'web', url: 'https://aldairbz.github.io/A2_ResidentEvil_Web/' },
-    fragmento: 'infierno-1600',
+    escena: 'maqueta',
   },
 ]

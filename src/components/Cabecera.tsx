@@ -42,10 +42,21 @@ export default function Cabecera() {
           ))}
         </ul>
       </nav>
+      <div className="cabecera__derecha">
+      <button
+        type="button"
+        className="cabecera__comandos"
+        onClick={() => window.dispatchEvent(new Event('abrir-paleta'))}
+        aria-label="Abrir paleta de comandos"
+      >
+        <kbd className="solo-teclado">Ctrl K</kbd>
+        <kbd className="solo-tactil">Comandos</kbd>
+      </button>
       <a className="cabecera__estado" href="#contacto" onClick={(e) => navegar(e, '#contacto')}>
         <span className="cabecera__punto" aria-hidden="true" />
         Disponible
       </a>
+      </div>
     </header>
   )
 }

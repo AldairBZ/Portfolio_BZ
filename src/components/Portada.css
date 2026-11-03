@@ -6,59 +6,12 @@
   isolation: isolate;
 }
 
-/* Marco del cuadro: ocupa la mitad inferior y se funde con la página */
-.portada__cuadro {
-  position: absolute;
-  inset: 34% 0 0;
-  z-index: -1;
-  overflow: hidden;
-  clip-path: inset(0% 0% 0% 0%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 70%, transparent 100%);
-}
-
 .portada__lienzo {
   position: absolute;
   inset: 0;
-  transform-origin: 52.2% 55%;
-  will-change: transform;
-}
-
-.portada__lienzo img {
+  z-index: -1;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 52% 50%;
-}
-
-.portada__plano {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.portada__trazo {
-  fill: none;
-  stroke: var(--papel);
-  stroke-width: 0.6;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  opacity: 0.85;
-}
-
-.portada__cota {
-  position: absolute;
-  font-family: var(--mono);
-  font-size: clamp(0.5rem, 0.9vw, 0.7rem);
-  color: var(--papel);
-  background: rgba(14, 13, 11, 0.75);
-  padding: 0.15rem 0.4rem;
-  border-radius: 3px;
-  white-space: nowrap;
 }
 
 .portada__texto {
@@ -66,13 +19,18 @@
   max-width: var(--ancho);
   margin: 0 auto;
   padding: clamp(6.5rem, 15vh, 9rem) var(--margen) 0;
+  pointer-events: none;
+}
+
+.portada__texto a {
+  pointer-events: auto;
 }
 
 .portada__titulo {
   margin: 0.6rem 0 0;
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(3.6rem, 13vw, 12.5rem);
+  font-size: clamp(3.6rem, 12vw, 11.5rem);
   line-height: 0.86;
   letter-spacing: -0.02em;
 }
@@ -88,15 +46,18 @@
 }
 
 .portada__linea em {
-  color: var(--rosa);
+  color: var(--bermellon);
   padding-left: 0.6em;
 }
 
+.portada__lateral {
+  max-width: 24rem;
+}
+
 .portada__intro {
-  max-width: 34rem;
-  margin: 1.5rem 0 0;
+  margin: 1.75rem 0 0;
   color: var(--papel-2);
-  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  font-size: clamp(0.98rem, 1.3vw, 1.08rem);
 }
 
 .portada__acciones {
@@ -109,63 +70,46 @@
 .portada__frase {
   position: absolute;
   left: 50%;
-  bottom: 12%;
-  translate: -50% 0;
-  width: min(90vw, 36rem);
+  top: 50%;
+  translate: -50% -50%;
+  width: min(90vw, 40rem);
   margin: 0;
+  padding: 1.5rem;
   text-align: center;
   font-family: var(--serif);
   font-size: clamp(1.8rem, 4.5vw, 3.4rem);
-  line-height: 1.05;
+  line-height: 1.08;
   opacity: 0;
   visibility: hidden;
+  text-shadow: 0 0 40px var(--tinta), 0 0 12px var(--tinta);
 }
 
 .portada__frase em {
-  color: var(--bermellon);
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.55em;
+  color: var(--rosa);
 }
 
 .portada__pista {
   position: absolute;
-  right: var(--margen);
+  left: var(--margen);
   bottom: 1.5rem;
   margin: 0;
-  writing-mode: vertical-rl;
 }
 
-@media (min-width: 1100px) {
-  .portada__texto {
-    display: grid;
-    grid-template-columns: 1fr 21rem;
-    column-gap: 3rem;
-  }
-
-  .portada__texto > .etiqueta {
-    grid-column: 1;
-  }
-
-  .portada__titulo {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  /* El texto va arriba a la derecha, sobre fondo oscuro, para que el cuadro no lo tape */
-  .portada__lateral {
-    grid-column: 2;
-    grid-row: 1 / 3;
-    padding-top: 2.4rem;
-  }
-
-  .portada__intro {
-    margin-top: 0;
-  }
+kbd {
+  display: inline-block;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--linea);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: var(--papel);
 }
 
 @media (max-width: 760px) {
-  .portada__cuadro {
-    inset: 46% 0 0;
-  }
-
   .portada__pista {
     display: none;
   }

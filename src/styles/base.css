@@ -95,6 +95,18 @@ button {
   color: var(--papel-2);
 }
 
+@media (pointer: coarse) {
+  .solo-teclado {
+    display: none !important;
+  }
+}
+
+@media (pointer: fine) {
+  .solo-tactil {
+    display: none !important;
+  }
+}
+
 .saltar {
   position: absolute;
   left: 1rem;
@@ -158,6 +170,19 @@ button {
 .boton svg {
   width: 1em;
   height: 1em;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes subir {
+  from {
+    transform: translateY(30px) scale(0.98);
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

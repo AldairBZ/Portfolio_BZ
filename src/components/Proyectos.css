@@ -47,22 +47,46 @@
   width: min(62rem, 78vw);
 }
 
-.obra__arco {
-  height: min(66svh, 38rem);
-  aspect-ratio: 3 / 4.4;
+.obra__ventana {
+  display: flex;
+  flex-direction: column;
+  height: min(66svh, 36rem);
+  aspect-ratio: 4 / 5;
   margin: 0;
   overflow: hidden;
-  border-radius: 999px 999px 6px 6px;
   border: 1px solid var(--linea);
-  background: var(--tinta-3);
+  border-radius: 14px;
+  background: var(--tinta);
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
 }
 
-.obra__arco img {
-  width: 118%;
-  max-width: none;
-  height: 100%;
-  margin-left: -9%;
-  object-fit: cover;
+.obra__pestana {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--linea);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--papel-3);
+}
+
+.obra__puntos {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--papel-3);
+  box-shadow:
+    13px 0 0 var(--papel-3),
+    26px 0 0 var(--papel-3);
+  margin-right: 26px;
+  opacity: 0.6;
+}
+
+.obra__lienzo {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
 }
 
 .obra__nombre {
@@ -123,14 +147,10 @@
     grid-template-columns: 1fr;
   }
 
-  .obra__arco {
-    width: min(100%, 22rem);
-    height: auto;
-    aspect-ratio: 4 / 5;
-  }
-
-  .obra__arco img {
+  .obra__ventana {
     width: 100%;
-    margin-left: 0;
+    max-width: 26rem;
+    height: auto;
+    aspect-ratio: 4 / 4.4;
   }
 }

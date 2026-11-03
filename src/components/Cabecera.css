@@ -81,6 +81,31 @@
   transform-origin: left;
 }
 
+.cabecera__derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cabecera__comandos {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.cabecera__comandos kbd {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.7rem;
+  color: var(--papel-2);
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.cabecera__comandos:hover kbd {
+  color: var(--papel);
+  border-color: var(--papel-2);
+}
+
 .cabecera__estado {
   display: inline-flex;
   align-items: center;

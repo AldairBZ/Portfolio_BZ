@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/scroll'
+import Ilustracion from './Ilustracion'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import './Proyectos.css'
 
@@ -38,18 +39,20 @@ export default function Proyectos({ onEjecutar }: Props) {
           invalidateOnRefresh: true,
         },
       })
-      gsap.utils.toArray<HTMLElement>('.obra__arco img').forEach((img) => {
+      // Cada ventana entra con un leve giro mientras la galería avanza
+      gsap.utils.toArray<HTMLElement>('.obra__ventana').forEach((ventana) => {
         gsap.fromTo(
-          img,
-          { xPercent: -8 },
+          ventana,
+          { rotate: 4, scale: 0.92 },
           {
-            xPercent: 8,
+            rotate: 0,
+            scale: 1,
             ease: 'none',
             scrollTrigger: {
-              trigger: img.closest('.obra'),
+              trigger: ventana.closest('.obra'),
               containerAnimation: avance,
               start: 'left right',
-              end: 'right left',
+              end: 'center center',
               scrub: true,
             },
           },
@@ -90,13 +93,12 @@ export default function Proyectos({ onEjecutar }: Props) {
 
         {proyectos.map((proyecto, i) => (
           <article key={proyecto.id} className="obra" aria-labelledby={`obra-${proyecto.id}`}>
-            <figure className="obra__arco">
-              <img
-                src={`/arte/${proyecto.fragmento}.webp`}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+            <figure className="obra__ventana">
+              <figcaption className="obra__pestana">
+                <span className="obra__puntos" aria-hidden="true" />
+                {proyecto.id}/{proyecto.escena}.ts
+              </figcaption>
+              <Ilustracion escena={proyecto.escena} className="obra__lienzo" />
             </figure>
             <div className="obra__info">
               <p className="etiqueta">

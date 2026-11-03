@@ -3,8 +3,9 @@ import Cabecera from './components/Cabecera'
 import Portada from './components/Portada'
 import Manifiesto from './components/Manifiesto'
 import Proyectos from './components/Proyectos'
+import GitHub from './components/GitHub'
 import Trayectoria from './components/Trayectoria'
-import Pintura from './components/Pintura'
+import Paleta from './components/Paleta'
 import Contacto from './components/Contacto'
 import { iniciarScroll, ScrollTrigger } from './lib/scroll'
 import type { Proyecto } from './data/proyectos'
@@ -36,10 +37,11 @@ export default function App() {
         <Portada />
         <Manifiesto />
         <Proyectos onEjecutar={setAbierto} />
+        <GitHub />
         <Trayectoria />
-        <Pintura />
         <Contacto />
       </main>
+      <Paleta onEjecutar={setAbierto} />
       {abierto && (
         <Suspense fallback={null}>
           <Ejecutor proyecto={abierto} onCerrar={() => setAbierto(null)} />

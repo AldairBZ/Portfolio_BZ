@@ -91,6 +91,8 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
   const pantalla = useRef<HTMLDivElement>(null)
   const campo = useRef<HTMLInputElement>(null)
   const activo = useRef(true)
+  // Cada ejecución tiene un número; una ejecución antigua no escribe ni continúa
+  const ejecucion = useRef(0)
 
   const escribir = useCallback((texto: string, tipo: Linea['tipo'] = 'salida') => {
     if (!activo.current) return
@@ -105,11 +107,13 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
   }, [])
 
   const ejecutar = useCallback(async () => {
+    const id = ++ejecucion.current
+    const vigente = () => activo.current && id === ejecucion.current
     setSalida([])
     setEstado('cargando')
     try {
       const py = await cargarPyodide()
-      if (!activo.current) return
+      if (!vigente()) return
       const decodificador = new TextDecoder()
       py.setStdout({ write: (b) => (escribir(decodificador.decode(b, { stream: true })), b.length) })
       py.setStderr({ write: (b) => (escribir(decodificador.decode(b, { stream: true }), 'error'), b.length) })
@@ -127,21 +131,21 @@ export default function EjecutorPython({ archivos, principal }: { archivos: stri
         // No existía una base de datos previa
       }
       await py.runPythonAsync("import os; os.makedirs('/home/pyodide/app', exist_ok=True)")
-      for (const archivo of archivos) {
-        const texto = await fetch(`/apps/bongust/${archivo}`).then((r) => r.text())
-        py.FS.writeFile(`/home/pyodide/app/${archivo}`, texto)
-      }
+      const textos = await Promise.all(archivos.map((a) => fetch(`/apps/bongust/${a}`).then((r) => r.text())))
+      if (!vigente()) return
+      archivos.forEach((archivo, i) => py.FS.writeFile(`/home/pyodide/app/${archivo}`, textos[i]))
       await py.runPythonAsync(LANZADOR)
       setEstado('ejecutando')
       await py.runPythonAsync(`await __lanzar('${principal}')`)
-      setEstado('terminado')
+      if (vigente()) setEstado('terminado')
     } catch (error) {
+      if (!vigente()) return
       const mensaje = error instanceof Error ? error.message : String(error)
       // Los errores de Python (por ejemplo, escribir letras donde se espera un número) se muestran como en una terminal real
       escribir(`\n${mensaje.split('\n').slice(-3).join('\n')}\n`, 'error')
       setEstado(mensaje.includes('Traceback') || mensaje.includes('Error') ? 'terminado' : 'error')
     } finally {
-      setEsperando(false)
+      if (vigente()) setEsperando(false)
     }
   }, [archivos, principal, escribir])
 

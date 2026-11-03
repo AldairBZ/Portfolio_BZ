@@ -36,7 +36,10 @@ export function irA(destino: string | HTMLElement) {
 
 /** Detiene el scroll de la página mientras hay una ventana abierta encima */
 export function bloquearScroll(bloquear: boolean) {
-  if (lenis) bloquear ? lenis.stop() : lenis.start()
+  if (lenis) {
+    if (bloquear) lenis.stop()
+    else lenis.start()
+  }
   document.documentElement.style.overflow = bloquear ? 'hidden' : ''
 }
 

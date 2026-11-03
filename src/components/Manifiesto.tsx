@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/scroll'
+import CodigoVivo from './CodigoVivo'
 import './Manifiesto.css'
 
 const texto =
@@ -26,15 +27,6 @@ export default function Manifiesto() {
           scrollTrigger: { trigger: '.manifiesto__texto', start: 'top 80%', end: 'bottom 45%', scrub: true },
         },
       )
-      gsap.fromTo(
-        '.manifiesto__arco img',
-        { yPercent: -12 },
-        {
-          yPercent: 12,
-          ease: 'none',
-          scrollTrigger: { trigger: raiz.current, start: 'top bottom', end: 'bottom top', scrub: true },
-        },
-      )
       gsap.fromTo('.manifiesto__cifra', { y: 40, autoAlpha: 0 }, {
         y: 0,
         autoAlpha: 1,
@@ -50,15 +42,9 @@ export default function Manifiesto() {
   return (
     <section className="manifiesto" ref={raiz} aria-labelledby="manifiesto-titulo">
       <div className="manifiesto__rejilla">
-        <figure className="manifiesto__arco">
-          <img
-            src="/arte/fuente-900.webp"
-            alt="La fuente de la vida, del panel izquierdo de El jardín de las delicias"
-            loading="lazy"
-            width="900"
-            height="2094"
-          />
-        </figure>
+        <div className="manifiesto__lateral">
+          <CodigoVivo />
+        </div>
         <div>
           <h2 id="manifiesto-titulo" className="etiqueta">
             Sobre mí

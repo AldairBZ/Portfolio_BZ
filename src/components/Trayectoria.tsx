@@ -21,11 +21,6 @@ const hitos = [
     titulo: 'Microsoft Azure Fundamentals',
     texto: 'AZ-900, AI-900, DP-900 y SC-900. Y Java SE 11 Programming II, de La Salle.',
   },
-  {
-    fecha: 'Antes',
-    titulo: 'Ilustración digital',
-    texto: 'Años de dibujo y pintura digital. De ahí viene el cuidado por el detalle y por las interfaces que se entienden.',
-  },
 ]
 
 const stack = [
@@ -64,9 +59,9 @@ export default function Trayectoria() {
         <header>
           <p className="etiqueta">Trayectoria</p>
           <h2 id="trayectoria-titulo" className="trayectoria__titulo">
-            De pintar mundos
+            Aprender rápido,
             <br />
-            <em>a programarlos.</em>
+            <em>entregar código que funciona.</em>
           </h2>
         </header>
 
