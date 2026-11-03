@@ -22,6 +22,12 @@ declare global {
 
 let pyodide: Promise<Pyodide> | null = null
 
+/** Descarga el cargador de Python antes de que se pulse el botón */
+// eslint-disable-next-line react-refresh/only-export-components
+export function precalentar() {
+  cargarScript(`${PYODIDE}pyodide.js`).catch(() => {})
+}
+
 function cargarPyodide() {
   if (!pyodide) {
     pyodide = (async () => {

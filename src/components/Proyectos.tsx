@@ -3,6 +3,7 @@ import { gsap, ScrollTrigger } from '../lib/scroll'
 import Ilustracion from './Ilustracion'
 import { proyectos, type Proyecto } from '../data/proyectos'
 import { useIdioma, type Texto } from '../lib/idioma'
+import { precargar } from '../lib/precarga'
 import './Proyectos.css'
 
 const textoBoton: Record<Proyecto['ejecucion']['tipo'], Texto> = {
@@ -132,7 +133,14 @@ export default function Proyectos({ onEjecutar }: Props) {
                 ))}
               </ul>
               <div className="obra__acciones">
-                <button type="button" className="boton boton--lleno" onClick={() => onEjecutar(proyecto)}>
+                <button
+                  type="button"
+                  className="boton boton--lleno"
+                  onClick={() => onEjecutar(proyecto)}
+                  onPointerEnter={() => precargar(proyecto.ejecucion.tipo)}
+                  onFocus={() => precargar(proyecto.ejecucion.tipo)}
+                  onTouchStart={() => precargar(proyecto.ejecucion.tipo)}
+                >
                   <svg viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
                   </svg>

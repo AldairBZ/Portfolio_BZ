@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=560" />
+    <meta name="robots" content="noindex" />
+    <title>Java en el navegador</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 560px;
+        height: 720px;
+        overflow: hidden;
+        background: #0e0d0b;
+      }
+      #pantalla {
+        width: 560px;
+        height: 720px;
+      }
+    </style>
+    <!-- Esta página se carga en un iframe de 560 x 720: dentro, Java ve siempre una pantalla
+         de ese tamaño, aunque el móvil sea más estrecho, y la ventana del juego cabe entera -->
+    <script src="https://cjrtnc.leaningtech.com/5.0/loader.js"></script>
+  </head>
+  <body>
+    <div id="pantalla"></div>
+    <script type="module">
+      const avisar = (estado) => parent.postMessage({ origen: 'java', estado }, location.origin)
+
+      // Escape cierra la ventana del proyecto aunque el foco esté dentro del juego
+      addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') parent.postMessage({ origen: 'java', tecla: 'Escape' }, location.origin)
+      })
+
+      // Los botones táctiles de la página principal envían teclas por postMessage
+      addEventListener('message', (e) => {
+        if (e.origin !== location.origin || e.data?.origen !== 'portfolio') return
+        const { tecla, codigo } = e.data
+        // CheerpJ lee el teclado desde un <textarea> oculto que mantiene enfocado
+        const destino =
+          document.activeElement?.tagName === 'TEXTAREA' ? document.activeElement : document.querySelector('textarea') ?? document.body
+        destino.focus?.()
+        for (const tipo of ['keydown', 'keyup']) {
+          const evento = new KeyboardEvent(tipo, {
+            key: tecla,
+            code: tecla === ' ' ? 'Space' : tecla.length === 1 ? `Key${tecla.toUpperCase()}` : tecla,
+            bubbles: true,
+            cancelable: true,
+          })
+          // Chrome ignora keyCode al crear el evento, pero Java lo usa para saber la tecla
+          Object.defineProperty(evento, 'keyCode', { get: () => codigo })
+          Object.defineProperty(evento, 'which', { get: () => codigo })
+          destino.dispatchEvent(evento)
+        }
+      })
+
+      try {
+        await cheerpjInit({ version: 21, status: 'none' })
+        cheerpjCreateDisplay(-1, -1, document.getElementById('pantalla'))
+        avisar('listo')
+        // La promesa solo termina cuando se cierra el programa
+        // Solo se ejecutan los .jar publicados en /apps/
+        const jar = new URLSearchParams(location.search).get('jar') ?? ''
+        if (!/^\/apps\/[\w-]+\.jar$/.test(jar)) throw new Error('jar no válido')
+        cheerpjRunJar(`/app${jar}`)
+      } catch {
+        avisar('error')
+      }
+    </script>
+  </body>
+</html>

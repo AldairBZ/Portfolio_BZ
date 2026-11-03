@@ -69,6 +69,10 @@
   background: var(--tinta);
 }
 
+.ejecutor__info {
+  display: none;
+}
+
 .ejecutor__ficha {
   padding: 1.5rem;
   border-left: 1px solid var(--linea);
@@ -176,13 +180,32 @@
 
   .ejecutor__cuerpo {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
+  .ejecutor__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-top: 1px solid var(--linea);
+    background: var(--tinta-2);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--papel-2);
+    cursor: pointer;
   }
 
   .ejecutor__ficha {
-    max-height: 30svh;
+    display: none;
+    max-height: 40svh;
     border-left: 0;
     border-top: 1px solid var(--linea);
+  }
+
+  .ejecutor__ficha--abierta {
+    display: block;
   }
 
   .ejecutor__extra {

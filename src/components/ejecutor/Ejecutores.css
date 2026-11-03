@@ -1,10 +1,21 @@
-/* Java (CheerpJ) */
-body > .java__pantalla {
+/* Java (CheerpJ) en un iframe de tamaño fijo que se escala encima del marco */
+.java__iframe {
   position: fixed;
-  left: -10000px;
+  left: 0;
   top: 0;
-  width: 600px;
-  height: 700px;
+  z-index: 91;
+  border: 0;
+  transform-origin: top left;
+  visibility: hidden;
+  pointer-events: none;
+  /* Fuera de la vista mientras no se usa, sin descargarlo ni reiniciarlo */
+  translate: -10000px 0;
+}
+
+.java__iframe--visible {
+  visibility: visible;
+  pointer-events: auto;
+  translate: none;
 }
 
 .java {
@@ -19,9 +30,8 @@ body > .java__pantalla {
   min-height: 0;
 }
 
-.java__marco > .java__pantalla {
-  position: absolute;
-  inset: 0;
+.java__marco {
+  overflow: hidden;
 }
 
 .java__controles {
@@ -119,6 +129,13 @@ body > .java__pantalla {
 
 .terminal__entrada {
   display: inline;
+}
+
+@media (pointer: coarse) {
+  /* Con menos de 16 px, el móvil hace zoom al escribir */
+  .terminal__entrada input {
+    font-size: 16px;
+  }
 }
 
 .terminal__entrada input {

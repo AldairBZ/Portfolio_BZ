@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { bloquearScroll } from '../../lib/scroll'
 import type { Proyecto } from '../../data/proyectos'
 import { useIdioma, type Texto } from '../../lib/idioma'
@@ -30,6 +30,8 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
   const dialogo = useRef<HTMLDivElement>(null)
   const { ejecucion } = proyecto
   const { t, tx } = useIdioma()
+  // En el móvil la ficha empieza plegada para dejar todo el espacio al proyecto
+  const [info, setInfo] = useState(false)
 
   useEffect(() => {
     bloquearScroll(true)
@@ -94,7 +96,17 @@ export default function Ejecutor({ proyecto, onCerrar }: Props) {
               {ejecucion.tipo === 'cobol' && <EjecutorCobol />}
             </Suspense>
           </div>
-          <aside className="ejecutor__ficha">
+          <button
+            type="button"
+            className="ejecutor__info"
+            aria-expanded={info}
+            aria-controls="ejecutor-ficha"
+            onClick={() => setInfo((v) => !v)}
+          >
+            {info ? t('Ocultar detalles', 'Hide details') : t('Ver detalles del proyecto', 'Show project details')}
+            <span aria-hidden="true">{info ? '↓' : '↑'}</span>
+          </button>
+          <aside id="ejecutor-ficha" className={`ejecutor__ficha${info ? ' ejecutor__ficha--abierta' : ''}`}>
             <p className="ejecutor__resumen">{tx(proyecto.resumen)}</p>
             <ul className="ejecutor__detalle">
               {proyecto.detalle.map((d) => (

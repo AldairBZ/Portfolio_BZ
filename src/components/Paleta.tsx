@@ -153,6 +153,8 @@ export default function Paleta({ onEjecutar }: Props) {
           <span aria-hidden="true">›</span>
           <input
             ref={campo}
+            // Enfocado desde el primer momento: lo que se escriba al abrir no se pierde
+            autoFocus
             value={busqueda}
             onChange={(e) => {
               setBusqueda(e.target.value)

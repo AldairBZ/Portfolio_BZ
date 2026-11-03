@@ -1,36 +1,56 @@
 import { useEffect, useRef, useState } from 'react'
 import { Cargando } from './Ejecutor'
 import { useIdioma } from '../../lib/idioma'
-import { cargarScript } from '../../lib/cargarScript'
-
-declare global {
-  interface Window {
-    cheerpjInit?: (opciones?: Record<string, unknown>) => Promise<void>
-    cheerpjCreateDisplay?: (ancho: number, alto: number, padre?: HTMLElement) => HTMLElement
-    cheerpjRunJar?: (ruta: string, ...args: string[]) => Promise<number>
-  }
-}
 
 const CHEERPJ = 'https://cjrtnc.leaningtech.com/5.0/loader.js'
+// La página de Java mide siempre 560 x 720: dentro, la ventana del juego cabe entera
+const ANCHO = 560
+const ALTO = 720
 
-// CheerpJ solo puede iniciarse una vez por página: la pantalla se reutiliza entre aperturas
-let pantalla: HTMLElement | null = null
-let arranque: Promise<void> | null = null
+/** Pide al navegador el cargador de Java antes de que se pulse el botón */
+// eslint-disable-next-line react-refresh/only-export-components
+export function precalentar() {
+  if (document.querySelector(`link[href="${CHEERPJ}"]`)) return
+  const enlace = document.createElement('link')
+  enlace.rel = 'prefetch'
+  enlace.href = CHEERPJ
+  document.head.appendChild(enlace)
+}
 
-function arrancar(jar: string) {
-  if (!arranque) {
-    arranque = (async () => {
-      await cargarScript(CHEERPJ)
-      await window.cheerpjInit!({ version: 21, status: 'none' })
-      pantalla = document.createElement('div')
-      pantalla.className = 'java__pantalla'
-      document.body.appendChild(pantalla)
-      window.cheerpjCreateDisplay!(-1, -1, pantalla)
-      // No se espera: la promesa solo termina cuando se cierra el programa
-      window.cheerpjRunJar!(`/app${jar}`)
-    })()
+/*
+ * Java se ejecuta en un iframe (public/apps/java.html). Un iframe se recarga si se
+ * mueve por el DOM, así que se crea una vez, se queda en <body> con posición fija
+ * y solo se coloca encima del marco mientras la ventana del proyecto está abierta.
+ * Así la partida se conserva al cerrar y volver a abrir.
+ */
+let marco: HTMLIFrameElement | null = null
+let estadoJava: 'cargando' | 'listo' | 'error' = 'cargando'
+const oyentes = new Set<(estado: typeof estadoJava) => void>()
+
+function obtenerMarco(jar: string) {
+  if (!marco) {
+    marco = document.createElement('iframe')
+    marco.src = `/apps/java.html?jar=${encodeURIComponent(jar)}`
+    marco.title = 'Java'
+    marco.className = 'java__iframe'
+    marco.width = String(ANCHO)
+    marco.height = String(ALTO)
+    document.body.appendChild(marco)
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin || e.data?.origen !== 'java') return
+      if (e.data.tecla === 'Escape') {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+        return
+      }
+      estadoJava = e.data.estado
+      oyentes.forEach((avisar) => avisar(estadoJava))
+    })
   }
-  return arranque
+  return marco
+}
+
+function ocultarMarco() {
+  if (marco) marco.classList.remove('java__iframe--visible')
 }
 
 const controles = [
@@ -42,47 +62,57 @@ const controles = [
   { tecla: 'c', codigo: 67, texto: 'C', nombre: { es: 'Guardar pieza', en: 'Hold piece' } },
 ]
 
-function pulsar(tecla: string, codigo: number) {
-  const destino = (pantalla?.querySelector('canvas, [tabindex]') as HTMLElement | null) ?? document.body
-  destino.focus?.()
-  for (const tipo of ['keydown', 'keyup'] as const) {
-    const evento = new KeyboardEvent(tipo, {
-      key: tecla,
-      code: tecla === ' ' ? 'Space' : tecla.length === 1 ? `Key${tecla.toUpperCase()}` : tecla,
-      keyCode: codigo,
-      which: codigo,
-      bubbles: true,
-      cancelable: true,
-    })
-    destino.dispatchEvent(evento)
-  }
-}
-
 export default function EjecutorJava({ jar }: { jar: string }) {
   const contenedor = useRef<HTMLDivElement>(null)
-  const [estado, setEstado] = useState<'cargando' | 'listo' | 'error'>(pantalla ? 'listo' : 'cargando')
+  const [estado, setEstado] = useState(estadoJava)
   const { t, tx } = useIdioma()
 
   useEffect(() => {
-    let activo = true
-    arrancar(jar)
-      .then(() => {
-        if (!activo || !pantalla || !contenedor.current) return
-        contenedor.current.appendChild(pantalla)
-        setEstado('listo')
-      })
-      .catch(() => activo && setEstado('error'))
+    const iframe = obtenerMarco(jar)
+    oyentes.add(setEstado)
+
+    // Coloca y escala el iframe encima del marco, en el móvil y en el ordenador
+    const colocar = () => {
+      const zona = contenedor.current?.getBoundingClientRect()
+      if (!zona) return
+      const escala = Math.min(zona.width / ANCHO, zona.height / ALTO, 1.3)
+      iframe.style.transform = `translate(${zona.left + (zona.width - ANCHO * escala) / 2}px, ${zona.top + (zona.height - ALTO * escala) / 2}px) scale(${escala})`
+      iframe.classList.add('java__iframe--visible')
+    }
+    colocar()
+    const observador = new ResizeObserver(colocar)
+    if (contenedor.current) observador.observe(contenedor.current)
+    window.addEventListener('resize', colocar)
+    // Con el foco dentro, el teclado del ordenador controla el juego directamente
+    iframe.focus()
+
     return () => {
-      activo = false
-      // La pantalla vuelve a su escondite para conservar la partida
-      if (pantalla) document.body.appendChild(pantalla)
+      oyentes.delete(setEstado)
+      observador.disconnect()
+      window.removeEventListener('resize', colocar)
+      ocultarMarco()
     }
   }, [jar])
 
+  const pulsar = (tecla: string, codigo: number) => {
+    marco?.contentWindow?.postMessage({ origen: 'portfolio', tecla, codigo }, location.origin)
+  }
+
   return (
     <div className="java">
-      {estado === 'cargando' && <Cargando texto={t('Arrancando una máquina virtual de Java en tu navegador…', 'Starting a Java virtual machine in your browser…')} />}
-      {estado === 'error' && <Cargando texto={t('No se pudo iniciar Java en este navegador. Prueba con Chrome, Edge o Firefox actualizados.', 'Java could not start in this browser. Try an up-to-date Chrome, Edge or Firefox.')} />}
+      {estado === 'cargando' && (
+        <Cargando
+          texto={t('Arrancando una máquina virtual de Java en tu navegador…', 'Starting a Java virtual machine in your browser…')}
+        />
+      )}
+      {estado === 'error' && (
+        <Cargando
+          texto={t(
+            'No se pudo iniciar Java en este navegador. Prueba con Chrome, Edge o Firefox actualizados.',
+            'Java could not start in this browser. Try an up-to-date Chrome, Edge or Firefox.',
+          )}
+        />
+      )}
       <div className="java__marco" ref={contenedor} />
       <div className="java__controles" aria-label={t('Controles del juego', 'Game controls')}>
         {controles.map((c) => (
@@ -99,7 +129,12 @@ export default function EjecutorJava({ jar }: { jar: string }) {
           </button>
         ))}
       </div>
-      <p className="java__ayuda">{t('Teclado: flechas para mover y girar, espacio para soltar, C para guardar pieza.', 'Keyboard: arrows to move and rotate, space to drop, C to hold a piece.')}</p>
+      <p className="java__ayuda">
+        {t(
+          'Teclado: flechas para mover y girar, espacio para soltar, C para guardar pieza.',
+          'Keyboard: arrows to move and rotate, space to drop, C to hold a piece.',
+        )}
+      </p>
     </div>
   )
 }
