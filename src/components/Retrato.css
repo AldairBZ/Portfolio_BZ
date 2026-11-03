@@ -1,0 +1,33 @@
+.retrato {
+  margin: 0;
+}
+
+.retrato__lienzo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 550 / 640;
+  cursor: none;
+  touch-action: pan-y;
+}
+
+.retrato__pie {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--linea);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--papel-3);
+}
+
+.retrato__pie > span:first-child {
+  color: var(--papel-2);
+}
+
+@media (max-width: 860px) {
+  .retrato {
+    max-width: 24rem;
+  }
+}

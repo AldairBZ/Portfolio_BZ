@@ -13,7 +13,11 @@
 
 .manifiesto__lateral {
   position: sticky;
-  top: 14vh;
+  top: 12vh;
+}
+
+.manifiesto__codigo {
+  margin-top: 4rem;
 }
 
 .manifiesto__texto {
@@ -65,7 +69,6 @@
   .manifiesto__lateral {
     position: relative;
     top: 0;
-    order: 2;
   }
 
   .manifiesto__cifras {

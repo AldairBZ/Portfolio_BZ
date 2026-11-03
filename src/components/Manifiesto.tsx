@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/scroll'
 import CodigoVivo from './CodigoVivo'
+import Retrato from './Retrato'
 import './Manifiesto.css'
 
 const texto =
@@ -43,7 +44,7 @@ export default function Manifiesto() {
     <section className="manifiesto" ref={raiz} aria-labelledby="manifiesto-titulo">
       <div className="manifiesto__rejilla">
         <div className="manifiesto__lateral">
-          <CodigoVivo />
+          <Retrato />
         </div>
         <div>
           <h2 id="manifiesto-titulo" className="etiqueta">
@@ -68,6 +69,9 @@ export default function Manifiesto() {
               </li>
             ))}
           </ul>
+          <div className="manifiesto__codigo">
+            <CodigoVivo />
+          </div>
         </div>
       </div>
     </section>
