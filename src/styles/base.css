@@ -1,15 +1,15 @@
 :root {
-  --tinta: #0e0d0b;
-  --tinta-2: #17150f;
-  --tinta-3: #221f17;
-  --papel: #efe8da;
-  --papel-2: #b8ae9c;
-  --papel-3: #7d7566;
-  --linea: rgba(239, 232, 218, 0.14);
-  --bermellon: #d6502e;
-  --celadon: #a9c4b1;
-  --azul: #5f8fc4;
-  --rosa: #e9b7a6;
+  --tinta: #0c0d10;
+  --tinta-2: #13151a;
+  --tinta-3: #1c1f26;
+  --papel: #eceae4;
+  --papel-2: #a9adb6;
+  --papel-3: #6e737e;
+  --linea: rgba(236, 234, 228, 0.14);
+  --bermellon: #d4a95f;
+  --celadon: #8ebfae;
+  --azul: #8b9ee0;
+  --rosa: #e3c3b4;
 
   --display: 'Martian Mono Variable', ui-monospace, monospace;
   --sans: 'IBM Plex Sans Variable', system-ui, sans-serif;

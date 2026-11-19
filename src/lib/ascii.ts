@@ -65,9 +65,9 @@ export class PlanetaAscii {
     this.canvas = canvas
     this.ctx = canvas.getContext('2d')!
     this.opciones = {
-      colorTierra: '#efe8da',
-      colorMar: '#5f8fc4',
-      colorAnillo: '#d6502e',
+      colorTierra: '#eceae4',
+      colorMar: '#8b9ee0',
+      colorAnillo: '#d4a95f',
       celda: 12,
       radio: 0.42,
       centroX: 0.5,

@@ -43,13 +43,13 @@ interface Datos {
 
 const coloresLenguaje: Record<string, string> = {
   JavaScript: '#e9c46a',
-  TypeScript: '#5f8fc4',
-  Java: '#d6502e',
-  Python: '#a9c4b1',
+  TypeScript: '#8b9ee0',
+  Java: '#d4a95f',
+  Python: '#8ebfae',
   'C#': '#9b7fd1',
-  HTML: '#e9b7a6',
-  CSS: '#7d7566',
-  COBOL: '#b8ae9c',
+  HTML: '#e3c3b4',
+  CSS: '#6e737e',
+  COBOL: '#a9adb6',
 }
 
 function haceCuanto(fecha: string, idioma: Idioma) {
@@ -236,14 +236,14 @@ export default function GitHub() {
               {lenguajes.map(([lenguaje, peso]) => (
                 <span
                   key={lenguaje}
-                  style={{ flexGrow: peso / total, background: coloresLenguaje[lenguaje] ?? '#7d7566' }}
+                  style={{ flexGrow: peso / total, background: coloresLenguaje[lenguaje] ?? '#6e737e' }}
                 />
               ))}
             </div>
             <ul className="github__leyenda">
               {lenguajes.map(([lenguaje, peso]) => (
                 <li key={lenguaje}>
-                  <span style={{ background: coloresLenguaje[lenguaje] ?? '#7d7566' }} aria-hidden="true" />
+                  <span style={{ background: coloresLenguaje[lenguaje] ?? '#6e737e' }} aria-hidden="true" />
                   {lenguaje} <small>{Math.round((peso / total) * 100)}%</small>
                 </li>
               ))}

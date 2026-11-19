@@ -267,13 +267,13 @@ export class CapturaAscii {
       ctx.clip()
       ctx.drawImage(this.imagen, zona.x, zona.y, zona.ancho, zona.alto, ox, oy, columnas * celdaAncho, filas * celdaAlto)
       ctx.restore()
-      ctx.strokeStyle = '#d6502e'
+      ctx.strokeStyle = '#d4a95f'
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.arc(x, y, radio, 0, Math.PI * 2)
       ctx.stroke()
       ctx.font = `10px ${FUENTE}`
-      ctx.fillStyle = '#d6502e'
+      ctx.fillStyle = '#d4a95f'
       ctx.fillText(this.opciones.etiqueta, x - radio * 0.7, y + radio + 6)
     }
   }

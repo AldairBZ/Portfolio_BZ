@@ -18,7 +18,10 @@ import {
   siOpencv,
   siOpenjdk,
   siPython,
+  siNsis,
+  siOpengl,
   siReact,
+  siRust,
   siSpringboot,
   siSqlite,
   siTypescript,
@@ -31,8 +34,8 @@ import type { Texto } from '../lib/idioma'
 export interface Tecnologia {
   nombre: string
   forma: FormaLogo
-  /** Dónde la he usado */
-  uso: Texto
+  /** Dónde la he usado; sin él, al pasar el cursor solo sale el nombre */
+  uso?: Texto
 }
 
 export interface GrupoTecnologias {
@@ -61,7 +64,7 @@ export const tecnologias: GrupoTecnologias[] = [
       { nombre: 'Python', forma: logo(siPython), uso: usos('Gestor Bon Gust', 'BlackJack') },
       { nombre: 'C# · .NET', forma: logo(siDotnet), uso: usos({ es: 'Detección de movimiento', en: 'Motion detection' }) },
       { nombre: 'OpenCV', forma: logo(siOpencv), uso: usos({ es: 'Detección de movimiento', en: 'Motion detection' }) },
-      { nombre: 'COBOL', forma: { texto: 'COBOL', color: 'e9b7a6' }, uso: usos('BlackJack') },
+      { nombre: 'COBOL', forma: { texto: 'COBOL', color: 'e3c3b4' }, uso: usos('BlackJack') },
     ],
   },
   {
@@ -74,6 +77,16 @@ export const tecnologias: GrupoTecnologias[] = [
       { nombre: 'CSS', forma: logo(siCss), uso: usos('Resident Evil Web', PORTFOLIO) },
       { nombre: 'Vite', forma: logo(siVite), uso: usos('LifeLevelUp', PORTFOLIO) },
       { nombre: 'GSAP', forma: logo(siGsap), uso: usos(PORTFOLIO) },
+    ],
+  },
+  {
+    grupo: { es: 'Sistemas', en: 'Systems' },
+    tecnologias: [
+      // El logo de Rust es negro: sobre el fondo oscuro se pinta con el color que le da GitHub.
+      { nombre: 'Rust', forma: { ruta: siRust.path, color: 'dea584' } },
+      { nombre: 'NSIS', forma: logo(siNsis) },
+      // GLSL no tiene logo propio: va con el de OpenGL, que es donde vive.
+      { nombre: 'GLSL', forma: logo(siOpengl) },
     ],
   },
   {
@@ -94,7 +107,7 @@ export const tecnologias: GrupoTecnologias[] = [
       { nombre: 'Cloudflare', forma: logo(siCloudflare), uso: usos('LifeLevelUp', PORTFOLIO) },
       {
         nombre: 'Azure',
-        forma: { texto: 'AZ', color: '5f8fc4' },
+        forma: { texto: 'AZ', color: '8b9ee0' },
         uso: { es: 'certificaciones AZ-900, AI-900, DP-900 y SC-900', en: 'AZ-900, AI-900, DP-900 and SC-900 certifications' },
       },
     ],

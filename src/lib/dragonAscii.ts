@@ -11,7 +11,7 @@ const FUENTE = '"IBM Plex Mono", ui-monospace, monospace'
 const NODOS = 52
 const DISTANCIA = 9
 // Tonos: cuerpo, aletas, bigotes, ojo
-const COLORES = ['#7d7566', '#b8ae9c', '#e9b7a6', '#d6502e']
+const COLORES = ['#6e737e', '#a9adb6', '#e3c3b4', '#d4a95f']
 
 interface Punto {
   x: number

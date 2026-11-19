@@ -20,7 +20,7 @@ export interface FormaLogo {
 function colorVisible(hex: string) {
   const n = parseInt(hex.replace('#', ''), 16)
   const luz = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255
-  return luz < 0.3 ? '#efe8da' : `#${hex.replace('#', '')}`
+  return luz < 0.3 ? '#eceae4' : `#${hex.replace('#', '')}`
 }
 
 export class LogoAscii {
@@ -154,10 +154,10 @@ export class LogoAscii {
         }
       }
       const y = f * this.celda
-      ctx.fillStyle = this.resaltado ? this.color : '#b8ae9c'
+      ctx.fillStyle = this.resaltado ? this.color : '#a9adb6'
       ctx.fillText(normal, 0, y)
       if (ruido.trim()) {
-        ctx.fillStyle = '#d6502e'
+        ctx.fillStyle = '#d4a95f'
         ctx.fillText(ruido, 0, y)
       }
     }
