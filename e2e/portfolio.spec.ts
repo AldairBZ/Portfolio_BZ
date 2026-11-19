@@ -113,11 +113,22 @@ test('la oreja del retrato abre el acceso al panel de visitas', async ({ page })
 })
 
 test('el CV se descarga en el idioma elegido', async ({ page }) => {
-  await page.locator('.portada').getByRole('button', { name: 'Descargar CV' }).click()
+  // Se pulsa cuando la portada ha terminado de entrar, como lo haría una persona: a mitad de la
+  // animación, Playwright desplazaba la página para alcanzar el botón y la portada se iba.
+  await expect(page.locator('.portada__acciones')).toHaveCSS('opacity', '1')
+  const boton = await page.locator('.portada').getByRole('button', { name: 'Descargar CV' }).boundingBox()
+  if (!boton) throw new Error('el botón no se ve')
+  await page.mouse.click(boton.x + boton.width / 2, boton.y + boton.height / 2)
   const menu = page.getByRole('menu', { name: 'Idioma del CV' })
   await expect(menu.getByRole('menuitem')).toHaveText([/Castellano/, /Català/, /English/])
+  // Clic de ratón en su sitio, con el menú ya quieto. El clic normal de Playwright a veces «acerca»
+  // el elemento con el protocolo del navegador y, dentro de la escena sticky de la portada, eso
+  // desplazaba la página y la portada se iba con el menú: una persona nunca hace eso.
+  await expect(menu).toHaveCSS('transform', 'none')
+  const caja = await menu.getByRole('menuitem', { name: /Català/ }).boundingBox()
+  if (!caja) throw new Error('el menú no se ve')
   const descarga = page.waitForEvent('download')
-  await menu.getByRole('menuitem', { name: /Català/ }).click()
+  await page.mouse.click(caja.x + caja.width / 2, caja.y + caja.height / 2)
   expect((await descarga).suggestedFilename()).toBe('Scheneider_Baltazar_CV_CA.pdf')
   await expect(menu).toBeHidden()
 })

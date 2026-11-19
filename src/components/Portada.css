@@ -8,7 +8,9 @@
   top: 0;
   height: 100svh;
   min-height: 560px;
-  overflow: hidden;
+  /* clip y no hidden: recorta igual, pero no es un contenedor de scroll. Con hidden, al llevar el foco
+     (o un clic automático) a un botón de aquí dentro, Chrome desplazaba la página y la portada se iba. */
+  overflow: clip;
   isolation: isolate;
 }
 

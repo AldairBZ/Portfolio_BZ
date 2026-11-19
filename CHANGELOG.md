@@ -8,6 +8,7 @@ Nueva paleta y tres lenguajes más.
 - Trayectoria estrena titular: «Paso a paso, hasta aquí.».
 - Nuevo grupo «Sistemas» en las tecnologías, con Rust, NSIS y GLSL.
 - La versión se ve en el pie de la página.
+- Descargar el CV ya no falla a veces: el menú de idiomas se abre hacia arriba si no cabe en pantalla y no se cierra antes de que empiece la descarga.
 
 ## 2.0.0
 
