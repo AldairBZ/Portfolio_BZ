@@ -1,14 +1,15 @@
 # Versiones del portfolio
 
-## 2.1.0 · 20 de noviembre de 2026
+## 3.0.0 · 20 de noviembre de 2026
 
-Nueva paleta y tres lenguajes más.
+Nueva paleta, GitHub en directo y tres lenguajes más.
 
 - Paleta «grafito y champán»: fondo grafito con un punto de azul, texto blanco porcelana, el acento en champán en lugar del bermellón, y salvia y azul lavanda de apoyo. Cambia también en los dibujos en ASCII (planeta, retrato, dragón, logos y ventanas de los proyectos).
+- El icono de la pestaña y la imagen al compartir el enlace, con la paleta nueva.
 - Trayectoria estrena titular: «Paso a paso, hasta aquí.».
 - Nuevo grupo «Sistemas» en las tecnologías, con Rust, NSIS y GLSL.
 - La versión se ve en el pie de la página.
-- «Lo último que he subido» se conecta a todo mi GitHub: salen mis repositorios públicos (también los nuevos), nunca forks ni repos de otros, y solo mis commits grandes, con sus líneas añadidas y quitadas. Se actualiza sola mientras la página está abierta.
+- «Lo último que he subido» se conecta a todo mi GitHub: salen mis repositorios públicos (también los nuevos), nunca forks ni repos de otros, y solo mis commits grandes, con sus líneas añadidas y quitadas y los cuadraditos de GitHub. Se actualiza sola mientras la página está abierta, y en el móvil cada commit es una tarjeta.
 - Descargar el CV ya no falla a veces: el menú de idiomas se abre hacia arriba si no cabe en pantalla y no se cierra antes de que empiece la descarga.
 
 ## 2.0.0

@@ -107,6 +107,19 @@ async function cargarDirecto(): Promise<Datos> {
   }
 }
 
+/** Los cinco cuadraditos de GitHub: verdes por lo añadido y rojos por lo quitado */
+function Cuadros({ mas, menos }: { mas: number; menos: number }) {
+  const total = mas + menos
+  const verdes = total ? Math.round((mas / total) * 5) : 0
+  return (
+    <span className="github__cuadros" aria-hidden="true">
+      {Array.from({ length: 5 }, (_, i) => (
+        <i key={i} className={i < verdes ? "github__cuadro--mas" : "github__cuadro--menos"} />
+      ))}
+    </span>
+  )
+}
+
 const NIVELES = ['·', ':', '=', '#', '@']
 
 /** Calendario de contribuciones dibujado con caracteres: una columna por semana */
@@ -236,6 +249,7 @@ export default function GitHub() {
                     ) : c.mas !== undefined && (
                       <span className="github__lineas" aria-label={t(`${c.mas} líneas añadidas y ${c.menos} quitadas`, `${c.mas} lines added and ${c.menos} removed`)}>
                         <ins>+{c.mas}</ins> <del>−{c.menos}</del>
+                        <Cuadros mas={c.mas} menos={c.menos ?? 0} />
                       </span>
                     )}
                     <span className="github__fecha">{haceCuanto(c.fecha, idioma)}</span>

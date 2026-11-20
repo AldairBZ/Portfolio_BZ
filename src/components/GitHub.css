@@ -217,12 +217,53 @@
     grid-template-columns: 1fr;
   }
 
+  /* En el móvil, cada commit es una tarjeta: repo y fecha arriba, el mensaje entero y sus cambios */
+  .github__commits {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .github__commits li {
+    border-bottom: 0;
+  }
+
   .github__commits a {
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'repo fecha'
+      'mensaje mensaje'
+      'lineas lineas';
+    gap: 0.45rem 1rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--linea);
+    border-radius: 14px;
+    background: var(--tinta-2);
+  }
+
+  .github__commits a:hover {
+    padding-left: 1rem;
   }
 
   .github__repo {
-    grid-column: 1 / -1;
+    grid-area: repo;
+    color: var(--bermellon);
+  }
+
+  .github__fecha {
+    grid-area: fecha;
+  }
+
+  .github__mensaje {
+    grid-area: mensaje;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.4;
+    white-space: normal;
+  }
+
+  .github__lineas {
+    grid-area: lineas;
   }
 }
 
@@ -239,4 +280,23 @@
 .github__lineas del {
   color: var(--rosa);
   text-decoration: none;
+}
+
+.github__cuadros {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 0.5rem;
+  vertical-align: -1px;
+}
+.github__cuadros i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+.github__cuadro--mas {
+  background: var(--celadon);
+}
+.github__cuadro--menos {
+  background: var(--rosa);
+  opacity: 0.7;
 }

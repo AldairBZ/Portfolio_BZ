@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 
 // Todas las pruebas empiezan en español, sin depender del idioma del navegador
 test.beforeEach(async ({ page }) => {
@@ -7,6 +7,18 @@ test.beforeEach(async ({ page }) => {
   })
   await page.goto('/')
 })
+
+/** La caja de un elemento cuando lleva un momento sin moverse (scroll suave y animaciones) */
+async function cajaQuieta(elemento: Locator) {
+  let antes = await elemento.boundingBox()
+  for (let i = 0; i < 40; i++) {
+    await elemento.page().waitForTimeout(100)
+    const ahora = await elemento.boundingBox()
+    if (antes && ahora && Math.abs(antes.x - ahora.x) < 0.5 && Math.abs(antes.y - ahora.y) < 0.5 && Math.abs(antes.width - ahora.width) < 0.5) return ahora
+    antes = ahora
+  }
+  throw new Error('el elemento no deja de moverse')
+}
 
 const esMovil = (page: Page) => (page.viewportSize()?.width ?? 1440) < 768
 
@@ -31,6 +43,8 @@ test('ninguna sección provoca scroll horizontal', async ({ page }) => {
 })
 
 test('se juega una mano de BlackJack con el motor COBOL', async ({ page }) => {
+  // Carga el intérprete de COBOL y juega una mano entera: con el PC cargado necesita más margen
+  test.slow()
   await abrirPaleta(page)
   await page.getByPlaceholder('Escribe un comando o un proyecto…').fill('cobol')
   await page.keyboard.press('Enter')
@@ -108,7 +122,8 @@ test('el retrato se dibuja y cada proyecto tiene su imagen', async ({ page }) =>
 test('la oreja del retrato abre el acceso al panel de visitas', async ({ page }) => {
   const retrato = page.locator('.retrato__lienzo')
   await retrato.scrollIntoViewIfNeeded()
-  const caja = (await retrato.boundingBox())!
+  // El scroll es suave y la sección entra animada: se pulsa cuando el retrato ya no se mueve
+  const caja = await cajaQuieta(retrato)
   await page.mouse.click(caja.x + caja.width * 0.665, caja.y + caja.height * 0.38)
   const panel = page.getByRole('dialog', { name: 'Panel de visitas' })
   await expect(panel.getByLabel('Contraseña')).toBeVisible()
