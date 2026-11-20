@@ -165,8 +165,8 @@ export const CATALAN: Record<string, string> = {
   'Jugar en COBOL': 'Jugar en COBOL',
 
   // Trayectoria
-  'Aprender rápido,': 'Aprendre ràpid,',
-  'entregar código que funciona.': 'lliurar codi que funciona.',
+  'Paso a paso,': 'Pas a pas,',
+  'hasta aquí.': 'fins aquí.',
   '2.º puesto · Hackathon Tarragona': '2n lloc · Hackathon Tarragona',
   'En un equipo de cuatro programamos una solución con IA para agilizar trámites del Ajuntament, con modelos en local (Ollama) para que funcionara en un ordenador normal.':
     "En un equip de quatre vam programar una solució amb IA per agilitzar tràmits de l'Ajuntament, amb models en local (Ollama) perquè funcionés en un ordinador normal.",
@@ -258,4 +258,6 @@ export const CATALAN: Record<string, string> = {
   'CRUPIER BUST': 'CRUPIER PASSAT',
   'BLACKJACK PUSH': 'BLACKJACK EMPAT',
   BLACKJACK: 'BLACKJACK',
+  // Versión 2.1
+  'Sistemas': 'Sistemes',
 }

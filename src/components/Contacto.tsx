@@ -70,7 +70,7 @@ export default function Contacto() {
 
       <div className="contacto__pie">
         <p>
-          © {ANIO} Scheneider Baltazar · {t('Diseñado y programado por mí.', 'Designed and built by me.')}
+          © {ANIO} Scheneider Baltazar · {t('Diseñado y programado por mí.', 'Designed and built by me.')} · v{__VERSION__}
         </p>
         <p>
           {t(

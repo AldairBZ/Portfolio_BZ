@@ -170,7 +170,7 @@ export class RetratoAscii {
     const transcurrido = this.haEntrado ? ahora - this.inicio : 0
     // Línea de escaneo: baja cada 7 segundos
     const escaneo = ((ahora / 7000) % 1) * (this.filas + 40) - 20
-    const colores = ['#5c564b', '#b8ae9c', '#efe8da', '#d6502e']
+    const colores = ['#585d68', '#a9adb6', '#eceae4', '#d4a95f']
 
     for (let f = 0; f < this.filas; f++) {
       const lineas = ['', '', '', '']
@@ -211,16 +211,16 @@ export class RetratoAscii {
       ctx.clip()
       ctx.drawImage(this.imagen, 0, 0, this.columnas * celdaAncho, this.filas * celdaAlto)
       // Rejilla fina encima para que se note que es el mismo dato
-      ctx.fillStyle = 'rgba(14,13,11,0.18)'
+      ctx.fillStyle = 'rgba(12,13,16,0.18)'
       for (let ly = 0; ly < alto; ly += 3) ctx.fillRect(x - radio, ly, radio * 2, 1)
       ctx.restore()
-      ctx.strokeStyle = '#d6502e'
+      ctx.strokeStyle = '#d4a95f'
       ctx.lineWidth = 1
       ctx.beginPath()
       ctx.arc(x, y, radio, 0, Math.PI * 2)
       ctx.stroke()
       ctx.font = `10px ${FUENTE}`
-      ctx.fillStyle = '#d6502e'
+      ctx.fillStyle = '#d4a95f'
       ctx.fillText('retrato.webp', x - radio * 0.7, y + radio + 6)
     }
   }

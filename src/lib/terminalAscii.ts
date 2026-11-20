@@ -15,10 +15,10 @@ export interface LineaSesion {
 
 const FUENTE = '"IBM Plex Mono", ui-monospace, monospace'
 const COLORES: Record<TipoLinea | 'entrada', string> = {
-  titulo: '#efe8da',
-  menu: '#7d7566',
-  salida: '#a9c4b1',
-  entrada: '#d6502e',
+  titulo: '#eceae4',
+  menu: '#6e737e',
+  salida: '#8ebfae',
+  entrada: '#d4a95f',
 }
 const POR_LINEA = 90
 const POR_LETRA = 70

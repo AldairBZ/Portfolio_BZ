@@ -36,7 +36,7 @@ function Ficha({ tecnologia, activa, apagada, onActivar }: FichaProps) {
         onFocus={() => onActivar(true)}
         onBlur={() => onActivar(false)}
         aria-pressed={activa}
-        aria-description={`${t('Usado en', 'Used in')}: ${tx(tecnologia.uso)}`}
+        aria-description={tecnologia.uso ? `${t('Usado en', 'Used in')}: ${tx(tecnologia.uso)}` : undefined}
       >
         <canvas ref={lienzo} className="ficha__logo" aria-hidden="true" />
         <span className="ficha__nombre">{tecnologia.nombre}</span>
@@ -63,7 +63,13 @@ export default function Tecnologias() {
         <p className="tecnologias__pista" aria-live="polite">
           {activa ? (
             <>
-              <strong>{activa.nombre}</strong> · {t('usado en', 'used in')} {tx(activa.uso)}
+              <strong>{activa.nombre}</strong>
+              {activa.uso && (
+                <>
+                  {' · '}
+                  {t('usado en', 'used in')} {tx(activa.uso)}
+                </>
+              )}
             </>
           ) : (
             <>

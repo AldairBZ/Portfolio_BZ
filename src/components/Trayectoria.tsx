@@ -67,9 +67,9 @@ export default function Trayectoria() {
           <p className="etiqueta">{t('Trayectoria', 'Experience')}</p>
           <h2 id="trayectoria-titulo" className="trayectoria__titulo">
             <Resplandor color="var(--celadon)" />
-            {t('Aprender rápido,', 'Learn fast,')}
+            {t('Paso a paso,', 'Step by step,')}
             <br />
-            <em>{t('entregar código que funciona.', 'ship code that works.')}</em>
+            <em>{t('hasta aquí.', 'to this point.')}</em>
           </h2>
         </header>
 

@@ -101,7 +101,7 @@
 
 .github__commits a {
   display: grid;
-  grid-template-columns: 11rem 1fr auto;
+  grid-template-columns: 11rem 1fr auto auto;
   gap: 1rem;
   align-items: baseline;
   padding: 1.1rem 0;
@@ -138,7 +138,7 @@
 
 .github__esqueleto {
   height: 3.4rem;
-  background: linear-gradient(90deg, transparent, rgba(239, 232, 218, 0.05), transparent) 0 0 / 200% 100%;
+  background: linear-gradient(90deg, transparent, rgba(236, 234, 228, 0.05), transparent) 0 0 / 200% 100%;
   animation: brillo 1.4s infinite linear;
 }
 
@@ -217,11 +217,86 @@
     grid-template-columns: 1fr;
   }
 
+  /* En el móvil, cada commit es una tarjeta: repo y fecha arriba, el mensaje entero y sus cambios */
+  .github__commits {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .github__commits li {
+    border-bottom: 0;
+  }
+
   .github__commits a {
     grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'repo fecha'
+      'mensaje mensaje'
+      'lineas lineas';
+    gap: 0.45rem 1rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--linea);
+    border-radius: 14px;
+    background: var(--tinta-2);
+  }
+
+  .github__commits a:hover {
+    padding-left: 1rem;
   }
 
   .github__repo {
-    grid-column: 1 / -1;
+    grid-area: repo;
+    color: var(--bermellon);
   }
+
+  .github__fecha {
+    grid-area: fecha;
+  }
+
+  .github__mensaje {
+    grid-area: mensaje;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 1.4;
+    white-space: normal;
+  }
+
+  .github__lineas {
+    grid-area: lineas;
+  }
+}
+
+/* Líneas añadidas y quitadas de cada commit, como en GitHub */
+.github__lineas {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.github__lineas ins {
+  color: var(--celadon);
+  text-decoration: none;
+}
+.github__lineas del {
+  color: var(--rosa);
+  text-decoration: none;
+}
+
+.github__cuadros {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 0.5rem;
+  vertical-align: -1px;
+}
+.github__cuadros i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+.github__cuadro--mas {
+  background: var(--celadon);
+}
+.github__cuadro--menos {
+  background: var(--rosa);
+  opacity: 0.7;
 }
