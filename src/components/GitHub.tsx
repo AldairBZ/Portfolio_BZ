@@ -4,20 +4,13 @@ import Resplandor from './Resplandor'
 import './GitHub.css'
 
 const USUARIO = 'AldairBZ'
-// Respaldo si el Worker no responde (por ejemplo, en desarrollo): solo estos repositorios
-const REPOS = [
-  'LifeLevelUp',
-  'TetrisGame',
-  'GestorBonGustProject',
-  'DeteccionMovimiento',
-  'BlackJack-Proyecto-COBOL',
-  'A2_ResidentEvil_Web',
-  'BootCamp-TechTalent',
-  'Portfolio_BZ',
-]
+// Respaldo si el Worker no responde (por ejemplo, en desarrollo): mis repos públicos, menos los personales
+const BLOQUEADOS = ['08-03Love', 'Fther', USUARIO]
 
 interface Repo {
   name: string
+  fork?: boolean
+  private?: boolean
   language: string | null
   pushed_at: string
   html_url: string
@@ -28,7 +21,14 @@ interface Commit {
   mensaje: string
   fecha: string
   url: string
+  /** Líneas añadidas y quitadas, como las enseña GitHub (no las hay si el Worker no responde) */
+  mas?: number
+  menos?: number
+  archivos?: number
 }
+
+// Mientras la página está abierta se vuelve a preguntar: un commit nuevo aparece sin recargar
+const CADA_REFRESCO = 120_000
 
 interface Actividad {
   dias: { fecha: string; nivel: number }[]
@@ -82,15 +82,17 @@ async function pedir<T>(url: string): Promise<T> {
 
 async function cargarDirecto(): Promise<Datos> {
   const todos = await pedir<Repo[]>(`https://api.github.com/users/${USUARIO}/repos?per_page=100&sort=pushed`)
-  const propios = todos.filter((r) => REPOS.includes(r.name))
+  const propios = todos.filter((r) => !r.fork && !r.private && !BLOQUEADOS.includes(r.name))
   // Los últimos commits de los cuatro repositorios con actividad más reciente
   const listas = await Promise.all(
     propios.slice(0, 4).map((r) =>
       pedir<{ html_url: string; commit: { message: string; author: { date: string } } }[]>(
-        `https://api.github.com/repos/${USUARIO}/${r.name}/commits?per_page=3`,
+        `https://api.github.com/repos/${USUARIO}/${r.name}/commits?author=${USUARIO}&per_page=8`,
       )
         .then((cs) =>
-          cs.map((c) => ({ repo: r.name, mensaje: c.commit.message.split('\n')[0], fecha: c.commit.author.date, url: c.html_url })),
+          cs
+            .map((c) => ({ repo: r.name, mensaje: c.commit.message.split('\n')[0], fecha: c.commit.author.date, url: c.html_url }))
+            .filter((c) => !/^(Merge |Update |Create |Delete |Rename |Initial commit|Add files via upload)/i.test(c.mensaje)),
         )
         .catch(() => [] as Commit[]),
     ),
@@ -168,18 +170,26 @@ export default function GitHub() {
   useEffect(() => {
     // El Worker de Cloudflare junta repos, commits y mapa de actividad con caché;
     // si no está disponible, se pide directamente a la API pública de GitHub
-    pedir<Datos>('/api/github')
-      .then((datos) => {
-        if (!Array.isArray(datos.repos)) throw new Error('Respuesta no válida')
-        return datos
-      })
-      .catch(cargarDirecto)
-      .then((datos) => {
-        setRepos(datos.repos)
-        setCommits(datos.commits)
-        setActividad(datos.actividad)
-      })
-      .catch(() => setError(true))
+    const cargar = (primera: boolean) =>
+      (primera ? pedir<Datos>('/api/github') : fetch('/api/github').then((r) => (r.ok ? (r.json() as Promise<Datos>) : Promise.reject(r.status))))
+        .then((datos) => {
+          if (!Array.isArray(datos.repos)) throw new Error('Respuesta no válida')
+          return datos
+        })
+        .catch((e) => (primera ? cargarDirecto() : Promise.reject(e)))
+        .then((datos) => {
+          setRepos(datos.repos)
+          setCommits(datos.commits)
+          setActividad(datos.actividad)
+          setError(false)
+        })
+        // Un refresco que falla no borra lo que ya se ve
+        .catch(() => primera && setError(true))
+    cargar(true)
+    const cada = window.setInterval(() => {
+      if (document.visibilityState === 'visible') cargar(false)
+    }, CADA_REFRESCO)
+    return () => window.clearInterval(cada)
   }, [])
 
   const porLenguaje = new Map<string, number>()
@@ -221,6 +231,13 @@ export default function GitHub() {
                   <a href={c.url} target="_blank" rel="noreferrer">
                     <span className="github__repo">{c.repo}</span>
                     <span className="github__mensaje">{c.mensaje}</span>
+                    {c.mas !== undefined && c.mas + (c.menos ?? 0) === 0 && c.archivos ? (
+                      <span className="github__lineas">{t(`${c.archivos} archivos`, `${c.archivos} files`)}</span>
+                    ) : c.mas !== undefined && (
+                      <span className="github__lineas" aria-label={t(`${c.mas} líneas añadidas y ${c.menos} quitadas`, `${c.mas} lines added and ${c.menos} removed`)}>
+                        <ins>+{c.mas}</ins> <del>−{c.menos}</del>
+                      </span>
+                    )}
                     <span className="github__fecha">{haceCuanto(c.fecha, idioma)}</span>
                   </a>
                 </li>

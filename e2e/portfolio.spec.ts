@@ -36,8 +36,9 @@ test('se juega una mano de BlackJack con el motor COBOL', async ({ page }) => {
   await page.keyboard.press('Enter')
 
   const ventana = page.getByRole('dialog', { name: 'BlackJack en COBOL' })
-  await expect(ventana).toBeVisible()
-  await expect(ventana.getByText('PON TU APUESTA')).toBeVisible()
+  // Con muchas pruebas a la vez, cargar el intérprete puede tardar más de 5 segundos
+  await expect(ventana).toBeVisible({ timeout: 15_000 })
+  await expect(ventana.getByText('PON TU APUESTA')).toBeVisible({ timeout: 15_000 })
 
   await ventana.getByRole('button', { name: 'Apostar 25', exact: true }).click()
   await expect(ventana.getByText('APUESTA ACEPTADA')).toBeVisible()
@@ -46,7 +47,15 @@ test('se juega una mano de BlackJack con el motor COBOL', async ({ page }) => {
   // Dos cartas para cada uno y el registro BRIDGE.DAT refleja el comando
   await expect(ventana.locator('.mano__cartas img')).toHaveCount(4)
   await expect(ventana.getByText(/START → [\d.,]+ instrucciones COBOL/)).toBeVisible()
-  await expect(ventana.locator('.cobol__campo', { hasText: 'WS-BET' })).toContainText('000025')
+  // Si sale un BlackJack natural (una mano de cada veinte), el COBOL paga al momento y la apuesta
+  // vuelve a 0: la mano ya no está en juego y el mensaje lo dice
+  const estado = ventana.locator('.cobol__campo', { hasText: 'WS-STATUS' })
+  await expect(estado).not.toContainText('BETTING')
+  if ((await estado.textContent())?.includes('PLAYING')) {
+    await expect(ventana.locator('.cobol__campo', { hasText: 'WS-BET' })).toContainText('000025')
+  } else {
+    await expect(ventana.locator('.cobol__campo', { hasText: 'WS-MESSAGE' })).toContainText('BLACKJACK')
+  }
 
   await page.keyboard.press('Escape')
   await expect(ventana).toBeHidden()

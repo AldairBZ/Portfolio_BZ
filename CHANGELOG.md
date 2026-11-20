@@ -8,6 +8,7 @@ Nueva paleta y tres lenguajes más.
 - Trayectoria estrena titular: «Paso a paso, hasta aquí.».
 - Nuevo grupo «Sistemas» en las tecnologías, con Rust, NSIS y GLSL.
 - La versión se ve en el pie de la página.
+- «Lo último que he subido» se conecta a todo mi GitHub: salen mis repositorios públicos (también los nuevos), nunca forks ni repos de otros, y solo mis commits grandes, con sus líneas añadidas y quitadas. Se actualiza sola mientras la página está abierta.
 - Descargar el CV ya no falla a veces: el menú de idiomas se abre hacia arriba si no cabe en pantalla y no se cierra antes de que empiece la descarga.
 
 ## 2.0.0

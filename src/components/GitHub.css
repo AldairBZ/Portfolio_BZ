@@ -101,7 +101,7 @@
 
 .github__commits a {
   display: grid;
-  grid-template-columns: 11rem 1fr auto;
+  grid-template-columns: 11rem 1fr auto auto;
   gap: 1rem;
   align-items: baseline;
   padding: 1.1rem 0;
@@ -218,10 +218,25 @@
   }
 
   .github__commits a {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
   }
 
   .github__repo {
     grid-column: 1 / -1;
   }
+}
+
+/* Líneas añadidas y quitadas de cada commit, como en GitHub */
+.github__lineas {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.github__lineas ins {
+  color: var(--celadon);
+  text-decoration: none;
+}
+.github__lineas del {
+  color: var(--rosa);
+  text-decoration: none;
 }

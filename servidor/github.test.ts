@@ -1,19 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { leerActividad, visible } from './github'
+import { esGrande, leerActividad, visible } from './github'
 
 const repo = (name: string, topics: string[] = [], extra = {}) => ({ name, topics, fork: false, private: false, ...extra })
 
 describe('qué repositorios se muestran', () => {
-  it('muestra los repositorios con la etiqueta portfolio', () => {
-    expect(visible(repo('ProyectoNuevo', ['portfolio', 'java']))).toBe(true)
-  })
-
-  it('muestra los de la lista por defecto aunque no tengan etiqueta', () => {
+  it('muestra todos mis repositorios públicos, también los nuevos', () => {
     expect(visible(repo('TetrisGame'))).toBe(true)
-  })
-
-  it('oculta los demás repositorios', () => {
-    expect(visible(repo('Pruebas'))).toBe(false)
+    expect(visible(repo('ProyectoDeManana'))).toBe(true)
   })
 
   it('nunca muestra los repositorios personales, aunque se les ponga la etiqueta', () => {
@@ -24,6 +17,39 @@ describe('qué repositorios se muestran', () => {
   it('ignora forks y repositorios privados', () => {
     expect(visible(repo('TetrisGame', [], { fork: true }))).toBe(false)
     expect(visible(repo('ProyectoNuevo', ['portfolio'], { private: true }))).toBe(false)
+  })
+})
+
+describe('qué commits se enseñan', () => {
+  const mio = (mensaje: string, padres = 1) => ({ autor: 'AldairBZ', padres, mensaje })
+
+  it('enseña mis commits con cambios de verdad', () => {
+    expect(esGrande(mio('Intérprete de COBOL en TypeScript'), { mas: 420, menos: 12, archivos: 6 })).toBe(true)
+    expect(esGrande(mio('Corrige el cálculo del total'), { mas: 2, menos: 1, archivos: 3 })).toBe(true)
+  })
+
+  it('no enseña limpiezas que casi solo borran', () => {
+    expect(esGrande(mio('Quita los compilados'), { mas: 47, menos: 7307, archivos: 300 })).toBe(false)
+  })
+
+  it('enseña los que cambian archivos sin líneas, como PDF o imágenes', () => {
+    expect(esGrande(mio('CV nuevo en tres idiomas'), { mas: 0, menos: 0, archivos: 4 })).toBe(true)
+  })
+
+  it('no enseña los pequeños', () => {
+    expect(esGrande(mio('Corrige una errata'), { mas: 1, menos: 1, archivos: 1 })).toBe(false)
+  })
+
+  it('no enseña merges ni los mensajes automáticos de GitHub', () => {
+    expect(esGrande(mio('Merge pull request #1 from AldairBZ/rama'))).toBe(false)
+    expect(esGrande(mio('Une dos ramas', 2))).toBe(false)
+    expect(esGrande(mio('Update README.md'))).toBe(false)
+    expect(esGrande(mio('Initial commit'))).toBe(false)
+  })
+
+  it('no enseña commits de otras personas', () => {
+    expect(esGrande({ autor: 'otraPersona', padres: 1, mensaje: 'Algo grande' }, { mas: 900, menos: 0, archivos: 20 })).toBe(false)
+    expect(esGrande({ autor: null, padres: 1, mensaje: 'Sin cuenta enlazada' })).toBe(false)
   })
 })
 
